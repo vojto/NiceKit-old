@@ -1,0 +1,14 @@
+PODS:
+  - NiceKit (0.1.0)
+
+DEPENDENCIES:
+  - NiceKit (from `../`)
+
+EXTERNAL SOURCES:
+  NiceKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  NiceKit: 05794841be9f4cb973b1dea5fefe383051110923
+
+COCOAPODS: 0.39.0

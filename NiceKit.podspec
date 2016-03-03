@@ -26,13 +26,23 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/NiceKit.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.platform     = :ios, '8.0'
+  s.ios.deployment_target = "8.0"
+  s.osx.deployment_target = "10.11"
+
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes/**/*'
-  s.resource_bundles = {
-    'NiceKit' => ['Pod/Assets/*.png']
-  }
+  s.ios.source_files = ['Pod/Classes/Shared/**/*', 'Pod/Classes/iOS/**/*']
+  s.osx.source_files = ['Pod/Classes/Shared/**/*', 'Pod/Classes/Mac/**/*']
+
+  # s.resource_bundles = {
+  #   'NiceKit' => ['Pod/Assets/*.png']
+  # }
+
+  s.dependency 'Cartography'
+  s.dependency 'SwiftColors'
+
+  s.osx.dependency 'ITSwitch'
+  s.osx.dependency 'Changeset'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'

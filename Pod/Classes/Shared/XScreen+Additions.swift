@@ -1,0 +1,26 @@
+//
+//  XScreen+Additions.swift
+//  FocusList
+//
+//  Created by Vojtech Rinik on 11/02/16.
+//  Copyright © 2016 Vojtech Rinik. All rights reserved.
+//
+
+import Foundation
+import CoreGraphics
+
+extension XScreen {
+    #if os(OSX)
+    var scale: CGFloat {
+        return self.backingScaleFactor
+    }
+    #endif
+
+    static var mainScale: CGFloat {
+        #if os(OSX)
+        return mainScreen()!.scale
+        #else
+        return mainScreen().scale
+        #endif
+    }
+}

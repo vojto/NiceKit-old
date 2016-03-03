@@ -1,0 +1,6 @@
+framework module NiceKit {
+  umbrella header "NiceKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
