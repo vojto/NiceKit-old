@@ -31,7 +31,7 @@ public class NKWindow: NSWindow {
     var miniaturizeButton: NSButton? { get { return self.standardWindowButton(.MiniaturizeButton) } }
     var zoomButton: NSButton? { get { return self.standardWindowButton(.ZoomButton) } }
 
-    var currentScene: String? {
+    public var currentScene: String? {
         return executedTransitions.last?.toScene
     }
 

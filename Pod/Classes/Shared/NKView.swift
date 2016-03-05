@@ -59,7 +59,7 @@ public class NKView: XView, NKViewable {
     
     func unsetup() {}
 
-    func setContext(context: AnyObject?) {}
+    public func setContext(context: AnyObject?) {}
 
     override func layoutSubviews() {
         super.layoutSubviews()

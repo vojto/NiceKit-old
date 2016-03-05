@@ -81,21 +81,21 @@ public extension NSMutableAttributedString {
     #endif
 }
 
-func +=(lhs: NSMutableAttributedString, rhs: NSAttributedString) {
+public func +=(lhs: NSMutableAttributedString, rhs: NSAttributedString) {
     lhs.appendAttributedString(rhs)
 }
 
-func +=(lhs: NSMutableAttributedString, rhs: String) {
+public func +=(lhs: NSMutableAttributedString, rhs: String) {
     lhs.appendAttributedString(NSAttributedString(string: rhs))
 }
 
-func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedString {
+public func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedString {
     let str1 = lhs.mutableCopy() as! NSMutableAttributedString
     str1.appendAttributedString(rhs)
     return str1
 }
 
-func +(lhs: String, rhs: NSAttributedString) -> NSMutableAttributedString {
+public func +(lhs: String, rhs: NSAttributedString) -> NSMutableAttributedString {
     let str = NSMutableAttributedString(string: lhs)
     str.appendAttributedString(rhs)
     return str

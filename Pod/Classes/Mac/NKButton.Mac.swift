@@ -23,11 +23,11 @@ public class NKButton: NKView {
         return XEdgeInsets(top: insets.top/2, left: insets.left/2, bottom: insets.bottom/2, right: insets.right/2)
     }
 
-    var title: String! = ""
+    public var title: String! = ""
 
     var leftClickShowsMenu = false
 
-    var enabled = true {
+    public var enabled = true {
         didSet {
             if enabled {
                 removeClass("disabled")
