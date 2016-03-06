@@ -145,6 +145,11 @@ public class NKStoryboard {
     // -----------------------------------------------------------------------
 
     func openWindow(window: NKWindow) {
+        if window == mainWindow {
+            Swift.print("NKStoryboard not opening the main window, that should be managed by your application")
+            return
+        }
+        
         switch(window.openingPolicy) {
         case .Default:
             window.makeKeyAndOrderFront(self)
