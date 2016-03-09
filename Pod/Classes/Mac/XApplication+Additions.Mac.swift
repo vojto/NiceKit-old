@@ -59,26 +59,27 @@ public extension XApplication {
         let bundlePath = (NSBundle.mainBundle().bundlePath as NSString)
 
         print("bundle path: \(bundlePath)")
-
-        let path = (((bundlePath.stringByDeletingLastPathComponent as NSString).stringByDeletingLastPathComponent as NSString).stringByDeletingLastPathComponent as NSString).stringByDeletingLastPathComponent
-//        let binaryPath = NSBundle(path: bundlePath)?.executablePath
-
-        Swift.print("path: \(path)")
-
-        NSWorkspace.sharedWorkspace().launchApplication(path)
-
-        /*
-        if let path = binaryPath {
-            NSWorkspace.sharedWorkspace().launchApplication(path)
-        } else {
-            Swift.print("Failed")
-            Swift.print("Bundle path: \(bundlePath)")
-            Swift.print("Binary path: \(binaryPath)")
-        }
-        */
         
-
-
+        let workspace = NSWorkspace.sharedWorkspace()
+        
+        let identifier = "rinik.Escape"
+        
+        if let url = workspace.URLForApplicationWithBundleIdentifier(identifier) {
+            var config = [String: AnyObject]()
+            config[NSWorkspaceLaunchConfigurationArguments] = ["quiet", "test"] as NSArray
+            config[NSWorkspaceLaunchConfigurationEnvironment] = ["quiet": "true"] as NSDictionary
+            
+            Swift.print("Launching application with config: \(config)")
+            
+            do {
+                try workspace.launchApplicationAtURL(url, options: [.Default], configuration: config)
+            } catch _ {
+                Swift.print("Failed launching app with config: \(config)")
+            }
+        } else {
+            Swift.print("Couldn't find application with identifier \(identifier)")
+        }
+        
     }
 
     var applicationState: XApplicationState {
