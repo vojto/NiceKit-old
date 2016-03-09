@@ -12,15 +12,15 @@ import CoreGraphics
 import Changeset
 
 
-enum NKAutocorrectionType {
+public enum NKAutocorrectionType {
     case No
 }
 
-enum NKAutocapitalizationType {
+public enum NKAutocapitalizationType {
     case None
 }
 
-enum NKKeyboardType {
+public enum NKKeyboardType {
     case NumberPad
 }
 
@@ -47,9 +47,9 @@ public class NKTextField: NSTextField, NKViewable {
     public var onMouseDown: (NSEvent -> Void)?
     var onMouseUp: (NSEvent -> Void)?
 
-    var autocorrectionType: NKAutocorrectionType?
-    var autocapitalizationType: NKAutocapitalizationType?
-    var keyboardType: NKKeyboardType?
+    public var autocorrectionType: NKAutocorrectionType?
+    public var autocapitalizationType: NKAutocapitalizationType?
+    public var keyboardType: NKKeyboardType?
 
     public var fieldType: NKFieldType?
     public var secureValue: String = ""
@@ -148,7 +148,7 @@ public class NKTextField: NSTextField, NKViewable {
     // MARK: - Events
     // ----------------------------------------------------------------------
     
-    func handleClickFromTable(event: NSEvent) {
+    public func handleClickFromTable(event: NSEvent) {
         if self.editable {
             self.window?.makeFirstResponder(self)
         }
@@ -164,11 +164,11 @@ public class NKTextField: NSTextField, NKViewable {
         onFocus?()
     }
 
-    func blur() {
+    public func blur() {
         window?.makeFirstResponder(nil)
     }
 
-    func focus() {
+    public func focus() {
         window?.makeFirstResponder(self)
     }
 

@@ -8,16 +8,16 @@
 
 import Foundation
 
-extension XTextField {
+public extension XTextField {
 
 #if os(OSX)
 
-    var placeholder: String? {
+    public var placeholder: String? {
         get { return placeholderString }
         set { placeholderString = newValue }
     }
 
-    var attributedPlaceholder: NSAttributedString? {
+    public var attributedPlaceholder: NSAttributedString? {
         get { return placeholderAttributedString }
         set { placeholderAttributedString = newValue }
     }

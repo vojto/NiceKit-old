@@ -10,12 +10,12 @@ import Foundation
 import Cartography
 
 
-extension XView {
+public extension XView {
 
     // MARK: - Shared additions
     // ------------------------------------------------------------------------
 
-    func getLayer() -> CALayer {
+    public func getLayer() -> CALayer {
         #if os(OSX)
             wantsLayer = true
             return layer!
@@ -25,11 +25,11 @@ extension XView {
     }
 
 
-    func hide() {
+    public func hide() {
         hidden = true
     }
 
-    func show() {
+    public func show() {
         hidden = false
     }
 
@@ -37,17 +37,17 @@ extension XView {
     // ------------------------------------------------------------------------
 
 #if os(OSX)
-    var alpha: CGFloat {
+    public var alpha: CGFloat {
         get { return CGFloat(self.getLayer().opacity) }
         set { self.getLayer().opacity = Float(newValue) }
     }
 
-    static func animateWithDuration(duration: NSTimeInterval, animations: () -> Void, completion: ((Bool) -> Void)?) {
+    public static func animateWithDuration(duration: NSTimeInterval, animations: () -> Void, completion: ((Bool) -> Void)?) {
         animations()
         completion?(true)
     }
 
-    func layoutSubviews() {}
+    public func layoutSubviews() {}
 #endif
 }
 

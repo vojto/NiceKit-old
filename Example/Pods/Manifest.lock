@@ -1,5 +1,13 @@
 PODS:
-  - NiceKit (0.1.0)
+  - Cartography (0.6.0)
+  - EZAlertController (0.3)
+  - NiceKit (0.1.0):
+    - Cartography
+    - Changeset
+    - EZAlertController
+    - ITSwitch
+    - SwiftColors
+  - SwiftColors (0.3.5)
 
 DEPENDENCIES:
   - NiceKit (from `../`)
@@ -9,6 +17,9 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  NiceKit: 05794841be9f4cb973b1dea5fefe383051110923
+  Cartography: 70af183a248547694a8cfaa6b989cb7e04589985
+  EZAlertController: 178808422e5281c3ffb20c28cb3eb555088bf07e
+  NiceKit: ebe4510c7aad9737dcab5914ec7d0ebfbfa0ec1d
+  SwiftColors: d50594a10bbb68b99952ed400c17d30395deb7cc
 
 COCOAPODS: 0.39.0

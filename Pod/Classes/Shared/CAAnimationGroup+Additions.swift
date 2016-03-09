@@ -9,8 +9,8 @@
 import Foundation
 import QuartzCore
 
-extension CAAnimationGroup {
-    var stays: Bool {
+public extension CAAnimationGroup {
+    public var stays: Bool {
         get {
             return !removedOnCompletion && fillMode == kCAFillModeForwards
         }

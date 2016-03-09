@@ -18,7 +18,7 @@ public class NKStylesheet: NKStylesheetEntry {
         super.init(cls: "root")
     }
 
-    static func styleForClasses(var classes: [String]) -> NKStyle {
+    public static func styleForClasses(var classes: [String]) -> NKStyle {
         let style = NKStyle()
 
         #if os(OSX)
@@ -36,11 +36,11 @@ public class NKStylesheet: NKStylesheetEntry {
         return style
     }
 
-    static func styleForView(view: AnyClass) -> NKStyle {
+    public static func styleForView(view: AnyClass) -> NKStyle {
         return styleForView(view, classes: [])
     }
 
-    static func styleForView(view: AnyClass, var classes: [String]) -> NKStyle {
+    public static func styleForView(view: AnyClass, var classes: [String]) -> NKStyle {
 //        Log.t("Getting style for view: \(view)")
         let viewName = NSStringFromClass(view)
 //        Log.t("    viewName = \(viewName)")

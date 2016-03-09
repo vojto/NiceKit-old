@@ -9,10 +9,10 @@
 import Foundation
 import CoreGraphics
 
-class NKBezierPath: XBezierPath {
-    var size: CGSize?
+public class NKBezierPath: XBezierPath {
+    public var size: CGSize?
 
-    func renderToImage(size: CGSize) -> XImage {
+    public func renderToImage(size: CGSize) -> XImage {
         let size = self.size ?? self.bounds.size
 
         let scaleX = size.width / size.width
@@ -25,7 +25,7 @@ class NKBezierPath: XBezierPath {
         return view.renderToImage()
     }
 
-    func renderToImage() -> XImage {
+    public func renderToImage() -> XImage {
         return renderToImage(self.size!)
     }
 }

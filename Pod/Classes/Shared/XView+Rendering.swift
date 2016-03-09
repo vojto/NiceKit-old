@@ -13,9 +13,9 @@ import UIKit
 import AppKit
 #endif
 
-extension XView {
+public extension XView {
 #if os(OSX)
-    func renderToImage() -> XImage {
+    public func renderToImage() -> XImage {
         let frame = self.bounds
         let size = frame.size
 
@@ -53,14 +53,14 @@ extension XView {
         return image
     }
 #else
-    func renderToImage() -> UIImage {
-    UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
-    let ctx = UIGraphicsGetCurrentContext()
-    layer.renderInContext(ctx!)
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
+    public func renderToImage() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
+        let ctx = UIGraphicsGetCurrentContext()
+        layer.renderInContext(ctx!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
 
-    return image
+        return image
     }
 #endif
 }

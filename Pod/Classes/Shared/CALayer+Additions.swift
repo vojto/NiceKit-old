@@ -9,8 +9,8 @@
 import Foundation
 import QuartzCore
 
-extension CALayer {
-    func animate(property: String, to: CGFloat, duration: Double) {
+public extension CALayer {
+    public func animate(property: String, to: CGFloat, duration: Double) {
         let currentValue = valueForKey(property)
 
         let animation = CABasicAnimation()
@@ -23,7 +23,7 @@ extension CALayer {
         setValue(to, forKey: property)
     }
 
-    var scale: (CGFloat, CGFloat) {
+    public var scale: (CGFloat, CGFloat) {
         get {
             return (transform.m11, transform.m22)
         }
@@ -36,8 +36,8 @@ extension CALayer {
 }
 
 
-extension CAShapeLayer {
-    static func circleLayer(frame: CGRect) -> CAShapeLayer {
+public extension CAShapeLayer {
+    public static func circleLayer(frame: CGRect) -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.frame = frame
         let path = XBezierPath(ovalInRect: frame)

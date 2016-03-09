@@ -84,8 +84,14 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-NiceKit_Tests/Cartography.framework"
+  install_framework "Pods-NiceKit_Tests/EZAlertController.framework"
   install_framework "Pods-NiceKit_Tests/NiceKit.framework"
+  install_framework "Pods-NiceKit_Tests/SwiftColors.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-NiceKit_Tests/Cartography.framework"
+  install_framework "Pods-NiceKit_Tests/EZAlertController.framework"
   install_framework "Pods-NiceKit_Tests/NiceKit.framework"
+  install_framework "Pods-NiceKit_Tests/SwiftColors.framework"
 fi

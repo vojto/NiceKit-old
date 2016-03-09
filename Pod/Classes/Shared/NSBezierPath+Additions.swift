@@ -9,8 +9,8 @@
 import Foundation
 import CoreGraphics
 
-extension XBezierPath {
-    convenience init(pieSliceInRect rect: CGRect, size: CGFloat) {
+public extension XBezierPath {
+    public convenience init(pieSliceInRect rect: CGRect, size: CGFloat) {
         self.init()
         let mid = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect))
         let radius = rect.size.width / 2
@@ -26,19 +26,19 @@ extension XBezierPath {
     }
 
     #if os(OSX)
-    convenience init(roundedRect: CGRect, cornerRadius: CGFloat) {
+    public convenience init(roundedRect: CGRect, cornerRadius: CGFloat) {
         self.init(roundedRect: roundedRect, xRadius: cornerRadius, yRadius: cornerRadius)
     }
 
-    func addCurveToPoint(point: CGPoint, controlPoint1: CGPoint, controlPoint2: CGPoint) {
+    public func addCurveToPoint(point: CGPoint, controlPoint1: CGPoint, controlPoint2: CGPoint) {
         curveToPoint(point, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
     }
 
-    func addLineToPoint(point: CGPoint) {
+    public func addLineToPoint(point: CGPoint) {
         lineToPoint(point)
     }
 
-    func addArcWithCenter(center: CGPoint, radius: CGFloat, var startAngle: CGFloat, var endAngle: CGFloat, clockwise: Bool) {
+    public func addArcWithCenter(center: CGPoint, radius: CGFloat, var startAngle: CGFloat, var endAngle: CGFloat, clockwise: Bool) {
 
         startAngle = toDegrees(Double(startAngle))
         endAngle = toDegrees(Double(endAngle))
@@ -51,11 +51,11 @@ extension XBezierPath {
 
 
 // Taken from: https://gist.github.com/juliensagot/9749c3a1df28c38fb9f9
-extension XBezierPath {
+public extension XBezierPath {
 
     #if os(OSX)
 
-    var CGPath: CGPathRef {
+    public var CGPath: CGPathRef {
 
         get {
             return self.transformToCGPath()
@@ -103,7 +103,7 @@ extension XBezierPath {
         return path
     }
 
-    func applyTransform(transform: CGAffineTransform) {
+    public func applyTransform(transform: CGAffineTransform) {
 //        let t =
 
         let t = NSAffineTransform()

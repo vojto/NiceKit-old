@@ -17,26 +17,26 @@ func toDegrees(radians: Double) -> CGFloat {
     return CGFloat(radians * 180.0 / M_PI)
 }
 
-extension CAAnimation {
-    class func rotate(from: Double, to: Double, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
+public extension CAAnimation {
+    public class func rotate(from: Double, to: Double, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
         let (value1, value2) = valuesForRotation(from, to: to)
         return createAnimation("transform", from: value1, to: value2, duration: duration, beginTime: beginTime)
     }
 
-    class func scale(from: Double, to: Double, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
+    public class func scale(from: Double, to: Double, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
         let (value1, value2) = valuesForScale(from, to: to)
         return createAnimation("transform", from: value1, to: value2, duration: duration, beginTime: beginTime)
     }
 
-    class func opacity(from: Double, to: Double, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
+    public class func opacity(from: Double, to: Double, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
         return createAnimation("opacity", from: from, to: to, duration: duration, beginTime: beginTime)
     }
 
-    class func strokeColor(from: CGColorRef?, to: CGColorRef?, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
+    public class func strokeColor(from: CGColorRef?, to: CGColorRef?, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
         return createAnimation("strokeColor", from: from, to: to, duration: duration, beginTime: beginTime)
     }
 
-    class func fillColor(from: CGColorRef?, to: CGColorRef?, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
+    public class func fillColor(from: CGColorRef?, to: CGColorRef?, duration: CFTimeInterval, beginTime: CFTimeInterval) -> CABasicAnimation {
         return createAnimation("fillColor", from: from, to: to, duration: duration, beginTime: beginTime)
     }
 

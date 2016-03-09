@@ -8,22 +8,22 @@
 
 import Foundation
 
-extension NSUserDefaults {
-    static func set(value: AnyObject?, forKey key: String) {
+public extension NSUserDefaults {
+    public static func set(value: AnyObject?, forKey key: String) {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setObject(value, forKey: key)
     }
     
-    static func get(key: String) -> AnyObject? {
+    public static func get(key: String) -> AnyObject? {
         let defaults = NSUserDefaults.standardUserDefaults()
         return defaults.objectForKey(key)
     }
     
-    static func getInt(key: String) -> Int? {
+    public static func getInt(key: String) -> Int? {
         return self.get(key) as? Int
     }
     
-    static func getBool(key: String) -> Bool? {
+    public static func getBool(key: String) -> Bool? {
         return self.get(key) as? Bool
     }
 }

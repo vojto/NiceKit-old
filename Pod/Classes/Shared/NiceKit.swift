@@ -10,12 +10,12 @@ import Foundation
 
 public typealias NKSimpleCallback = (() -> Void)
 
-struct NiceKit {
+public struct NiceKit {
     #if os(OSX)
-    static let osx = true
-    static let ios = false
+        public static let osx = true
+        public static let ios = false
     #else
-    static let osx = false
-    static let ios = true
+        public static let osx = false
+        public static let ios = true
     #endif
 }

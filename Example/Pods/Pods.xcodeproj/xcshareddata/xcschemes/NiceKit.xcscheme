@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '2952B58C10B16B0D828EBC01'
+               BlueprintIdentifier = 'D8C1A0F79C2B79D2061E6CAA'
                BlueprintName = 'NiceKit'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'NiceKit.framework'>

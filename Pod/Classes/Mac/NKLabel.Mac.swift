@@ -9,7 +9,7 @@
 import Foundation
 
 public class NKLabel: NKTextField {
-    var userInteractionEnabled = true
+    public var userInteractionEnabled = true
 
     public override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)

@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension NSUserNotification {
-    static func deliver(title: String, text: String) {
+public extension NSUserNotification {
+    public static func deliver(title: String, text: String) {
         let center = NSUserNotificationCenter.defaultUserNotificationCenter()
         let notification = NSUserNotification()
         

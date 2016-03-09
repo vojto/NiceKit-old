@@ -9,39 +9,39 @@
 import Foundation
 import Cartography
 
-extension NKViewable {
+public extension NKViewable {
     public func setup() {
         
     }
 
-    func expandX() -> ConstraintGroup {
+    public func expandX() -> ConstraintGroup {
         return constrain(self as! XView) { v in
             v.left == v.superview!.left
             v.right == v.superview!.right
         }
     }
 
-    func expandY() -> ConstraintGroup {
+    public func expandY() -> ConstraintGroup {
         return constrain(self as! XView) { v in
             v.top == v.superview!.top
             v.bottom == v.superview!.bottom
         }
     }
 
-    func expandX(left: CGFloat, right: CGFloat) -> ConstraintGroup {
+    public func expandX(left: CGFloat, right: CGFloat) -> ConstraintGroup {
         return constrain(self as! XView) { v in
             v.left == v.superview!.left + left
             v.right == v.superview!.right - right
         }
     }
 
-    func centerX() -> ConstraintGroup {
+    public func centerX() -> ConstraintGroup {
         return constrain(self as! XView) { v in
             v.centerX == v.superview!.centerX
         }
     }
 
-    func centerY() -> ConstraintGroup {
+    public func centerY() -> ConstraintGroup {
         return constrain(self as! XView) { v in
             v.centerY == v.superview!.centerY
         }
@@ -100,7 +100,7 @@ extension XView {
         }
     }
     
-    func center() -> ConstraintGroup {
+    public func center() -> ConstraintGroup {
         return constrain(self) { v in
             v.centerX == v.superview!.centerX
             v.centerY == v.superview!.centerY
@@ -109,7 +109,7 @@ extension XView {
 
 
 
-    func centerY() -> ConstraintGroup {
+    public func centerY() -> ConstraintGroup {
         return constrain(self) { v in
             v.centerY == v.superview!.centerY
         }

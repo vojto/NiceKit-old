@@ -9,7 +9,7 @@
 import Foundation
 import ITSwitch
 
-extension ITSwitch {
+public extension ITSwitch {
     var on: Bool {
         get { return checked }
         set { checked = newValue }

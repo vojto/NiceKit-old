@@ -224,7 +224,7 @@ public class NKStoryboard {
         return window.contentView!
     }
 
-    func updateStatusBar() {
+    public func updateStatusBar() {
     }
 
 

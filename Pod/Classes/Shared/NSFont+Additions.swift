@@ -8,18 +8,18 @@
 
 import Foundation
 
-extension XFont {
+public extension XFont {
 #if os(OSX)
-    func getFontDescriptor() -> XFontDescriptor {
+    public func getFontDescriptor() -> XFontDescriptor {
         return fontDescriptor
     }
 #else
-    func getFontDescriptor() -> XFontDescriptor {
+    public func getFontDescriptor() -> XFontDescriptor {
         return fontDescriptor()
     }
 #endif
 
-    func monospaced() -> XFont? {
+    public func monospaced() -> XFont? {
         let descriptor = getFontDescriptor().fontDescriptorByAddingAttributes([XFontFeatureSettingsAttribute: [[
             XFontFeatureTypeIdentifierKey: 6,
             XFontFeatureSelectorIdentifierKey: 0

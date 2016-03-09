@@ -9,8 +9,8 @@
 import Foundation
 import CoreGraphics
 
-class NKSlider: XSlider {
-    var onChange: (() -> ())?
+public class NKSlider: XSlider {
+    public var onChange: (() -> ())?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,7 +23,7 @@ class NKSlider: XSlider {
         #endif
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -34,17 +34,17 @@ class NKSlider: XSlider {
 
     #if os(OSX)
 
-    var minimumValue: Double {
+    public var minimumValue: Double {
         get { return minValue }
         set { minValue = newValue }
     }
 
-    var maximumValue: Double {
+    public var maximumValue: Double {
         get { return maxValue }
         set { maxValue = newValue }
     }
 
-    var value: Float {
+    public var value: Float {
         get { return Float(doubleValue) }
         set { doubleValue = Double(newValue) }
     }

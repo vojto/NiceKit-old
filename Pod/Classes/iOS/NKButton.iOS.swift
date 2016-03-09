@@ -13,7 +13,7 @@ import CoreGraphics
 
 import UIKit
 
-class NKButton: XButton, NKViewable {
+public class NKButton: XButton, NKViewable {
     var style: NKStyle
     var classes = Set<String>()
 
@@ -38,7 +38,7 @@ class NKButton: XButton, NKViewable {
     var onTap: NKSimpleCallback?
     var onTouchDown: NKSimpleCallback?
 
-    var image: XImage? {
+    public var image: XImage? {
         get {
             return imageForState(.Normal)
         }

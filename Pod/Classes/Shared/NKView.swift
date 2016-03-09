@@ -61,7 +61,7 @@ public class NKView: XView, NKViewable {
 
     public func setContext(context: AnyObject?) {}
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         applyStyle()
@@ -102,22 +102,22 @@ public class NKView: XView, NKViewable {
         set { onClick = newValue }
     }
 
-    var mouseTrackingArea: NSTrackingArea?
-    var clipsToBounds = false
+    public var mouseTrackingArea: NSTrackingArea?
+    public var clipsToBounds = false
 
-    func preferredStatusBarStyle() -> XStatusBarStyle {
+    public func preferredStatusBarStyle() -> XStatusBarStyle {
         return .Default
     }
 
-    var userInteractionEnabled = true
+    public var userInteractionEnabled = true
 
-    var transform: CGAffineTransform? // TODO: Implement
+    public var transform: CGAffineTransform? // TODO: Implement
 
-    func setNeedsDisplay() {
+    public func setNeedsDisplay() {
         self.setNeedsDisplayInRect(self.bounds)
     }
 
-    var shouldTrackMouseEnterExit = false
+    public var shouldTrackMouseEnterExit = false
 
     override public var flipped: Bool { return true }
 

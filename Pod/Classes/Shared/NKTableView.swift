@@ -14,9 +14,9 @@ import Foundation
 
     public class NKTableView: NSTableView {
 
-        var onDoubleClick: (() -> ())?
+        public var onDoubleClick: (() -> ())?
 
-        var editing = false
+        public var editing = false
         
         
         // Hack that allows us editing custom text fields in custom

@@ -15,7 +15,7 @@ import CoreGraphics
     import UIKit
 #endif
 
-extension XImage {
+public extension XImage {
     #if os(OSX)
     var CGImage: CGImageRef? {
         let ctx = NSGraphicsContext.currentContext()

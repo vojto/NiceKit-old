@@ -15,22 +15,25 @@ public typealias CreateTableViewCallback = (() -> NKTableCellView)
 
 
 public class NKTableItem {
-    var viewClass: NKTableCellView.Type? = NKTableCellView.self
-    var selectable = true
-    var deletable = false
+    public var viewClass: NKTableCellView.Type? = NKTableCellView.self
+    public var selectable = true
+    public var deletable = false
 
-    var create: CreateTableViewCallback?
-    var update: ((NKTableCellView) -> ())?
+    public var create: CreateTableViewCallback?
+    public var update: ((NKTableCellView) -> ())?
 
     var row: Int? // TODO: I don't like this information being here. It's duplicate info. We can always just query
                   // XTableView for this information
-    var view: NKTableCellView?
+    public var view: NKTableCellView?
 
     public var props: SimpleDict?
 
     var height: CGFloat?
 
 //    var actions: [NKTableViewRowAction]?
+
+    public init() {
+    }
 
     public convenience init(_ viewClass: NKTableCellView.Type, height: CGFloat?) {
         self.init()

@@ -11,12 +11,12 @@ import CoreGraphics
 
 extension XScreen {
     #if os(OSX)
-    var scale: CGFloat {
+    public var scale: CGFloat {
         return self.backingScaleFactor
     }
     #endif
 
-    static var mainScale: CGFloat {
+    public static var mainScale: CGFloat {
         #if os(OSX)
         return mainScreen()!.scale
         #else

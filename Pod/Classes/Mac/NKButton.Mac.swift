@@ -15,17 +15,17 @@ public class NKButton: NKView {
     // MARK: - Properties
     // -----------------------------------------------------------------------
 
-    var image: XImage?
+    public var image: XImage?
 
-    var imageEdgeInsets: XEdgeInsets?
-    var imageEdgeInsetsNormalized: XEdgeInsets {
+    public var imageEdgeInsets: XEdgeInsets?
+    public var imageEdgeInsetsNormalized: XEdgeInsets {
         let insets = imageEdgeInsets ?? XEdgeInsetsZero
         return XEdgeInsets(top: insets.top/2, left: insets.left/2, bottom: insets.bottom/2, right: insets.right/2)
     }
 
     public var title: String! = ""
 
-    var leftClickShowsMenu = false
+    public var leftClickShowsMenu = false
 
     public var enabled = true {
         didSet {
@@ -39,9 +39,9 @@ public class NKButton: NKView {
         }
     }
 
-    var imageSize: CGSize { return image?.size ?? CGSizeMake(0, 0) }
+    public var imageSize: CGSize { return image?.size ?? CGSizeMake(0, 0) }
 
-    var imageOuterSize: CGSize {
+    public var imageOuterSize: CGSize {
         let insets = imageEdgeInsetsNormalized
 
         return CGSizeMake(imageSize.width + insets.left + insets.right,

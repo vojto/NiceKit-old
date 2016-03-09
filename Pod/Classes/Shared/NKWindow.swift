@@ -8,14 +8,14 @@
 
 import Cocoa
 
-enum NKWindowOpeningPolicy: String {
+public enum NKWindowOpeningPolicy: String {
     case Default
     case Sheet
 }
 
 public class NKWindow: NSWindow {
 
-    var openingPolicy: NKWindowOpeningPolicy = .Default
+    public var openingPolicy: NKWindowOpeningPolicy = .Default
 
     // Properties
     // -----------------------------------------------------------------------

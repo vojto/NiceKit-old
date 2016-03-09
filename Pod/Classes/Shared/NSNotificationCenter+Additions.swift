@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension NSNotificationCenter {
-    func replace(notifName: String, obj: AnyObject?, newObj: AnyObject?, target: AnyObject, selector: Selector) {
+public extension NSNotificationCenter {
+    public func replace(notifName: String, obj: AnyObject?, newObj: AnyObject?, target: AnyObject, selector: Selector) {
         if obj != nil {
             self.removeObserver(target, name: notifName, object: obj)
         }
@@ -19,17 +19,17 @@ extension NSNotificationCenter {
         }
     }
 
-    static func post(notifName: String) {
+    public static func post(notifName: String) {
         self.post(notifName, nil)
     }
     
-    static func post(notifName: String, _ object: AnyObject?) {
+    public static func post(notifName: String, _ object: AnyObject?) {
         let center = NSNotificationCenter.defaultCenter()
         let notification = NSNotification(name: notifName, object: object)
         center.postNotification(notification)
     }
     
-    static func on(notifName: String, handler: (obj: AnyObject?) -> ()) {
+    public static func on(notifName: String, handler: (obj: AnyObject?) -> ()) {
         let center = NSNotificationCenter.defaultCenter()
         
         center.addObserverForName(notifName, object: nil, queue: nil) { notification in

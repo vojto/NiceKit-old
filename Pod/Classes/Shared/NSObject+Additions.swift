@@ -12,25 +12,25 @@ struct EventObservingConstants {
     static var observersKey = NSString(string: "__eventObservers__")
 }
 
-class NKEventObserver {
+public class NKEventObserver {
     let observer: NSObjectProtocol
     
-    init(observer: NSObjectProtocol) {
+    public init(observer: NSObjectProtocol) {
         self.observer = observer
     }
     
-    func off() {
+    public func off() {
         let center = NSNotificationCenter.defaultCenter()
         center.removeObserver(self.observer)
     }
 }
 
-extension NSObject {
-    func trigger(name: String) {
+public extension NSObject {
+    public func trigger(name: String) {
         self.trigger(name, data: nil)
     }
     
-    func trigger(name: String, data: AnyObject?) {
+    public func trigger(name: String, data: AnyObject?) {
         let identifier = self.eventIdentifier(name)
         let center = NSNotificationCenter.defaultCenter()
         var userInfo = [String: AnyObject]()
@@ -41,7 +41,7 @@ extension NSObject {
         center.postNotification(notification)
     }
     
-    func on(name: String, handler: (data: AnyObject?) -> ()) -> NKEventObserver {
+    public func on(name: String, handler: (data: AnyObject?) -> ()) -> NKEventObserver {
         let identifier = self.eventIdentifier(name)
         let center = NSNotificationCenter.defaultCenter()
         let systemObserver = center.addObserverForName(identifier, object: self, queue: nil) { notification in

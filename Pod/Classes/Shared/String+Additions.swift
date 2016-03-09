@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 
-extension String {
+public extension String {
     func calculateHeight(font: XFont, width: CGFloat, padding: NKPadding) -> CGFloat {
         let attributed = NSAttributedString(string: self)
         return attributed.calculateHeight(font, width: width, padding: padding)

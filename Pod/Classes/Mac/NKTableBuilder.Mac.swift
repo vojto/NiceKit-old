@@ -28,18 +28,18 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     let hiddenIndexes = NSMutableIndexSet()
 
     // UI
-    var showsVerticalScrollIndicator: Bool = false // Doesn't do anything
-    var padding: NKPadding? {
+    public var showsVerticalScrollIndicator: Bool = false // Doesn't do anything
+    public var padding: NKPadding? {
         didSet { setPadding(padding!) } // TODO: This should be done through styles
     }
-    var enableReordering: Bool = false {
+    public var enableReordering: Bool = false {
         didSet { applyEnableReordering(enableReordering) }
     }
-    var menu: NSMenu? {
+    public var menu: NSMenu? {
         get { return self.tableView.menu }
         set { self.tableView.menu = newValue }
     }
-    var columnWidth: CGFloat { return tableView.tableColumns[0].width }
+    public var columnWidth: CGFloat { return tableView.tableColumns[0].width }
 
     // Classic API
     public var numberOfSections: (() -> Int)?
@@ -61,21 +61,21 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     dynamic var _selectionIndexes: NSIndexSet?
 
     // Events
-    var onTap: (() -> ())?                      // iOS only - doesn't do anything here
-    var onTapOut: (() -> ())?                   // iOS only - doesn't do anything here
-    var onDelete: ((row: Int) -> ())?           // TODO: Implement
-    var onScroll: ((offset: CGPoint) -> ())?    // Not sure about this one
-    var onStartScrolling: NKSimpleCallback?
-    var onDoubleClick: (() -> ())? {
+    public var onTap: (() -> ())?                      // iOS only - doesn't do anything here
+    public var onTapOut: (() -> ())?                   // iOS only - doesn't do anything here
+    public var onDelete: ((row: Int) -> ())?           // TODO: Implement
+    public var onScroll: ((offset: CGPoint) -> ())?    // Not sure about this one
+    public var onStartScrolling: NKSimpleCallback?
+    public var onDoubleClick: (() -> ())? {
         get { return tableView.onDoubleClick }
         set { tableView.onDoubleClick = newValue }
     }
     
     // Reordering callbacks
-    var canMoveItem: ((at: Int) -> Bool)?
-    var targetRowForMove: ((from: Int, to: Int) -> Int)?    // Not used here, TODO: make it somehow work with iOS
-    var canDropItem: ((from: Int, to: Int) -> Bool)?
-    var moveItem: ((atIndex: Int, toIndex: Int) -> ())?
+    public var canMoveItem: ((at: Int) -> Bool)?
+    public var targetRowForMove: ((from: Int, to: Int) -> Int)?    // Not used here, TODO: make it somehow work with iOS
+    public var canDropItem: ((from: Int, to: Int) -> Bool)?
+    public var moveItem: ((atIndex: Int, toIndex: Int) -> ())?
 
 
 
@@ -108,7 +108,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         self.addObserver(self, forKeyPath: "_selectionIndexes", options: .New, context: nil)
     }
 
-    func reload() {
+    public func reload() {
 //        print("Reloading! 😈")
 
         hiddenIndexes.removeAllIndexes()
@@ -128,11 +128,11 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Public API
     // ------------------------------------------------------------------------
 
-    func viewAt(index: Int) -> NSView? {
+    public func viewAt(index: Int) -> NSView? {
         return tableView.viewAtColumn(0, row: index, makeIfNecessary: false)
     }
 
-    func indexForView(view: NKTableCellView) -> Int? {
+    public func indexForView(view: NKTableCellView) -> Int? {
         return items.indexOf { $0.view == view }
     }
     
@@ -309,7 +309,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Selecting items
     // ------------------------------------------------------------------------
 
-    var selectedRow: Int? {
+    public var selectedRow: Int? {
         return tableView.selectedRow
     }
 
@@ -317,17 +317,17 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         handleSelectionChange(tableView.selectedRowIndexes)
     }
 
-    func selectRow(index: Int) {
+    public func selectRow(index: Int) {
         selectIndexes(NSIndexSet(index: index))
     }
 
-    func selectIndexes(indexes: NSIndexSet) {
+    public func selectIndexes(indexes: NSIndexSet) {
         tableView.selectRowIndexes(indexes, byExtendingSelection: false)
 
         handleSelectionChange(indexes)
     }
 
-    func reselectIndexes(proposedIndexes: NSIndexSet) {
+    public func reselectIndexes(proposedIndexes: NSIndexSet) {
         let indexes = indexesForReselection(proposedIndexes)
 
         selectIndexes(indexes)
@@ -381,7 +381,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
     }
 
-    func deselect() {
+    public func deselect() {
         fatalError("Deselect not implemented yet")
     }
 
@@ -426,7 +426,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     
     // MARK: Recalculating heights
     
-    func recalculateHeightForView(view: NKTableCellView) {
+    public func recalculateHeightForView(view: NKTableCellView) {
         let indexes = NSMutableIndexSet()
         
         self.tableView.enumerateAvailableRowViewsUsingBlock { rowView, index in
@@ -438,12 +438,12 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         recalculateHeights(indexes)
     }
     
-    func recalculateAllHeights() {
+    public func recalculateAllHeights() {
         let indexes = NSIndexSet(indexesInRange: NSMakeRange(0, tableView.numberOfRows))
         recalculateHeights(indexes)
     }
     
-    func recalculateHeights(indexes: NSIndexSet) {
+    public func recalculateHeights(indexes: NSIndexSet) {
         let context = NSAnimationContext.currentContext()
         
         NSAnimationContext.beginGrouping()
@@ -536,13 +536,13 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
     }
 
-    func toggleReordering() { // Doesn't do anything on Mac
+    public func toggleReordering() { // Doesn't do anything on Mac
     }
 
     // MARK: Hiding/showing rows
     // -----------------------------------------------------------------------
 
-    func hideRowAt(index: Int) {
+    public func hideRowAt(index: Int) {
         if hiddenIndexes.containsIndex(index) {
             return
         }
@@ -556,7 +556,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         recalculateAllHeights()
     }
 
-    func unhideRowAt(index: Int) {
+    public func unhideRowAt(index: Int) {
         if !hiddenIndexes.containsIndex(index) {
             return
         }
@@ -573,7 +573,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Scrolling
     // -----------------------------------------------------------------------
 
-    func scrollToBottom() {
+    public func scrollToBottom() {
         let rows = tableView.numberOfRows
         tableView.scrollRowToVisible(rows - 1)
     }
