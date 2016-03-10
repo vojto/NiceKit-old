@@ -204,7 +204,9 @@ public class NKButton: NKView {
         removeClass("active")
         setNeedsDisplay()
 
-        onClick?()
+        if enabled {
+            onClick?()
+        }
     }
 
     override public var mouseDownCanMoveWindow: Bool {
