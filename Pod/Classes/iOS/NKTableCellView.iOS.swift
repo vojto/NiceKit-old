@@ -9,16 +9,16 @@
 import Foundation
 import UIKit
 
-class NKTableCellView: UITableViewCell, NKViewable {
+public class NKTableCellView: UITableViewCell, NKViewable {
 //        var selected = false
     var builder: NKTableBuilder!
-    var style: NKStyle
-    var classes = Set<String>()
+    public var style: NKStyle
+    public var classes = Set<String>()
 
     #if os(iOS)
-    var tapRecognizer: UITapGestureRecognizer?
-    var onClick: NKSimpleCallback?
-    var onTap: NKSimpleCallback? {
+    public var tapRecognizer: UITapGestureRecognizer?
+    public var onClick: NKSimpleCallback?
+    public var onTap: NKSimpleCallback? {
         didSet {
             if tapRecognizer == nil {
                 tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap")
@@ -33,11 +33,11 @@ class NKTableCellView: UITableViewCell, NKViewable {
     
     #else
     
-    var onTap: (() -> ())?
+    public var onTap: (() -> ())?
     
     #endif
 
-    required init(reuseIdentifier: String) {
+    required public init(reuseIdentifier: String) {
         self.style = NKStylesheet.styleForView(self.dynamicType)
 
         super.init(style: .Default, reuseIdentifier: reuseIdentifier)
@@ -47,7 +47,7 @@ class NKTableCellView: UITableViewCell, NKViewable {
         applyLayoutFromChildrenStyles()
     }
 
-    convenience init(reuseIdentifier: String, setup: SetupCallback) {
+    public convenience init(reuseIdentifier: String, setup: SetupCallback) {
         self.init(reuseIdentifier: reuseIdentifier)
 
         let subviews = setup(view: self)
@@ -57,23 +57,23 @@ class NKTableCellView: UITableViewCell, NKViewable {
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup() {
+    public func setup() {
     }
 
-    func update(item: NKTableItem) {
+    public func update(item: NKTableItem) {
     }
 
-    override func drawRect(rect: CGRect) {
+    public override func drawRect(rect: CGRect) {
         super.drawRect(rect)
 
         style.draw(rect)
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    public override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         if selected {

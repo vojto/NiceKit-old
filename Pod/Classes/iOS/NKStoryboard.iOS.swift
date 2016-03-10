@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import EZAlertController
 
-class NKStoryboard {
+public class NKStoryboard {
     static var _instance: NKStoryboard?
 
 
@@ -32,7 +32,7 @@ class NKStoryboard {
     // MARK: - Lifecycle
     // -----------------------------------------------------------------------
 
-    static var instance: NKStoryboard {
+    public static var instance: NKStoryboard {
         get {
             if _instance == nil { _instance = NKStoryboard() }
             return _instance!
@@ -54,7 +54,7 @@ class NKStoryboard {
         return lastNavigationController?.viewControllers.last as! NKViewController?
     }
 
-    var currentSceneName: String? {
+    public var currentSceneName: String? {
         return currentController?.sceneName
     }
 
@@ -63,7 +63,7 @@ class NKStoryboard {
     // MARK: - Registering objects
     // -----------------------------------------------------------------------
 
-    func registerScene(name: String, viewClass: NKView.Type) {
+    public func registerScene(name: String, viewClass: NKView.Type) {
         if viewClasses.keys.contains(name) {
             fatalError("Can't add scene named \(name), already has scene with that name!")
         }
@@ -71,12 +71,12 @@ class NKStoryboard {
         viewClasses[name] = viewClass
     }
 
-    func registerTransition(fromScene: String, toScene: String, transition: NKTransitionType) {
+    public func registerTransition(fromScene: String, toScene: String, transition: NKTransitionType) {
         let transition = NKTransition(fromScene: fromScene, toScene: toScene, transition: transition)
         transitions.insert(transition)
     }
 
-    func setRootScene(scene: String) {
+    public func setRootScene(scene: String) {
         rootSceneName = scene
     }
 
@@ -86,7 +86,7 @@ class NKStoryboard {
     // MARK: - Getting instances
     // -----------------------------------------------------------------------
 
-    func controllerForScene(name: String) -> NKViewController {
+    public func controllerForScene(name: String) -> NKViewController {
         if controllers[name] == nil {
             let view = self.viewForScene(name)
             let controller = NKViewController(view: view)
@@ -136,23 +136,23 @@ class NKStoryboard {
     // MARK: - Making transitions
     // -----------------------------------------------------------------------
 
-    func transitionTo(name: String) {
+    public func transitionTo(name: String) {
         transitionTo(name, context: nil)
     }
 
-    func transitionTo(name: String, context: AnyObject?) {
+    public func transitionTo(name: String, context: AnyObject?) {
         let transition = self.transition(currentSceneName!, to: name)
 
         let controller = controllerForScene(name)
         controller.setContext(context)
 
         guard let currentNavigation = self.navigationControllers.last else {
-            Log.e("Cannot transition, there are no navigation controllers in the stack")
+            Swift.print("Cannot transition, there are no navigation controllers in the stack")
             return
         }
 
         guard let currentController = self.currentController else {
-            Log.e("Cannot transition, there is no current controller")
+            Swift.print("Cannot transition, there is no current controller")
             return
         }
 
@@ -185,13 +185,13 @@ class NKStoryboard {
         executedTransitions.append(transition)
     }
 
-    func transitionBack() {
+    public func transitionBack() {
         transitionBack(nil)
     }
 
-    func transitionBack(window: String?) {
+    public func transitionBack(window: String?) {
         guard executedTransitions.count > 0 else {
-            Log.e("Cannot transition back, no transitions were made")
+            Swift.print("Cannot transition back, no transitions were made")
             return
         }
 
@@ -205,7 +205,7 @@ class NKStoryboard {
 
         case .Push:
             guard let nav = navigationControllers.last else {
-                Log.e("Cannot transition back from Push, no navigation controller in the stack")
+                Swift.print("Cannot transition back from Push, no navigation controller in the stack")
                 return
             }
             nav.popViewControllerAnimated(true)
@@ -227,11 +227,11 @@ class NKStoryboard {
     // MARK: - Showing alerts
     // -----------------------------------------------------------------------
 
-    func showAlert(text: String, description: String?) {
+    public func showAlert(text: String, description: String?) {
         showAlert(text, description: description, callback: nil)
     }
 
-    func showAlert(text: String, description: String?, callback: NKSimpleCallback?) {
+    public func showAlert(text: String, description: String?, callback: NKSimpleCallback?) {
         EZAlertController.alert(text, message: description ?? "", acceptMessage: "OK") {
             callback?()
         }
@@ -242,7 +242,7 @@ class NKStoryboard {
     // MARK: - Helpers
     // -----------------------------------------------------------------------
 
-    func updateStatusBar() {
+    public func updateStatusBar() {
         currentController?.setNeedsStatusBarAppearanceUpdate()
     }
 }

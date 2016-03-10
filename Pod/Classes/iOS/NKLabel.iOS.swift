@@ -11,12 +11,12 @@ import CoreGraphics
 import UIKit
 
 
-class NKLabel: XLabel, NKViewable {
-    var style: NKStyle
-    var classes = Set<String>()
+public class NKLabel: XLabel, NKViewable {
+    public var style: NKStyle
+    public var classes = Set<String>()
 
-    var tapRecognizer: UITapGestureRecognizer?
-    var onTap: (() -> ())? {
+    public var tapRecognizer: UITapGestureRecognizer?
+    public var onTap: (() -> ())? {
         didSet {
             if tapRecognizer == nil {
                 tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap")
@@ -25,13 +25,13 @@ class NKLabel: XLabel, NKViewable {
             userInteractionEnabled = true
         }
     }
-    var onClick: NKSimpleCallback?
-    var onAction: (() -> ())? {
+    public var onClick: NKSimpleCallback?
+    public var onAction: (() -> ())? {
         get { return onTap }
         set { onTap = newValue }
     }
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         self.style = NKStylesheet.styleForView(self.dynamicType)
 
         super.init(frame: frame)
@@ -43,7 +43,7 @@ class NKLabel: XLabel, NKViewable {
         setup()
     }
 
-    override var text: String? {
+    public override var text: String? {
         get { return super.text }
         set {
             if self.style.textTransform == .Uppercase {
@@ -54,20 +54,20 @@ class NKLabel: XLabel, NKViewable {
         }
     }
 
-    func setup() {
+    public func setup() {
     }
 
-    convenience init(text: String) {
+    public convenience init(text: String) {
         self.init(frame: CGRectZero)
 
         self.text = text
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyStyle() {
+    public func applyStyle() {
         self.font = style.font
         if let color = style.textColor {
             self.textColor = color.color
@@ -95,7 +95,7 @@ class NKLabel: XLabel, NKViewable {
         onTap?()
     }
 
-    override func willMoveToSuperview(newSuperview: XView?) {
+    public override func willMoveToSuperview(newSuperview: XView?) {
         super.willMoveToSuperview(newSuperview)
         self.applyStyle()
     }

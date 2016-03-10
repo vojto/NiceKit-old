@@ -12,28 +12,28 @@
 
     import UIKit
 
-    typealias XView = UIView
-    typealias XColor = UIColor
-    typealias XEvent = UIEvent
-    typealias XLabel = UILabel
-    typealias XButton = UIButton
-    typealias XFont = UIFont
-    typealias XFontDescriptor = UIFontDescriptor
-    typealias XImage = UIImage
-    typealias XBezierPath = UIBezierPath
-    typealias XTextField = UITextField
-    typealias XTableView = UITableView
-    typealias XTableViewRowAction = UITableViewRowAction
-    typealias XApplication = UIApplication
-    typealias XSlider = UISlider
-    typealias XDevice = UIDevice
-    typealias XImageView = UIImageView
-    typealias XStatusBarStyle = UIStatusBarStyle
-    typealias XPanGestureRecognizer = UIPanGestureRecognizer
-    typealias XGestureRecognizer = UIGestureRecognizer
-    typealias XScreen = UIScreen
-    typealias XApplicationState = UIApplicationState
-    typealias XSwitch = UISwitch
+    public typealias XView = UIView
+    public typealias XColor = UIColor
+    public typealias XEvent = UIEvent
+    public typealias XLabel = UILabel
+    public typealias XButton = UIButton
+    public typealias XFont = UIFont
+    public typealias XFontDescriptor = UIFontDescriptor
+    public typealias XImage = UIImage
+    public typealias XBezierPath = UIBezierPath
+    public typealias XTextField = UITextField
+    public typealias XTableView = UITableView
+    public typealias XTableViewRowAction = UITableViewRowAction
+    public typealias XApplication = UIApplication
+    public typealias XSlider = UISlider
+    public typealias XDevice = UIDevice
+    public typealias XImageView = UIImageView
+    public typealias XStatusBarStyle = UIStatusBarStyle
+    public typealias XPanGestureRecognizer = UIPanGestureRecognizer
+    public typealias XGestureRecognizer = UIGestureRecognizer
+    public typealias XScreen = UIScreen
+    public typealias XApplicationState = UIApplicationState
+    public typealias XSwitch = UISwitch
 
     public let XFontWeightUltraLight = UIFontWeightUltraLight
     public let XFontWeightThin = UIFontWeightThin

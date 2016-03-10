@@ -26,7 +26,6 @@ public class NKSound: Equatable {
             do {
                 try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
             } catch _ {
-                Log.e("Failed making audio ambient")
             }
 
             let bundle = NSBundle.mainBundle()

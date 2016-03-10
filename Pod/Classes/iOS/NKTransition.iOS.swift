@@ -8,23 +8,23 @@
 
 import Foundation
 
-enum NKTransitionType: String {
+public enum NKTransitionType: String {
     case Push
     case Modal
     case Overlay
 }
 
-struct NKTransition: Hashable {
+public struct NKTransition: Hashable {
     let fromScene: String
     let toScene: String
     let transition: NKTransitionType
 
-    var hashValue: Int {
+    public var hashValue: Int {
         return "\(fromScene)\(toScene)\(transition)".hashValue
     }
 }
 
-func ==(lhs: NKTransition, rhs: NKTransition) -> Bool {
+public func ==(lhs: NKTransition, rhs: NKTransition) -> Bool {
     return lhs.fromScene == rhs.fromScene &&
         lhs.toScene == rhs.toScene &&
         lhs.transition == rhs.transition

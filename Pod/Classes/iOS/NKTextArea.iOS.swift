@@ -9,29 +9,29 @@
 import Foundation
 import UIKit
 
-class NKTextArea: UITextView, NKViewable {
+public class NKTextArea: UITextView, NKViewable {
     // TODO: Implement this for UITextView, or just use UITextField somehow... 
     // See: http://stackoverflow.com/questions/1328638/placeholder-in-uitextview
-    var attributedPlaceholder: NSAttributedString?
+    public var attributedPlaceholder: NSAttributedString?
 
     var delegateRetainer = NKTextAreaDelegate()
 
-    var onFocus: (() -> ())?
-    var onBlur: (() -> ())?
-    var onChange: (() -> ())?
+    public var onFocus: (() -> ())?
+    public var onBlur: (() -> ())?
+    public var onChange: (() -> ())?
 
-    var bezeled: Bool = false // TODO: Doesn't do anything, should it?
+    public var bezeled: Bool = false // TODO: Doesn't do anything, should it?
 
-    var style: NKStyle
-    var classes = Set<String>()
+    public var style: NKStyle
+    public var classes = Set<String>()
 
-    var isFieldFocused = false {
+    public var isFieldFocused = false {
         didSet {
             setNeedsDisplay()
         }
     }
 
-    override init(frame: CGRect, textContainer: NSTextContainer?) {
+    public override init(frame: CGRect, textContainer: NSTextContainer?) {
         self.style = NKStylesheet.styleForView(self.dynamicType)
 
         super.init(frame: frame, textContainer: textContainer)
@@ -49,23 +49,23 @@ class NKTextArea: UITextView, NKViewable {
         backgroundColor = XColor.clearColor()
     }
 
-    override var editable: Bool {
+    public override var editable: Bool {
         didSet {
             userInteractionEnabled = editable
         }
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         textContainer.lineFragmentPadding = 0
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
+    public override func drawRect(rect: CGRect) {
         super.drawRect(rect)
 
         if let placeholder = attributedPlaceholder where text.characters.count == 0 && !isFieldFocused {
@@ -73,7 +73,7 @@ class NKTextArea: UITextView, NKViewable {
         }
     }
 
-    func applyStyle() {
+    public func applyStyle() {
         self.font = style.font
         if let color = style.textColor {
             self.textColor = color.color
@@ -84,7 +84,7 @@ class NKTextArea: UITextView, NKViewable {
         }
     }
 
-    override func willMoveToSuperview(newSuperview: XView?) {
+    public override func willMoveToSuperview(newSuperview: XView?) {
         super.willMoveToSuperview(newSuperview)
         self.applyStyle()
     }

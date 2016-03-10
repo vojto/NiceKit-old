@@ -8,6 +8,6 @@
 
 import Foundation
 
-func NSRectMidPoint(rect: NSRect) -> NSPoint {
-    return NSMakePoint(NSMidX(rect), NSMidY(rect))
-}
+//func NSRectMidPoint(rect: CGRect) -> CGPoint {
+//    return NSMakePoint(NSMidX(rect), NSMidY(rect))
+//}

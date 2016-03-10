@@ -9,81 +9,70 @@
 import Foundation
 import UIKit
 
-
-
-
-class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
-    var padding: NKPadding? {
-        get {
-            return nil
-        }
-        set {
-            tableView.contentInset = newValue!.edgeInsets
-        }
+public class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
+    public var padding: NKPadding? {
+        get { return nil }
+        set { tableView.contentInset = newValue!.edgeInsets }
     }
 
-    var controller: UITableViewController?
-    let tableView: UITableView
-    let mainView: NKView
+    public let tableView: UITableView
+    public let mainView: NKView
 
-    var selectedRow: Int?
+    public var selectedRow: Int?
 
-    var enableReordering = false
+    public var enableReordering = false
 
-
-    var items = [NKTableItem]() {
-        didSet {
-            reload()
-        }
+    public var items = [NKTableItem]() {
+        didSet { reload() }
     }
 
 //    var viewIdentifierForRow: ((row: Int) -> String)?
 //    var createCellView: ((row: Int) -> NKTableCellView?)?
 //    var updateCellView: ((view: NKTablespoCellView, row: Int) -> Void)?
 
-    var calcRowHeight: ((row: Int) -> CGFloat)?
-    var rowHeight: CGFloat?
+    public var calcRowHeight: ((row: Int) -> CGFloat)?
+    public var rowHeight: CGFloat?
 
     // Classic API
-    var numberOfSections: (() -> Int)?
-    var numberOfRows: ((section: Int) -> Int)?
-    var itemForRow: ((section: Int, row: Int) -> NKTableItem)?
-    var viewForHeader: ((section: Int) -> NKView)?
-    var headerHeight: CGFloat?
+    public var numberOfSections: (() -> Int)?
+    public var numberOfRows: ((section: Int) -> Int)?
+    public var itemForRow: ((section: Int, row: Int) -> NKTableItem)?
+    public var viewForHeader: ((section: Int) -> NKView)?
+    public var headerHeight: CGFloat?
 
-    var onSelectRow: ((row: Int) -> ())?
-    var onSelect: ((item: NKTableItem) -> ())?
-    var onDeselectRow: (() -> ())?
+    public var onSelectRow: ((row: Int) -> ())?
+    public var onSelect: ((item: NKTableItem) -> ())?
+    public var onDeselectRow: (() -> ())?
 
-    var onDelete: ((row: Int) -> ())?
+    public var onDelete: ((row: Int) -> ())?
 
-    var onStartScrolling: NKSimpleCallback?
-    var onScroll: ((offset: CGPoint) -> ())?
+    public var onStartScrolling: NKSimpleCallback?
+    public var onScroll: ((offset: CGPoint) -> ())?
 
     // Reordering callbacks
-    var canMoveItem: ((at: Int) -> Bool)?
-    var moveItem: ((atIndex: Int, toIndex: Int) -> ())?
-    var targetRowForMove: ((from: Int, to: Int) -> Int)?
-    var canDropItem: ((from: Int, to: Int) -> Bool)? // Not used here
+    public var canMoveItem: ((at: Int) -> Bool)?
+    public var moveItem: ((atIndex: Int, toIndex: Int) -> ())?
+    public var targetRowForMove: ((from: Int, to: Int) -> Int)?
+    public var canDropItem: ((from: Int, to: Int) -> Bool)? // Not used here
 
-    var showsVerticalScrollIndicator: Bool {
+    public var showsVerticalScrollIndicator: Bool {
         get { return tableView.showsVerticalScrollIndicator }
         set { tableView.showsVerticalScrollIndicator = newValue }
     }
 
 
-    let selectedBackgroundView = NKTableSelectedBackgroundView()
-    var drawSelection: ((rect: CGRect) -> ())? {
+    public let selectedBackgroundView = NKTableSelectedBackgroundView()
+    public var drawSelection: ((rect: CGRect) -> ())? {
         didSet {
             selectedBackgroundView.drawingBlock = drawSelection
         }
     }
 
-    var columnWidth: CGFloat {
+    public var columnWidth: CGFloat {
         return tableView.frame.size.width
     }
 
-    override init() {
+    public override init() {
         tableView = NKTableView()
 
         tableView.separatorStyle = .None
@@ -121,11 +110,11 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
 
     }
 
-    func selectRow(index: Int) {
+    public func selectRow(index: Int) {
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0), animated: false, scrollPosition: .None)
     }
 
-    func deselect() {
+    public func deselect() {
         if let selection = tableView.indexPathForSelectedRow {
             tableView.deselectRowAtIndexPath(selection, animated: false)
             handleRowSelection()
@@ -133,22 +122,22 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
 
     }
 
-    func viewAt(index: Int) -> UITableViewCell? {
+    public func viewAt(index: Int) -> UITableViewCell? {
         return tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0))
     }
 
-    func recalculateHeightForView(view: NKTableCellView) {
+    public func recalculateHeightForView(view: NKTableCellView) {
         recalculateHeights()
     }
 
-    func recalculateHeights() {
+    public func recalculateHeights() {
         UIView.setAnimationsEnabled(false)
         tableView.beginUpdates()
         tableView.endUpdates()
         UIView.setAnimationsEnabled(true)
     }
 
-    func reload() {
+    public func reload() {
         hiddenIndexes.removeAllIndexes()
 
         tableView.reloadData()
@@ -158,7 +147,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
 
     // MARK: UITableView delegate
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if let fun = numberOfSections {
             return fun()
         } else {
@@ -166,7 +155,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         }
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let fun = numberOfRows {
             return fun(section: section)
         } else {
@@ -174,15 +163,15 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         }
     }
 
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return viewForHeader?(section: section)
     }
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return headerHeight ?? 0
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let row = indexPath.row
 
         let item = itemAt(indexPath)
@@ -224,7 +213,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         }
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let row = indexPath.row
 
         if hiddenIndexes.contains(row) {
@@ -250,7 +239,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
 
     // MARK: Handling selection
 
-    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+    public func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         let item = itemAt(indexPath)
 
         if item.selectable {
@@ -261,11 +250,11 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
     }
 
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         handleRowSelection()
     }
 
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    public func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         handleRowSelection()
     }
 
@@ -283,20 +272,18 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
                 onDeselectRow?()
             }
         }
-
-
     }
 
     // MARK: Hiding rows
 
     let hiddenIndexes = NSMutableIndexSet()
 
-    func hideRowAt(index: Int) {
+    public func hideRowAt(index: Int) {
         hiddenIndexes.addIndex(index)
         recalculateHeights()
     }
 
-    func unhideRowAt(index: Int) {
+    public func unhideRowAt(index: Int) {
         hiddenIndexes.removeIndex(index)
         recalculateHeights()
     }
@@ -304,7 +291,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
     // MARK: Recognizing tap gestures
 
     var tapGestureRecognizer: UITapGestureRecognizer?
-    var onTap: SimpleCallback? {
+    public var onTap: NKSimpleCallback? {
         didSet {
             if tapGestureRecognizer == nil {
                 tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
@@ -314,7 +301,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         }
     }
 
-    var onTapOut: SimpleCallback?
+    public var onTapOut: NKSimpleCallback?
 
     func handleTap(sender: UITapGestureRecognizer) {
         onTap?()
@@ -326,35 +313,33 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         if view === tableView {
             onTapOut?()
         }
-
-
     }
 
 
     // MARK: Scrolling
 
-    func scrollTo(view: NKTableCellView) {
+    public func scrollTo(view: NKTableCellView) {
         if let indexPath = tableView.indexPathForCell(view) {
             tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         }
     }
 
-    func scrollToPoint(point: CGPoint) {
+    public func scrollToPoint(point: CGPoint) {
         tableView.setContentOffset(point, animated: false)
     }
 
-    func scrollToBottom() {
+    public func scrollToBottom() {
         scrollToPoint(CGPointMake(0, CGFloat.max))
     }
 
     // MARK: Row actions
 
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         let item = itemAt(indexPath)
         return item.deletable
     }
 
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+    public func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         if tableView.editing {
             return .Delete
         } else {
@@ -362,7 +347,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         }
     }
 
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             onDelete?(row: indexPath.row)
         }
@@ -393,8 +378,6 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         if tableView.window == nil {
             return
         }
-
-        print("Showing keyboard")
 
         guard let info = notif.userInfo else { return }
         guard let rect = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.CGRectValue() else { return }
@@ -433,11 +416,11 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
 
     // MARK: - Responding to scrolling
 
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         onStartScrolling?()
     }
 
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
         let offset = scrollView.contentOffset
 
         onScroll?(offset: offset)
@@ -445,7 +428,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
 
     // MARK: - Reordering
 
-    func toggleReordering() {
+    public func toggleReordering() {
         if tableView.editing {
             tableView.setEditing(false, animated: true)
         } else {
@@ -453,7 +436,7 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         }
     }
 
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         if let cb = canMoveItem {
             return cb(at: indexPath.row)
         } else {
@@ -461,11 +444,11 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
         }
     }
 
-    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+    public func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         moveItem?(atIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
     }
 
-    func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+    public func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
         let from = sourceIndexPath.row
         let to = proposedDestinationIndexPath.row
 
@@ -479,21 +462,21 @@ class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UISc
 }
 
 
-class NKTableSelectedBackgroundView: XView {
+public class NKTableSelectedBackgroundView: XView {
     var drawingBlock: ((rect: CGRect) -> ())?
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
 
         opaque = false
         backgroundColor = XColor.clearColor()
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
+    public override func drawRect(rect: CGRect) {
 //        XColor.clearColor().set()
 //        let ctx = XGraphicsGetCurrentContext()
 //

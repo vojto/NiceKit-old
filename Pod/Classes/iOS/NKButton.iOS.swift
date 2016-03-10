@@ -14,29 +14,29 @@ import CoreGraphics
 import UIKit
 
 public class NKButton: XButton, NKViewable {
-    var style: NKStyle
-    var classes = Set<String>()
+    public var style: NKStyle
+    public var classes = Set<String>()
 
-    var isActive = false {
+    public var isActive = false {
         didSet {
             isActive ? addClass("active") : removeClass("active")
             applyStyle()
         }
     }
 
-    override var enabled: Bool {
+    public override var enabled: Bool {
         didSet {
             enabled ? removeClass("disabled") : addClass("disabled")
             applyStyle()
         }
     }
 
-    var action: (() -> ())? {
+    public var action: (() -> ())? {
         get { return onTap }
         set { onTap = newValue }
     }
-    var onTap: NKSimpleCallback?
-    var onTouchDown: NKSimpleCallback?
+    public var onTap: NKSimpleCallback?
+    public var onTouchDown: NKSimpleCallback?
 
     public var image: XImage? {
         get {
@@ -48,7 +48,7 @@ public class NKButton: XButton, NKViewable {
         }
     }
 
-    var title: String? {
+    public var title: String? {
         get {
             return titleLabel?.text
         }
@@ -58,7 +58,7 @@ public class NKButton: XButton, NKViewable {
         }
     }
 
-    init() {
+    public init() {
         self.style = NKStylesheet.styleForView(self.dynamicType)
 
         super.init(frame: CGRectZero)
@@ -76,20 +76,20 @@ public class NKButton: XButton, NKViewable {
         // TODO: Apply style to the view/layers
     }
 
-    convenience init(title: String) {
+    public convenience init(title: String) {
         self.init()
 
         self.title = title
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup() {
+    public func setup() {
     }
 
-    func applyStyle() {
+    public func applyStyle() {
         titleLabel?.font = style.font
 
         if let color = style.textColor?.color {
@@ -116,13 +116,13 @@ public class NKButton: XButton, NKViewable {
         setNeedsDisplay()
     }
 
-    override func drawRect(rect: CGRect) {
+    public override func drawRect(rect: CGRect) {
         style.draw(rect)
 
         super.drawRect(rect)
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         applyStyle()
@@ -144,7 +144,7 @@ public class NKButton: XButton, NKViewable {
         isActive = false
     }
 
-    override func setTitle(title: String?, forState state: UIControlState) {
+    public override func setTitle(title: String?, forState state: UIControlState) {
         if style.textTransform == .Uppercase {
             super.setTitle(title?.uppercaseString, forState: state)
         } else {

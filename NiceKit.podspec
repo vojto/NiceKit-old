@@ -17,24 +17,27 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/vojto/NiceKit.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/_vojto'
 
-  s.ios.deployment_target = "8.0"
+  s.ios.deployment_target = "9.0"
   s.osx.deployment_target = "10.11"
+  s.watchos.deployment_target = "2.0"
 
   # s.requires_arc = true
 
-  s.ios.source_files = ['Pod/Classes/Shared/**/*', 'Pod/Classes/iOS/**/*']
-  s.osx.source_files = ['Pod/Classes/Shared/**/*', 'Pod/Classes/Mac/**/*']
+  s.watchos.source_files = ['Pod/Classes/Shared+Watch/**/*']
+  s.ios.source_files = ['Pod/Classes/Shared+Watch/**/*', 'Pod/Classes/Shared/**/*', 'Pod/Classes/iOS/**/*']
+  s.osx.source_files = ['Pod/Classes/Shared+Watch/**/*', 'Pod/Classes/Shared/**/*', 'Pod/Classes/Mac/**/*']
 
   # s.resource_bundles = {
   #   'NiceKit' => ['Pod/Assets/*.png']
   # }
 
-  s.dependency 'Cartography'
-  s.dependency 'SwiftColors'
-
+  s.osx.dependency 'Cartography'
+  s.osx.dependency 'SwiftColors'
   s.osx.dependency 'ITSwitch'
   s.osx.dependency 'Changeset'
 
+  s.ios.dependency 'Cartography'
+  s.ios.dependency 'SwiftColors'
   s.ios.dependency 'EZAlertController'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'

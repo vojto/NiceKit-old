@@ -46,7 +46,7 @@ extension NKViewable {
         self.applyStyle()
     }
 
-    func applyStyle() {
+    public func applyStyle() {
     }
 
     public func addSubviews(views: [XView]) {

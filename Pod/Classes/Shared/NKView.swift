@@ -165,9 +165,9 @@ public class NKView: XView, NKViewable {
     // -----------------------------------------------------------------------
 
 #if os(iOS)
-    var tapRecognizer: UITapGestureRecognizer?
-    var onClick: NKSimpleCallback?
-    var onTap: NKSimpleCallback? {
+    public var tapRecognizer: UITapGestureRecognizer?
+    public var onClick: NKSimpleCallback?
+    public var onTap: NKSimpleCallback? {
         didSet {
             if tapRecognizer == nil {
                 tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap")
@@ -180,7 +180,7 @@ public class NKView: XView, NKViewable {
         onTap?()
     }
 
-    func preferredStatusBarStyle() -> UIStatusBarStyle {
+    public func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .Default
     }
 

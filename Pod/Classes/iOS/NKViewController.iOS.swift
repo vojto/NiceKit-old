@@ -10,31 +10,29 @@ import Foundation
 import UIKit
 
 
-
-
-class NKViewController: UIViewController {
+public class NKViewController: UIViewController {
     var mainView: NKView!
     var sceneName: String!
     var controllerThatPresentedModally: UIViewController?
 
-    convenience init(view: NKView) {
+    public convenience init(view: NKView) {
         self.init()
 
         self.mainView = view
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         self.view.addSubview(self.mainView)
         mainView.expand()
 
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return mainView.preferredStatusBarStyle()
     }
 
-    func setContext(context: AnyObject?) {
+    public func setContext(context: AnyObject?) {
         mainView.setContext(context)
     }
     

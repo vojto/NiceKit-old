@@ -11,18 +11,18 @@ import CoreGraphics
 import UIKit
 
 
-class NKTextField: XTextField, NKViewable, UITextFieldDelegate {
-    var bezeled = false // TODO: Use iOS style api instead
-    var style: NKStyle
-    var classes = Set<String>()
+public class NKTextField: XTextField, NKViewable, UITextFieldDelegate {
+    public var bezeled = false // TODO: Use iOS style api instead
+    public var style: NKStyle
+    public var classes = Set<String>()
 
-    var onFocus: SimpleCallback?
-    var onBlur: SimpleCallback?
-    var onSubmit: SimpleCallback?
+    public var onFocus: NKSimpleCallback?
+    public var onBlur: NKSimpleCallback?
+    public var onSubmit: NKSimpleCallback?
 
-    var nextKeyView: XView? // Not used here on iOS
+    public var nextKeyView: XView? // Not used here on iOS
 
-    var fieldType: NKFieldType? {
+    public var fieldType: NKFieldType? {
         didSet {
             if fieldType == .Email {
                 autocorrectionType = .No
@@ -36,9 +36,9 @@ class NKTextField: XTextField, NKViewable, UITextFieldDelegate {
         }
     }
 
-    var secureValue: String? { return text }
+    public var secureValue: String? { return text }
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         self.style = NKStylesheet.styleForView(self.dynamicType)
 
         super.init(frame: frame)
@@ -48,39 +48,39 @@ class NKTextField: XTextField, NKViewable, UITextFieldDelegate {
         applyStyle()
     }
 
-    convenience init(placeholder: String) {
+    public convenience init(placeholder: String) {
         self.init(frame: CGRectZero)
 
         self.placeholder = placeholder
     }
 
-    convenience init(attributedPlaceholder: NSAttributedString) {
+    public convenience init(attributedPlaceholder: NSAttributedString) {
         self.init(frame: CGRectZero)
 
         self.attributedPlaceholder = attributedPlaceholder
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyStyle() {
+    public func applyStyle() {
         self.font = style.font
         if let color = style.textColor {
             self.textColor = color.color
         }
     }
 
-    func blur() {
+    public func blur() {
         resignFirstResponder()
     }
 
-    override func willMoveToSuperview(newSuperview: XView?) {
+    public override func willMoveToSuperview(newSuperview: XView?) {
         super.willMoveToSuperview(newSuperview)
         self.applyStyle()
     }
 
-    override func textRectForBounds(var bounds: CGRect) -> CGRect {
+    public override func textRectForBounds(var bounds: CGRect) -> CGRect {
         let padding = style.padding
         bounds.origin.x += padding.left
         bounds.origin.y += padding.bottom
@@ -90,28 +90,28 @@ class NKTextField: XTextField, NKViewable, UITextFieldDelegate {
         return bounds
     }
 
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
+    public override func editingRectForBounds(bounds: CGRect) -> CGRect {
         return textRectForBounds(bounds)
     }
 
     
-    override func drawRect(rect: CGRect) {
+    public override func drawRect(rect: CGRect) {
         style.draw(rect)
 
         super.drawRect(rect)
     }
 
 
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    public func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         onFocus?()
         return true
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
+    public func textFieldDidEndEditing(textField: UITextField) {
         onBlur?()
     }
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(textField: UITextField) -> Bool {
         onSubmit?()
         return true
     }
