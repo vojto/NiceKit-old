@@ -22,13 +22,13 @@ public class NKTableItem {
     public var create: CreateTableViewCallback?
     public var update: ((NKTableCellView) -> ())?
 
-    var row: Int? // TODO: I don't like this information being here. It's duplicate info. We can always just query
+    public var row: Int? // TODO: I don't like this information being here. It's duplicate info. We can always just query
                   // XTableView for this information
     public var view: NKTableCellView?
 
     public var props: SimpleDict?
 
-    var height: CGFloat?
+    public var height: CGFloat?
 
 //    var actions: [NKTableViewRowAction]?
 

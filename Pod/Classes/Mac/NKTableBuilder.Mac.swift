@@ -570,6 +570,10 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         recalculateAllHeights()
     }
 
+    public func isRowHidden(index: Int) -> Bool {
+        return hiddenIndexes.containsIndex(index)
+    }
+
     // MARK: Scrolling
     // -----------------------------------------------------------------------
 

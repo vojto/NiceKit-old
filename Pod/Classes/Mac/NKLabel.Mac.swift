@@ -17,6 +17,8 @@ public class NKLabel: NKTextField {
         self.editable = false
         self.selectable = false
         self.bezeled = false
+        self.lineBreakMode = .ByWordWrapping
+        self.setContentCompressionResistancePriority(250, forOrientation: .Horizontal)
     }
 
     required public init?(coder: NSCoder) {
