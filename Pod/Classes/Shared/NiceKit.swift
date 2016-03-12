@@ -18,4 +18,6 @@ public struct NiceKit {
         public static let osx = false
         public static let ios = true
     #endif
+
+    public static var log: ((String) -> Void)?
 }

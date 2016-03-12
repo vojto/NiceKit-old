@@ -37,6 +37,7 @@ public class NKButton: XButton, NKViewable {
     }
     public var onTap: NKSimpleCallback?
     public var onTouchDown: NKSimpleCallback?
+    public var onClick: NKSimpleCallback?       // Doesn't do anything on iOS
 
     public var image: XImage? {
         get {

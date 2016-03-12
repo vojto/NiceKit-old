@@ -280,12 +280,23 @@ public class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegat
 
     public func hideRowAt(index: Int) {
         hiddenIndexes.addIndex(index)
+
         recalculateHeights()
+
+        let item = itemAt(NSIndexPath(forRow: index, inSection: 0))
+        if let view = item.view {
+            view.hidden = true
+        }
     }
 
     public func unhideRowAt(index: Int) {
         hiddenIndexes.removeIndex(index)
         recalculateHeights()
+
+        let item = itemAt(NSIndexPath(forRow: index, inSection: 0))
+        if let view = item.view {
+            view.hidden = false
+        }
     }
 
     // MARK: Recognizing tap gestures

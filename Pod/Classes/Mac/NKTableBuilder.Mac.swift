@@ -109,7 +109,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     }
 
     public func reload() {
-//        print("Reloading! 😈")
+        NiceKit.log?("Reloading! 😈")
 
         hiddenIndexes.removeAllIndexes()
 
@@ -427,10 +427,13 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Recalculating heights
     
     public func recalculateHeightForView(view: NKTableCellView) {
+        NiceKit.log?("Recalculating height for view \(view)")
+
         let indexes = NSMutableIndexSet()
         
         self.tableView.enumerateAvailableRowViewsUsingBlock { rowView, index in
             if view.isDescendantOf(rowView) {
+                NiceKit.log?("Adding index \(index)")
                 indexes.addIndex(index)
             }
         }
@@ -444,6 +447,8 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     }
     
     public func recalculateHeights(indexes: NSIndexSet) {
+        NiceKit.log?("Recalculating heights for indexes \(indexes)")
+
         let context = NSAnimationContext.currentContext()
         
         NSAnimationContext.beginGrouping()
@@ -452,6 +457,8 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         self.tableView.noteHeightOfRowsWithIndexesChanged(indexes)
         
         NSAnimationContext.endGrouping()
+
+        NiceKit.log?("Finished recalculating")
     }
     
     // MARK: Reordering

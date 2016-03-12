@@ -53,6 +53,13 @@ public class NKStoryboard {
     }
 
 
+    // MARK - Querying state
+    // -----------------------------------------------------------------------
+
+    public var currentSceneName: String? {
+        return mainWindow?.currentScene
+    }
+
 
     // MARK: - Registering things
     // -----------------------------------------------------------------------

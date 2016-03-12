@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
   #   'NiceKit' => ['Pod/Assets/*.png']
   # }
 
+
   s.osx.dependency 'Cartography'
   s.osx.dependency 'SwiftColors'
   s.osx.dependency 'ITSwitch'

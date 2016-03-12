@@ -10,10 +10,10 @@ import Foundation
 import CoreGraphics
 
 public struct NKPadding {
-    var top: CGFloat = 0
-    var right: CGFloat = 0
-    var bottom: CGFloat = 0
-    var left: CGFloat = 0
+    public var top: CGFloat = 0
+    public var right: CGFloat = 0
+    public var bottom: CGFloat = 0
+    public var left: CGFloat = 0
 
     public init(top: CGFloat, right: CGFloat, bottom: CGFloat, left: CGFloat) {
         self.top = top

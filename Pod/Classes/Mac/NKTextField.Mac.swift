@@ -45,7 +45,7 @@ public class NKTextField: NSTextField, NKViewable {
 
     public var onClick: NKSimpleCallback?
     public var onMouseDown: (NSEvent -> Void)?
-    var onMouseUp: (NSEvent -> Void)?
+    public var onMouseUp: (NSEvent -> Void)?
 
     public var autocorrectionType: NKAutocorrectionType?
     public var autocapitalizationType: NKAutocapitalizationType?
@@ -94,6 +94,9 @@ public class NKTextField: NSTextField, NKViewable {
         self.focusRingType = .None
 
         applyStyle()
+    }
+
+    public func setup() {
     }
 
     public convenience init(placeholder: String) {
