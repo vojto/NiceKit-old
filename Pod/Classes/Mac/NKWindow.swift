@@ -157,6 +157,9 @@ public class NKWindow: NSWindow {
         switch(transition.transition) {
         case .Push:
             self.pop()
+        case .None:
+            let view = navigationStack.last!
+            view.removeFromSuperview()
         default:
             fatalError("Cannot transition back from transition with type \(transition.transition)")
             break

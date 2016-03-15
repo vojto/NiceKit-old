@@ -21,6 +21,7 @@ public protocol NKViewable: class {
     func applyStyle()
 
     var onMouseDown: (XEvent -> Void)? { get set }
+    
 }
 
 
@@ -56,7 +57,7 @@ extension NKViewable {
         }
     }
 
-    func applyLayoutFromChildrenStyles() {
+    public func applyLayoutFromChildrenStyles() {
         // First apply our own style to the layout
 
         let parentLayout = style.layout

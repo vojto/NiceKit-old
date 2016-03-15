@@ -70,6 +70,11 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         get { return tableView.onDoubleClick }
         set { tableView.onDoubleClick = newValue }
     }
+    public var onMenu: ((Int) -> (NSMenu?))? {
+        get { return tableView.onMenu }
+        set { tableView.onMenu = newValue }
+    }
+
     
     // Reordering callbacks
     public var canMoveItem: ((at: Int) -> Bool)?
@@ -109,7 +114,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     }
 
     public func reload() {
-        NiceKit.log?("Reloading! 😈")
+//        NiceKit.log?("Reloading! 😈")
 
         hiddenIndexes.removeAllIndexes()
 
@@ -237,7 +242,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Accessing items
     // ------------------------------------------------------------------------
 
-    func itemAt(row: Int) -> NKTableItem {
+    public func itemAt(row: Int) -> NKTableItem {
         if isCustomMode {
             return self.itemForCustomModeAt(row)
         } else {
@@ -427,13 +432,10 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Recalculating heights
     
     public func recalculateHeightForView(view: NKTableCellView) {
-        NiceKit.log?("Recalculating height for view \(view)")
-
         let indexes = NSMutableIndexSet()
         
         self.tableView.enumerateAvailableRowViewsUsingBlock { rowView, index in
             if view.isDescendantOf(rowView) {
-                NiceKit.log?("Adding index \(index)")
                 indexes.addIndex(index)
             }
         }
@@ -447,8 +449,6 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     }
     
     public func recalculateHeights(indexes: NSIndexSet) {
-        NiceKit.log?("Recalculating heights for indexes \(indexes)")
-
         let context = NSAnimationContext.currentContext()
         
         NSAnimationContext.beginGrouping()
@@ -457,8 +457,6 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         self.tableView.noteHeightOfRowsWithIndexesChanged(indexes)
         
         NSAnimationContext.endGrouping()
-
-        NiceKit.log?("Finished recalculating")
     }
     
     // MARK: Reordering

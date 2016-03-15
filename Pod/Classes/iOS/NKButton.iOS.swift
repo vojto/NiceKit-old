@@ -38,6 +38,8 @@ public class NKButton: XButton, NKViewable {
     public var onTap: NKSimpleCallback?
     public var onTouchDown: NKSimpleCallback?
     public var onClick: NKSimpleCallback?       // Doesn't do anything on iOS
+    public var onMouseOver: NKSimpleCallback?   // Doesn't do anything on iOS
+    public var onMouseOut: NKSimpleCallback?    // Doesn't do anything on iOS
 
     public var image: XImage? {
         get {
@@ -94,7 +96,7 @@ public class NKButton: XButton, NKViewable {
         titleLabel?.font = style.font
 
         if let color = style.textColor?.color {
-            titleLabel?.textColor = color
+            setTitleColor(color, forState: .Normal)
             imageView?.tintColor = color
         }
 
@@ -114,6 +116,11 @@ public class NKButton: XButton, NKViewable {
             self.alpha = 1
         }
 
+        if let image = style.image {
+            let image = UIImage(named: image)
+            setImage(image, forState: .Normal)
+        }
+
         setNeedsDisplay()
     }
 
@@ -123,8 +130,14 @@ public class NKButton: XButton, NKViewable {
         super.drawRect(rect)
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+//    public override func layoutSubviews() {
+//        super.layoutSubviews()
+//
+//        applyStyle()
+//    }
+
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
 
         applyStyle()
     }

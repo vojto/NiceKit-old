@@ -66,6 +66,17 @@ public class NKButton: NKView {
         shouldTrackMouseEnterExit = true
     }
 
+    // MARK: - Applying style
+    // -----------------------------------------------------------------------
+
+    public override func applyStyle() {
+        if let image = style.image {
+            self.image = NSImage(named: image)
+        }
+
+        super.applyStyle()
+    }
+
     // MARK: - Drawing
     // -----------------------------------------------------------------------
 
@@ -137,9 +148,13 @@ public class NKButton: NKView {
         // Vertically center the image
         //            rect.origin.y = (self.bounds.size.height - rect.height) / 2 - 1
 
-        let color = style.textColor ?? NKColor.black()
+        if let color = style.textColor {
+            image.draw(color.color, drawRect: drawRect)
+        } else {
+            image.drawInRect(drawRect)
+        }
 
-        image.draw(color.color, drawRect: drawRect)
+
     }
 
     // MARK: - Sizing

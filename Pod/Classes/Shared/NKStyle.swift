@@ -46,6 +46,8 @@ enum NKStyleProperty: String {
 
     case BackgroundColor
     case TextColor
+
+    case Image
     
     case FontSize
     case FontWeight
@@ -154,6 +156,11 @@ public class NKStyle {
     public var textColor: NKColor? {
         get { return getColor(.TextColor) }
         set { properties[.TextColor] = newValue }
+    }
+
+    public var image: String? {
+        get { return getString(.Image) }
+        set { properties[.Image] = newValue }
     }
     
     // MARK: Font properties

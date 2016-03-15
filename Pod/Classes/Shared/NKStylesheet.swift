@@ -144,6 +144,11 @@ public class NKStyleBuilder {
         set { style.textAlign = newValue }
     }
 
+    public var image: String? {
+        get { return style.image }
+        set { style.image = newValue }
+    }
+
     public var fontSize: CGFloat? {
         get { return style.fontSize }
         set { style.fontSize = newValue }
@@ -247,6 +252,11 @@ public class NKStyleBuilder {
     public var left: CGFloat? {
         get { return style.left }
         set { style.left = newValue }
+    }
+
+    public var expandY: Bool? {
+        get { return style.expandY }
+        set { style.expandY = newValue }
     }
 
 

@@ -14,6 +14,7 @@ import AppKit
 public class NKTableView: NSTableView {
 
     public var onDoubleClick: (() -> ())?
+    var onMenu: ((Int) -> (NSMenu?))?
 
     public var editing = false
     
@@ -45,6 +46,18 @@ public class NKTableView: NSTableView {
     }
 
     override public func drawGridInClipRect(clipRect: NSRect) {
+
+    }
+
+    public override func menuForEvent(event: NSEvent) -> NSMenu? {
+        let menu = super.menuForEvent(event)
+
+        Swift.print("Menu from parent: \(menu)")
+
+        let pt = convertPoint(event.locationInWindow, fromView: nil)
+        let row = rowAtPoint(pt)
+
+        return onMenu?(row)
     }
 
 }

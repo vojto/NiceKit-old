@@ -40,6 +40,8 @@ public class NKView: XView, NKViewable {
 
         super.init(frame: CGRectZero)
 
+        self.setup()
+
         let subviews = setup(view: self).map { $0 as! XView }
         addSubviews(subviews)
 
@@ -101,6 +103,8 @@ public class NKView: XView, NKViewable {
         get { return onClick }
         set { onClick = newValue }
     }
+    public var onMouseOver: NKSimpleCallback?
+    public var onMouseOut: NKSimpleCallback?
 
     public var mouseTrackingArea: NSTrackingArea?
     public var clipsToBounds = false
@@ -133,10 +137,12 @@ public class NKView: XView, NKViewable {
     }
 
     override public func mouseEntered(theEvent: XEvent) {
+        onMouseOver?()
         addClass("hover")
     }
 
     override public func mouseExited(theEvent: XEvent) {
+        onMouseOut?()
         removeClass("hover")
     }
 
