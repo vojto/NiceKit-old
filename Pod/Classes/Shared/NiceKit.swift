@@ -20,4 +20,14 @@ public struct NiceKit {
     #endif
 
     public static var log: ((String) -> Void)?
+
+    public static func openURL(path: String) {
+        let url = NSURL(string: path)!
+
+        #if os(iOS)
+        XApplication.sharedApplication().openURL(url)
+        #else
+        NSWorkspace.sharedWorkspace().openURL(url)
+        #endif
+    }
 }

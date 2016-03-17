@@ -97,7 +97,8 @@ public class NKView: XView, NKViewable {
     // -----------------------------------------------------------------------
 
 #if os(OSX)
-    public var onTap: (() -> ())?
+    public var onTap: NKSimpleCallback?
+    public var onTouchDown: NKSimpleCallback?
     public var onClick: NKSimpleCallback?
     public var action: NKSimpleCallback? {
         get { return onClick }

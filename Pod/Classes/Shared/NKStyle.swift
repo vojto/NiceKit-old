@@ -377,7 +377,7 @@ public class NKStyle {
     
     // Padding
     
-    var padding: NKPadding {
+    public var padding: NKPadding {
         get {
             return NKPadding(
                 top: getFloat(.PaddingTop) ?? 0,
@@ -394,22 +394,22 @@ public class NKStyle {
         }
     }
     
-    var paddingTop: CGFloat? {
+    public var paddingTop: CGFloat? {
         get { return getFloat(.PaddingTop) }
         set { properties[.PaddingTop] = newValue }
     }
     
-    var paddingRight: CGFloat? {
+    public var paddingRight: CGFloat? {
         get { return getFloat(.PaddingRight) }
         set { properties[.PaddingRight] = newValue }
     }
     
-    var paddingBottom: CGFloat? {
+    public var paddingBottom: CGFloat? {
         get { return getFloat(.PaddingBottom) }
         set { properties[.PaddingBottom] = newValue }
     }
     
-    var paddingLeft: CGFloat? {
+    public var paddingLeft: CGFloat? {
         get { return getFloat(.PaddingLeft) }
         set { properties[.PaddingLeft] = newValue }
     }
