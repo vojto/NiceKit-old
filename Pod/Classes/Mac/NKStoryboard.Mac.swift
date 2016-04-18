@@ -28,7 +28,7 @@ func ==(lhs: NKScene, rhs: NKScene) -> Bool {
 
 
 
-public class NKStoryboard {
+public class NKStoryboard: NSObject, NSWindowDelegate {
     static var _instance: NKStoryboard?
     var window: NSWindow!
     var scenes = Set<NKScene>()
@@ -41,9 +41,6 @@ public class NKStoryboard {
 
     // MARK: - Lifecycles
     // -----------------------------------------------------------------------
-
-    init() {
-    }
 
     public static var instance: NKStoryboard {
         get {
@@ -72,6 +69,7 @@ public class NKStoryboard {
 
         if windows.count == 0 {
             mainWindow = window
+            mainWindow?.delegate = self
         }
 
         windows[name] = window
@@ -165,6 +163,20 @@ public class NKStoryboard {
         }
     }
 
+    func closeWindow(window: NKWindow) {
+        switch(window.openingPolicy) {
+        case .Default:
+            window.close()
+        case .Sheet:
+            self.endSheet(window)
+        }
+
+        window.popAllTransitions()
+    }
+
+    // MARK: - Sheet windows
+    // -----------------------------------------------------------------------
+
     func openWindowAsSheet(window: NKWindow) {
         if window == mainWindow {
             fatalError("Cannot open main window as sheet")
@@ -177,15 +189,13 @@ public class NKStoryboard {
         main.beginSheet(window, completionHandler: nil)
     }
 
-    func closeWindow(window: NKWindow) {
-        switch(window.openingPolicy) {
-        case .Default:
-            window.close()
-        case .Sheet:
-            self.endSheet(window)
+    public func window(window: NSWindow, willPositionSheet sheet: NSWindow, var usingRect rect: NSRect) -> NSRect {
+        if let window = sheet as? NKWindow, offset = window.sheetOffset {
+            rect.origin.x += offset.width
+            rect.origin.y += offset.height
         }
 
-        window.popAllTransitions()
+        return rect
     }
 
     func endSheet(window: NKWindow) {

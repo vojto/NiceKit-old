@@ -149,7 +149,7 @@ public class NKButton: NKView {
         //            rect.origin.y = (self.bounds.size.height - rect.height) / 2 - 1
 
         if let color = style.textColor {
-            image.draw(color.color, drawRect: drawRect)
+            image.draw(color.color, drawRect: drawRect, flip: true)
         } else {
             image.drawInRect(drawRect)
         }

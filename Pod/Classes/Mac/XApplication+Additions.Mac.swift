@@ -69,8 +69,7 @@ public extension XApplication {
             config[NSWorkspaceLaunchConfigurationArguments] = ["quiet", "test"] as NSArray
             config[NSWorkspaceLaunchConfigurationEnvironment] = ["quiet": "true"] as NSDictionary
             
-            Swift.print("Launching application with config: \(config)")
-            
+
             do {
                 try workspace.launchApplicationAtURL(url, options: [.Default], configuration: config)
             } catch _ {

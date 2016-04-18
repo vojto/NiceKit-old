@@ -50,14 +50,14 @@ public class NKTableView: NSTableView {
     }
 
     public override func menuForEvent(event: NSEvent) -> NSMenu? {
-        let menu = super.menuForEvent(event)
+        if let onMenu = onMenu {
+            let pt = convertPoint(event.locationInWindow, fromView: nil)
+            let row = rowAtPoint(pt)
 
-        Swift.print("Menu from parent: \(menu)")
-
-        let pt = convertPoint(event.locationInWindow, fromView: nil)
-        let row = rowAtPoint(pt)
-
-        return onMenu?(row)
+            return onMenu(row)
+        } else {
+            return super.menuForEvent(event)
+        }
     }
 
 }

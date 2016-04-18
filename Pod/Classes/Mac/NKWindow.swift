@@ -16,6 +16,7 @@ public enum NKWindowOpeningPolicy: String {
 public class NKWindow: NSWindow {
 
     public var openingPolicy: NKWindowOpeningPolicy = .Default
+    public var sheetOffset: NSSize?
 
     // Properties
     // -----------------------------------------------------------------------
@@ -106,7 +107,6 @@ public class NKWindow: NSWindow {
         sheetWindow!.contentView = view
 
         beginSheet(sheetWindow!) { _ in
-            Swift.print("done with window!")
         }
     }
 
@@ -214,6 +214,9 @@ public class NKWindow: NSWindow {
         
         previous.expand()
     }
+
+
+
 
 }
 

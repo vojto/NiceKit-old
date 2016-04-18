@@ -121,12 +121,15 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         let indexes = tableView.selectedRowIndexes
 
         tableView.reloadData()
+        tableView.layoutSubtreeIfNeeded()
 
-        NSTimer.schedule(delay: 0) { _ in
-            // - Come on Vojto, this code is shit and you know it!
-            // - But it works.
-            self.reselectIndexes(indexes)
-        }
+        self.reselectIndexes(indexes)
+
+//        NSTimer.schedule(delay: 0.1) { _ in
+//            // - Come on Vojto, this code is shit and you know it!
+//            // - But it works.
+//            self.reselectIndexes(indexes)
+//        }
 
     }
 
