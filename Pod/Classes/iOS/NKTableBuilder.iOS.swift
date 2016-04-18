@@ -11,8 +11,10 @@ import UIKit
 
 public class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     public var padding: NKPadding? {
-        get { return nil }
-        set { tableView.contentInset = newValue!.edgeInsets }
+        didSet {
+            guard let padding = self.padding else { return }
+            tableView.contentInset = padding.edgeInsets
+        }
     }
 
     public let tableView: UITableView
@@ -418,9 +420,8 @@ public class NKTableBuilder: NSObject, UITableViewDataSource, UITableViewDelegat
         let options = UIViewAnimationOptions(rawValue: UInt(curveValue << 16))
 
         UIView.animateWithDuration(duration, delay: 0, options: [options, UIViewAnimationOptions.BeginFromCurrentState], animations: { () -> Void in
-            let insets = UIEdgeInsetsZero
-            self.tableView.contentInset = insets
-            self.tableView.scrollIndicatorInsets = insets
+            self.tableView.contentInset = self.padding?.edgeInsets ?? UIEdgeInsetsZero
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero
         }, completion: nil)
     }
 
