@@ -33,7 +33,6 @@ extension NSAttributedString {
         let size = attributedString.boundingRectWithSize(bounds, options: .UsesLineFragmentOrigin)
         #else
         let size = attributedString.boundingRectWithSize(bounds, options: [.UsesLineFragmentOrigin, .UsesFontLeading], context: nil)
-
         #endif
 
         return ceil(size.height)

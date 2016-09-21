@@ -37,6 +37,14 @@ extension NKViewable {
         self.updateStyle()
     }
 
+    public func addClasses(classes: [String]) {
+        for cls in classes {
+            self.classes.insert(cls)
+        }
+
+        self.updateStyle()
+    }
+
     public func removeClass(cls: String) {
         self.classes.remove(cls)
         self.updateStyle()
