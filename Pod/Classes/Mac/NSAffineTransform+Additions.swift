@@ -8,11 +8,11 @@
 
 import Foundation
 
-extension NSAffineTransform {
-    static func flipCoordinates(rect: NSRect) {
-        let transform = NSAffineTransform()
-        transform.translateXBy(0, yBy: rect.size.height)
-        transform.scaleXBy(1.0, yBy: -1.0)
-        transform.concat()
+extension AffineTransform {
+    static func flipCoordinates(_ rect: NSRect) {
+        var transform = AffineTransform.identity
+        transform.translate(x: 0, y: rect.size.height)
+        transform.scale(x: 1.0, y: -1.0)
+        (transform as NSAffineTransform).concat()
     }
 }

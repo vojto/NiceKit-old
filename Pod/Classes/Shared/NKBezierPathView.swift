@@ -26,9 +26,9 @@ class NKBezierPathView: XView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
 
-        XColor.blackColor().setFill()
+        XColor.black.setFill()
 
         bezierPath.fill()
     }

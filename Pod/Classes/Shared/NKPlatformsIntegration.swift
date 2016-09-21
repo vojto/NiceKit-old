@@ -97,21 +97,21 @@
     public let XFontFeatureTypeIdentifierKey = NSFontFeatureTypeIdentifierKey
     public let XFontFeatureSelectorIdentifierKey = NSFontFeatureSelectorIdentifierKey
 
-    public typealias XEdgeInsets = NSEdgeInsets
+    public typealias XEdgeInsets = EdgeInsets
     public let XEdgeInsetsMake = NSEdgeInsetsMake
     public let XEdgeInsetsZero = XEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 
-    public func XGraphicsGetCurrentContext() -> CGContextRef {
-        return NSGraphicsContext.currentContext()!.CGContext
+    public func XGraphicsGetCurrentContext() -> CGContext {
+        return NSGraphicsContext.current()!.cgContext
     }
 
     public enum XStatusBarStyle {
-        case Default
-        case LightContent
+        case `default`
+        case lightContent
     }
 
     public enum XApplicationState {
-        case Active
+        case active
     }
 
 #endif

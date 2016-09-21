@@ -9,15 +9,15 @@
 import Foundation
 import CoreGraphics
 
-public class NKSlider: XSlider {
-    public var onChange: (() -> ())?
+open class NKSlider: XSlider {
+    open var onChange: (() -> ())?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         #if os(OSX)
         target = self
-        action = "handleSlide"
+        action = #selector(NKSlider.handleSlide)
         #else
         addTarget(self, action: "handleSlide", forControlEvents: .ValueChanged)
         #endif
@@ -34,17 +34,17 @@ public class NKSlider: XSlider {
 
     #if os(OSX)
 
-    public var minimumValue: Double {
+    open var minimumValue: Double {
         get { return minValue }
         set { minValue = newValue }
     }
 
-    public var maximumValue: Double {
+    open var maximumValue: Double {
         get { return maxValue }
         set { maxValue = newValue }
     }
 
-    public var value: Float {
+    open var value: Float {
         get { return Float(doubleValue) }
         set { doubleValue = Double(newValue) }
     }

@@ -11,13 +11,33 @@ import CoreGraphics
 
 #if os(OSX)
 import AppKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 #endif
 
 enum NKBorderEdge {
-    case Top
-    case Right
-    case Bottom
-    case Left
+    case top
+    case right
+    case bottom
+    case left
 }
 
 class NKBorderEdgeStyle {
@@ -109,7 +129,7 @@ public enum NKTextTransform: String {
     case Uppercase
 }
 
-public class NKStyle {
+open class NKStyle {
     var properties = [NKStyleProperty: AnyObject]()
     var parentStyle: NKStyle?
     
@@ -133,45 +153,45 @@ public class NKStyle {
     
     // MARK: Basic properties
 
-    public var opaque: Bool? {
+    open var opaque: Bool? {
         get { return getBool(.Opaque) }
-        set { properties[.Opaque] = newValue }
+        set { properties[.Opaque] = newValue as AnyObject? }
     }
 
-    public var opacity: CGFloat? {
+    open var opacity: CGFloat? {
         get { return getFloat(.Opacity) }
-        set { properties[.Opacity] = newValue }
+        set { properties[.Opacity] = newValue as AnyObject? }
     }
     
-    public var backgroundColor: NKColor? {
+    open var backgroundColor: NKColor? {
         get { return getColor(.BackgroundColor) }
         set { properties[.BackgroundColor] = newValue }
     }
     
-    public var background: NKColor? {
+    open var background: NKColor? {
         get { return backgroundColor }
         set { backgroundColor = newValue }
     }
     
-    public var textColor: NKColor? {
+    open var textColor: NKColor? {
         get { return getColor(.TextColor) }
         set { properties[.TextColor] = newValue }
     }
 
-    public var image: String? {
+    open var image: String? {
         get { return getString(.Image) }
-        set { properties[.Image] = newValue }
+        set { properties[.Image] = newValue as AnyObject? }
     }
     
     // MARK: Font properties
     // -----------------------------------------------------------------------
     
-    public var fontSize: CGFloat? {
+    open var fontSize: CGFloat? {
         get { return getFloat(.FontSize) }
-        set { set(.FontSize, value: newValue) }
+        set { set(.FontSize, value: newValue as AnyObject?) }
     }
     
-    public var fontWeight: NKFontWeight? {
+    open var fontWeight: NKFontWeight? {
         get {
             if let value = getString(.FontWeight) {
                 return NKFontWeight(rawValue: value)
@@ -180,11 +200,11 @@ public class NKStyle {
             }
         }
         set {
-            set(.FontWeight, value: newValue?.rawValue)
+            set(.FontWeight, value: newValue?.rawValue as AnyObject?)
         }
     }
     
-    public var font: XFont? {
+    open var font: XFont? {
         get {
             if let font = properties[.Font] as? XFont {
                 return font
@@ -205,7 +225,7 @@ public class NKStyle {
                 default: weight = XFontWeightRegular
                 }
 
-                return XFont.systemFontOfSize(size, weight: weight)
+                return XFont.systemFont(ofSize: size, weight: weight)
             }
         }
         set {
@@ -213,7 +233,7 @@ public class NKStyle {
         }
     }
 
-    public var textAlign: NKTextAlign? {
+    open var textAlign: NKTextAlign? {
         get {
             if let value = getString(.TextAlign) {
                 return NKTextAlign(rawValue: value)
@@ -222,11 +242,11 @@ public class NKStyle {
             }
         }
         set {
-            set(.TextAlign, value: newValue?.rawValue)
+            set(.TextAlign, value: newValue?.rawValue as AnyObject?)
         }
     }
 
-    public var textTransform: NKTextTransform? {
+    open var textTransform: NKTextTransform? {
         get {
             if let value = getString(.TextTransform) {
                 return NKTextTransform(rawValue: value)
@@ -234,12 +254,12 @@ public class NKStyle {
                 return nil
             }
         }
-        set { set(.TextTransform, value: newValue?.rawValue) }
+        set { set(.TextTransform, value: newValue?.rawValue as AnyObject?) }
     }
     
     // MARK: Border properties
     
-    public var borderRadius: CGFloat? {
+    open var borderRadius: CGFloat? {
         get {
             let topLeft = getFloat(.BorderRadiusTopLeft)
             let topRight = getFloat(.BorderRadiusTopRight)
@@ -253,34 +273,34 @@ public class NKStyle {
             }
         }
         set {
-            properties[.BorderRadiusTopLeft] = newValue
-            properties[.BorderRadiusTopRight] = newValue
-            properties[.BorderRadiusBottomLeft] = newValue
-            properties[.BorderRadiusBottomRight] = newValue
+            properties[.BorderRadiusTopLeft] = newValue as AnyObject?
+            properties[.BorderRadiusTopRight] = newValue as AnyObject?
+            properties[.BorderRadiusBottomLeft] = newValue as AnyObject?
+            properties[.BorderRadiusBottomRight] = newValue as AnyObject?
         }
     }
 
     var borderRadiusTopLeft: CGFloat? {
         get { return getFloat(.BorderRadiusTopLeft) }
-        set { properties[.BorderRadiusTopLeft] = newValue }
+        set { properties[.BorderRadiusTopLeft] = newValue as AnyObject? }
     }
 
 
     var borderRadiusTopRight: CGFloat? {
         get { return getFloat(.BorderRadiusTopRight) }
-        set { properties[.BorderRadiusTopRight] = newValue }
+        set { properties[.BorderRadiusTopRight] = newValue as AnyObject? }
     }
 
 
     var borderRadiusBottomRight: CGFloat? {
         get { return getFloat(.BorderRadiusBottomRight) }
-        set { properties[.BorderRadiusBottomRight] = newValue }
+        set { properties[.BorderRadiusBottomRight] = newValue as AnyObject? }
     }
 
 
     var borderRadiusBottomLeft: CGFloat? {
         get { return getFloat(.BorderRadiusBottomLeft) }
-        set { properties[.BorderRadiusBottomLeft] = newValue }
+        set { properties[.BorderRadiusBottomLeft] = newValue as AnyObject? }
     }
     
 
@@ -294,14 +314,14 @@ public class NKStyle {
         }
         set {
             let (topLeft, topRight, bottomRight, bottomLeft) = newValue
-            properties[.BorderRadiusTopLeft] = topLeft
-            properties[.BorderRadiusTopRight] = topRight
-            properties[.BorderRadiusBottomRight] = bottomRight
-            properties[.BorderRadiusBottomLeft] = bottomLeft
+            properties[.BorderRadiusTopLeft] = topLeft as AnyObject?
+            properties[.BorderRadiusTopRight] = topRight as AnyObject?
+            properties[.BorderRadiusBottomRight] = bottomRight as AnyObject?
+            properties[.BorderRadiusBottomLeft] = bottomLeft as AnyObject?
         }
     }
 
-    public var border: (CGFloat?, NKColor?) {
+    open var border: (CGFloat?, NKColor?) {
         get {
             return borderTop
         }
@@ -313,20 +333,20 @@ public class NKStyle {
         }
     }
 
-    public var borderWidth: CGFloat? {
+    open var borderWidth: CGFloat? {
         get {
             let (width, _) = border
             return width
         }
         set {
-            properties[.BorderTopWidth] = newValue
-            properties[.BorderRightWidth] = newValue
-            properties[.BorderBottomWidth] = newValue
-            properties[.BorderLeftWidth] = newValue
+            properties[.BorderTopWidth] = newValue as AnyObject?
+            properties[.BorderRightWidth] = newValue as AnyObject?
+            properties[.BorderBottomWidth] = newValue as AnyObject?
+            properties[.BorderLeftWidth] = newValue as AnyObject?
         }
     }
 
-    public var borderColor: NKColor? {
+    open var borderColor: NKColor? {
         get {
             let (_, color) = border
             return color
@@ -339,45 +359,45 @@ public class NKStyle {
         }
     }
     
-    public var borderTop: (CGFloat?, NKColor?) {
+    open var borderTop: (CGFloat?, NKColor?) {
         get { return (getFloat(.BorderTopWidth), getColor(.BorderTopColor)) }
         set {
             let (width, color) = newValue
-            properties[.BorderTopWidth] = width
+            properties[.BorderTopWidth] = width as AnyObject?
             properties[.BorderTopColor] = color
         }
     }
     
-    public var borderRight: (CGFloat?, NKColor?) {
+    open var borderRight: (CGFloat?, NKColor?) {
         get { return (getFloat(.BorderRightWidth), getColor(.BorderRightColor)) }
         set {
             let (width, color) = newValue
-            properties[.BorderRightWidth] = width
+            properties[.BorderRightWidth] = width as AnyObject?
             properties[.BorderRightColor] = color
         }
     }
     
-    public var borderBottom: (CGFloat?, NKColor?) {
+    open var borderBottom: (CGFloat?, NKColor?) {
         get { return (getFloat(.BorderBottomWidth), getColor(.BorderBottomColor)) }
         set {
             let (width, color) = newValue
-            properties[.BorderBottomWidth] = width
+            properties[.BorderBottomWidth] = width as AnyObject?
             properties[.BorderBottomColor] = color
         }
     }
     
-    public var borderLeft: (CGFloat?, NKColor?) {
+    open var borderLeft: (CGFloat?, NKColor?) {
         get { return (getFloat(.BorderLeftWidth), getColor(.BorderLeftColor)) }
         set {
             let (width, color) = newValue
-            properties[.BorderLeftWidth] = width
+            properties[.BorderLeftWidth] = width as AnyObject?
             properties[.BorderLeftColor] = color
         }
     }
     
     // Padding
     
-    public var padding: NKPadding {
+    open var padding: NKPadding {
         get {
             return NKPadding(
                 top: getFloat(.PaddingTop) ?? 0,
@@ -387,64 +407,64 @@ public class NKStyle {
             )
         }
         set {
-            properties[.PaddingTop] = newValue.top
-            properties[.PaddingRight] = newValue.right
-            properties[.PaddingBottom] = newValue.bottom
-            properties[.PaddingLeft] = newValue.left
+            properties[.PaddingTop] = newValue.top as AnyObject?
+            properties[.PaddingRight] = newValue.right as AnyObject?
+            properties[.PaddingBottom] = newValue.bottom as AnyObject?
+            properties[.PaddingLeft] = newValue.left as AnyObject?
         }
     }
     
-    public var paddingTop: CGFloat? {
+    open var paddingTop: CGFloat? {
         get { return getFloat(.PaddingTop) }
-        set { properties[.PaddingTop] = newValue }
+        set { properties[.PaddingTop] = newValue as AnyObject? }
     }
     
-    public var paddingRight: CGFloat? {
+    open var paddingRight: CGFloat? {
         get { return getFloat(.PaddingRight) }
-        set { properties[.PaddingRight] = newValue }
+        set { properties[.PaddingRight] = newValue as AnyObject? }
     }
     
-    public var paddingBottom: CGFloat? {
+    open var paddingBottom: CGFloat? {
         get { return getFloat(.PaddingBottom) }
-        set { properties[.PaddingBottom] = newValue }
+        set { properties[.PaddingBottom] = newValue as AnyObject? }
     }
     
-    public var paddingLeft: CGFloat? {
+    open var paddingLeft: CGFloat? {
         get { return getFloat(.PaddingLeft) }
-        set { properties[.PaddingLeft] = newValue }
+        set { properties[.PaddingLeft] = newValue as AnyObject? }
     }
 
-    public var width: CGFloat? {
+    open var width: CGFloat? {
         get { return getFloat(.Width) }
-        set { properties[.Width] = newValue }
+        set { properties[.Width] = newValue as AnyObject? }
     }
 
-    public var height: CGFloat? {
+    open var height: CGFloat? {
         get { return getFloat(.Height) }
-        set { properties[.Height] = newValue }
+        set { properties[.Height] = newValue as AnyObject? }
     }
 
-    public var top: CGFloat? {
+    open var top: CGFloat? {
         get { return getFloat(.Top) }
-        set { properties[.Top] = newValue }
+        set { properties[.Top] = newValue as AnyObject? }
     }
 
-    public var right: CGFloat? {
+    open var right: CGFloat? {
         get { return getFloat(.Right) }
-        set { properties[.Right] = newValue }
+        set { properties[.Right] = newValue as AnyObject? }
     }
 
-    public var bottom: CGFloat? {
+    open var bottom: CGFloat? {
         get { return getFloat(.Bottom) }
-        set { properties[.Bottom] = newValue }
+        set { properties[.Bottom] = newValue as AnyObject? }
     }
 
-    public var left: CGFloat? {
+    open var left: CGFloat? {
         get { return getFloat(.Left) }
-        set { properties[.Left] = newValue }
+        set { properties[.Left] = newValue as AnyObject? }
     }
 
-    public var layout: NKLayoutDirection? {
+    open var layout: NKLayoutDirection? {
         get {
             if let value = getString(.Layout) {
                 return NKLayoutDirection(rawValue: value)
@@ -453,11 +473,11 @@ public class NKStyle {
             }
         }
         set {
-            set(.Layout, value: newValue?.rawValue)
+            set(.Layout, value: newValue?.rawValue as AnyObject?)
         }
     }
 
-    public var position: NKLayoutPosition? {
+    open var position: NKLayoutPosition? {
         get {
             if let value = getString(.Position) {
                 return NKLayoutPosition(rawValue: value)
@@ -466,50 +486,50 @@ public class NKStyle {
             }
         }
         set {
-            set(.Position, value: newValue?.rawValue)
+            set(.Position, value: newValue?.rawValue as AnyObject?)
         }
     }
 
-    public var expandX: Bool? {
+    open var expandX: Bool? {
         get { return getBool(.ExpandX) ?? false }
-        set { properties[.ExpandX] = newValue }
+        set { properties[.ExpandX] = newValue as AnyObject? }
     }
 
-    public var centerX: Bool? {
+    open var centerX: Bool? {
         get { return getBool(.CenterX) ?? false }
-        set { properties[.CenterX] = newValue }
+        set { properties[.CenterX] = newValue as AnyObject? }
     }
 
-    public var expandY: Bool? {
+    open var expandY: Bool? {
         get { return getBool(.ExpandY) ?? false }
-        set { properties[.ExpandY] = newValue }
+        set { properties[.ExpandY] = newValue as AnyObject? }
     }
 
-    public var centerY: Bool? {
+    open var centerY: Bool? {
         get { return getBool(.CenterY) ?? false }
-        set { properties[.CenterY] = newValue }
+        set { properties[.CenterY] = newValue as AnyObject? }
     }
 
     
     // MARK: Accessor functions
     
-    func getFloat(property: NKStyleProperty) -> CGFloat? {
+    func getFloat(_ property: NKStyleProperty) -> CGFloat? {
         return get(property) as! CGFloat?
     }
 
-    func getBool(property: NKStyleProperty) -> Bool? {
+    func getBool(_ property: NKStyleProperty) -> Bool? {
         return get(property) as! Bool?
     }
     
-    func getColor(property: NKStyleProperty) -> NKColor? {
+    func getColor(_ property: NKStyleProperty) -> NKColor? {
         return get(property) as! NKColor?
     }
     
-    func getString(property: NKStyleProperty) -> String? {
+    func getString(_ property: NKStyleProperty) -> String? {
         return get(property) as! String?
     }
     
-    func get(property: NKStyleProperty) -> AnyObject? {
+    func get(_ property: NKStyleProperty) -> AnyObject? {
         if let value = properties[property] {
             return value
         } else if let parent = self.parentStyle {
@@ -519,15 +539,16 @@ public class NKStyle {
         }
     }
     
-    func set(property: NKStyleProperty, value: AnyObject?) {
+    func set(_ property: NKStyleProperty, value: AnyObject?) {
         properties[property] = value
     }
     
     // MARK: Preparing strings
     
-    func prepareAttributedString(var text: String) -> NSMutableAttributedString {
+    func prepareAttributedString(_ text: String) -> NSMutableAttributedString {
+        var text = text
         if self.textTransform == .Uppercase {
-            text = text.uppercaseString
+            text = text.uppercased()
         }
 
 
@@ -541,11 +562,11 @@ public class NKStyle {
             let style = NSMutableParagraphStyle()
             switch(align) {
             case .Left:
-                style.alignment = .Left
+                style.alignment = .left
             case .Center:
-                style.alignment = .Center
+                style.alignment = .center
             case .Right:
-                style.alignment = .Right
+                style.alignment = .right
             }
 
             attributed.style = style
@@ -557,25 +578,25 @@ public class NKStyle {
     
     // MARK: Drawing
 
-    func draw(rect: CGRect) {
+    func draw(_ rect: CGRect) {
         drawBackground(rect)
         drawBorders(rect)
     }
     
-    func drawBackground(rect: CGRect) {
+    func drawBackground(_ rect: CGRect) {
 //        let radius = borderRadius ?? 0
 
 
         let ctx = XGraphicsGetCurrentContext()
-        CGContextSaveGState(ctx)
+        ctx.saveGState()
 
         let path = pathForBorderRadius(rect)
-        CGContextAddPath(ctx, path)
+        ctx.addPath(path)
         CGContextClip(ctx)
 
 
         if let background = background {
-            let colors = (background.colors! as [XColor]).map { $0.CGColor }
+            let colors = (background.colors! as [XColor]).map { $0.cgColor }
             var locations: [CGFloat] = []
 
             let count = colors.count
@@ -583,7 +604,7 @@ public class NKStyle {
             if count == 1 {
                 locations.append(0)
             } else {
-                for var i = 0; i < count; i++ {
+                for i in 0 ..< count {
                     locations.append(CGFloat(i) * CGFloat(1/CGFloat(count-1)))
                 }
             }
@@ -591,34 +612,34 @@ public class NKStyle {
 
             let space = CGColorSpaceCreateDeviceRGB()
 
-            let gradient = CGGradientCreateWithColors(space, colors, locations)
+            let gradient = CGGradient(colorsSpace: space, colors: colors as CFArray, locations: locations)
 
             let ctx = XGraphicsGetCurrentContext()
 
             let path = XBezierPath(rect: rect)
             path.addClip()
 
-            var orientation: NKGradientOrientation = .Vertical
+            var orientation: NKGradientOrientation = .vertical
 
             if let gradient = background as? NKGradient {
                 orientation = gradient.orientation
             }
 
-            var point2 = CGPointMake(0, rect.size.height)
+            var point2 = CGPoint(x: 0, y: rect.size.height)
 
-            if orientation == .Horizontal {
-                point2 = CGPointMake(rect.size.width, 0)
+            if orientation == .horizontal {
+                point2 = CGPoint(x: rect.size.width, y: 0)
             }
 
-            CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0, 0), point2, CGGradientDrawingOptions())
+            ctx.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: point2, options: CGGradientDrawingOptions())
 
         }
 
-        CGContextRestoreGState(ctx)
+        ctx.restoreGState()
     }
 
 
-    func pathForBorderRadius(rect: CGRect) -> CGPathRef {
+    func pathForBorderRadius(_ rect: CGRect) -> CGPath {
         let topLeft = borderRadiusTopLeft ?? 0.0
         let topRight = borderRadiusTopRight ?? 0.0
         let bottomRight = borderRadiusBottomRight ?? 0.0
@@ -627,44 +648,45 @@ public class NKStyle {
         return NKCreateBorderRadiusPath(rect, topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
     }
     
-    func drawBorders(rect: CGRect) {
-        if let borderWidth = self.borderWidth, color = self.borderColor where borderRadius > 0 {
-            let rect = CGRectInset(rect, borderWidth/2, borderWidth/2)
+    func drawBorders(_ rect: CGRect) {
+        if let borderWidth = self.borderWidth, let color = self.borderColor , borderRadius > 0 {
+            let rect = rect.insetBy(dx: borderWidth/2, dy: borderWidth/2)
             let path = pathForBorderRadius(rect)
             let ctx = XGraphicsGetCurrentContext()
-            CGContextSaveGState(ctx)
-            CGContextAddPath(ctx, path)
-            CGContextSetLineWidth(ctx, borderWidth)
-            CGContextSetStrokeColorWithColor(ctx, color.CGColor)
-            CGContextDrawPath(ctx, .Stroke)
-            CGContextRestoreGState(ctx)
+            ctx.saveGState()
+            ctx.addPath(path)
+            ctx.setLineWidth(borderWidth)
+            ctx.setStrokeColor(color.CGColor)
+            ctx.drawPath(using: .stroke)
+            ctx.restoreGState()
         } else {
-            self.drawBorder(rect, edge: .Top, color: getColor(.BorderTopColor), width: getFloat(.BorderTopWidth))
-            self.drawBorder(rect, edge: .Right, color: getColor(.BorderRightColor), width: getFloat(.BorderRightWidth))
-            self.drawBorder(rect, edge: .Bottom, color: getColor(.BorderBottomColor), width: getFloat(.BorderBottomWidth))
-            self.drawBorder(rect, edge: .Left, color: getColor(.BorderLeftColor), width: getFloat(.BorderLeftWidth))
+            self.drawBorder(rect, edge: .top, color: getColor(.BorderTopColor), width: getFloat(.BorderTopWidth))
+            self.drawBorder(rect, edge: .right, color: getColor(.BorderRightColor), width: getFloat(.BorderRightWidth))
+            self.drawBorder(rect, edge: .bottom, color: getColor(.BorderBottomColor), width: getFloat(.BorderBottomWidth))
+            self.drawBorder(rect, edge: .left, color: getColor(.BorderLeftColor), width: getFloat(.BorderLeftWidth))
         }
     }
     
-    func drawBorder(var rect: CGRect, edge: NKBorderEdge, color: NKColor?, width: CGFloat?) {
-        if let color = color, let width = width where width > 0 {
+    func drawBorder(_ rect: CGRect, edge: NKBorderEdge, color: NKColor?, width: CGFloat?) {
+        var rect = rect
+        if let color = color, let width = width , width > 0 {
             switch(edge) {
-            case .Top:
+            case .top:
                 rect.size.height = width
-            case .Right:
+            case .right:
                 rect.origin.x = rect.size.width - width
                 rect.size.width = width
-            case .Bottom:
+            case .bottom:
                 rect.origin.y = rect.size.height - width
                 rect.size.height = width
-            case .Left:
+            case .left:
                 rect.size.width = width
             }
             
             color.set()
 
             let ctx = XGraphicsGetCurrentContext()
-            CGContextFillRect(ctx, rect)
+            ctx.fill(rect)
         }
     }
 }

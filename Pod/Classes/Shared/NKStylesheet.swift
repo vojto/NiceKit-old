@@ -9,16 +9,17 @@
 import Foundation
 import CoreGraphics
 
-public typealias StyleCallback = ((builder: NKStyleBuilder) -> ())
+public typealias StyleCallback = ((_ builder: NKStyleBuilder) -> ())
 
-public class NKStylesheet: NKStylesheetEntry {
-    public static var stylesheet: NKStylesheet?
+open class NKStylesheet: NKStylesheetEntry {
+    open static var stylesheet: NKStylesheet?
 
     public init() {
         super.init(cls: "root")
     }
 
-    public static func styleForClasses(var classes: [String]) -> NKStyle {
+    public static func styleForClasses(_ classes: [String]) -> NKStyle {
+        var classes = classes
         let style = NKStyle()
 
         #if os(OSX)
@@ -36,21 +37,22 @@ public class NKStylesheet: NKStylesheetEntry {
         return style
     }
 
-    public static func styleForView(view: AnyClass) -> NKStyle {
+    open static func styleForView(_ view: AnyClass) -> NKStyle {
         return styleForView(view, classes: [])
     }
 
-    public static func styleForView(view: AnyClass, var classes: [String]) -> NKStyle {
+    public static func styleForView(_ view: AnyClass, classes: [String]) -> NKStyle {
+        var classes = classes
 //        Log.t("Getting style for view: \(view)")
         let viewName = NSStringFromClass(view)
 //        Log.t("    viewName = \(viewName)")
-        let cls = viewName.componentsSeparatedByString(".").last!
-        classes.insert(cls, atIndex: 0)
+        let cls = viewName.components(separatedBy: ".").last!
+        classes.insert(cls, at: 0)
         return styleForClasses(classes)
     }
 }
 
-public class NKStylesheetEntry: CustomDebugStringConvertible {
+open class NKStylesheetEntry: CustomDebugStringConvertible {
     let cls: String
     let style: NKStyle
     var childEntries = [NKStylesheetEntry]()
@@ -60,22 +62,22 @@ public class NKStylesheetEntry: CustomDebugStringConvertible {
         self.style = NKStyle()
     }
 
-    public func style(cls: String, handler: StyleCallback) {
+    open func style(_ cls: String, handler: StyleCallback) {
         let builder = NKStyleBuilder(style: self.style, entry: self)
         builder.style(cls, handler: handler)
     }
 
-    public func style(classes: [String], handler: StyleCallback) {
+    open func style(_ classes: [String], handler: StyleCallback) {
         for cls in classes {
             self.style(cls, handler: handler)
         }
     }
 
-    public var debugDescription: String {
+    open var debugDescription: String {
         return "<\(cls) \(childEntries) >"
     }
 
-    func addStylesFromChildEntriesMatching(classes: [String], toStyle style: NKStyle) {
+    func addStylesFromChildEntriesMatching(_ classes: [String], toStyle style: NKStyle) {
         let matchingEntries = self.childEntries.filter { childEntry in
             classes.contains(childEntry.cls)
         }
@@ -95,8 +97,8 @@ public class NKStylesheetEntry: CustomDebugStringConvertible {
     }
 }
 
-public class NKStyleBuilder {
-    public let style: NKStyle
+open class NKStyleBuilder {
+    open let style: NKStyle
     let entry: NKStylesheetEntry
 
     public init(style: NKStyle, entry: NKStylesheetEntry) {
@@ -104,157 +106,157 @@ public class NKStyleBuilder {
         self.entry = entry
     }
 
-    public func style(cls: String, handler: StyleCallback) {
+    open func style(_ cls: String, handler: StyleCallback) {
         let childEntry = NKStylesheetEntry(cls: cls)
         self.entry.childEntries.append(childEntry)
 
         let builder = NKStyleBuilder(style: childEntry.style, entry: childEntry)
-        handler(builder: builder)
+        handler(builder)
 
 
     }
 
-    public var opaque: Bool? {
+    open var opaque: Bool? {
         get { return style.opaque }
         set { style.opaque = newValue }
     }
 
-    public var opacity: CGFloat? {
+    open var opacity: CGFloat? {
         get { return style.opacity }
         set { style.opacity = newValue }
     }
 
-    public var backgroundColor: NKColor? {
+    open var backgroundColor: NKColor? {
         get { return style.backgroundColor }
         set { style.backgroundColor = newValue }
     }
 
-    public var background: NKColor? {
+    open var background: NKColor? {
         get { return style.background }
         set { style.background = newValue }
     }
 
-    public var textColor: NKColor? {
+    open var textColor: NKColor? {
         get { return style.textColor }
         set { style.textColor = newValue }
     }
 
-    public var textAlign: NKTextAlign? {
+    open var textAlign: NKTextAlign? {
         get { return style.textAlign }
         set { style.textAlign = newValue }
     }
 
-    public var image: String? {
+    open var image: String? {
         get { return style.image }
         set { style.image = newValue }
     }
 
-    public var fontSize: CGFloat? {
+    open var fontSize: CGFloat? {
         get { return style.fontSize }
         set { style.fontSize = newValue }
     }
 
-    public var fontWeight: NKFontWeight? {
+    open var fontWeight: NKFontWeight? {
         get { return style.fontWeight }
         set { style.fontWeight = newValue }
     }
 
-    public var font: XFont? {
+    open var font: XFont? {
         get { return style.font }
         set { style.font = newValue }
     }
 
-    public var border: (CGFloat?, NKColor?) {
+    open var border: (CGFloat?, NKColor?) {
         get { return style.border }
         set { style.border = newValue }
     }
 
-    public var borderRadius: CGFloat? {
+    open var borderRadius: CGFloat? {
         get { return style.borderRadius }
         set { style.borderRadius = newValue }
     }
 
-    public var borderTop: (CGFloat?, NKColor?) {
+    open var borderTop: (CGFloat?, NKColor?) {
         get { return style.borderTop }
         set { style.borderTop = newValue }
     }
 
-    public var borderRight: (CGFloat?, NKColor?) {
+    open var borderRight: (CGFloat?, NKColor?) {
         get { return style.borderRight }
         set { style.borderRight = newValue }
     }
 
-    public var borderBottom: (CGFloat?, NKColor?) {
+    open var borderBottom: (CGFloat?, NKColor?) {
         get { return style.borderBottom }
         set { style.borderBottom = newValue }
     }
 
-    public var borderLeft: (CGFloat?, NKColor?) {
+    open var borderLeft: (CGFloat?, NKColor?) {
         get { return style.borderLeft }
         set { style.borderLeft = newValue }
     }
 
-    public var padding: NKPadding {
+    open var padding: NKPadding {
         get { return style.padding }
         set { style.padding = newValue }
     }
 
-    public var paddingTop: CGFloat? {
+    open var paddingTop: CGFloat? {
         get { return style.paddingTop }
         set { style.paddingTop = newValue }
     }
 
-    public var paddingRight: CGFloat? {
+    open var paddingRight: CGFloat? {
         get { return style.paddingRight }
         set { style.paddingRight = newValue }
     }
 
-    public var paddingBottom: CGFloat? {
+    open var paddingBottom: CGFloat? {
         get { return style.paddingBottom }
         set { style.paddingBottom = newValue }
     }
 
-    public var paddingLeft: CGFloat? {
+    open var paddingLeft: CGFloat? {
         get { return style.paddingLeft }
         set { style.paddingLeft = newValue }
     }
 
-    public var position: NKLayoutPosition? {
+    open var position: NKLayoutPosition? {
         get { return style.position }
         set { style.position = newValue }
     }
 
-    public var width: CGFloat? {
+    open var width: CGFloat? {
         get { return style.width }
         set { style.width = newValue }
     }
 
-    public var height: CGFloat? {
+    open var height: CGFloat? {
         get { return style.height }
         set { style.height = newValue }
     }
 
-    public var top: CGFloat? {
+    open var top: CGFloat? {
         get { return style.top }
         set { style.top = newValue }
     }
 
-    public var right: CGFloat? {
+    open var right: CGFloat? {
         get { return style.right }
         set { style.right = newValue }
     }
 
-    public var bottom: CGFloat? {
+    open var bottom: CGFloat? {
         get { return style.bottom }
         set { style.bottom = newValue }
     }
 
-    public var left: CGFloat? {
+    open var left: CGFloat? {
         get { return style.left }
         set { style.left = newValue }
     }
 
-    public var expandY: Bool? {
+    open var expandY: Bool? {
         get { return style.expandY }
         set { style.expandY = newValue }
     }

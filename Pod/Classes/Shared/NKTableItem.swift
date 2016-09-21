@@ -14,21 +14,21 @@ public typealias SimpleDict = [String: AnyObject]
 public typealias CreateTableViewCallback = (() -> NKTableCellView)
 
 
-public class NKTableItem {
-    public var viewClass: NKTableCellView.Type? = NKTableCellView.self
-    public var selectable = true
-    public var deletable = false
+open class NKTableItem {
+    open var viewClass: NKTableCellView.Type? = NKTableCellView.self
+    open var selectable = true
+    open var deletable = false
 
-    public var create: CreateTableViewCallback?
-    public var update: ((NKTableCellView) -> ())?
+    open var create: CreateTableViewCallback?
+    open var update: ((NKTableCellView) -> ())?
 
-    public var row: Int? // TODO: I don't like this information being here. It's duplicate info. We can always just query
+    open var row: Int? // TODO: I don't like this information being here. It's duplicate info. We can always just query
                   // XTableView for this information
-    public var view: NKTableCellView?
+    open var view: NKTableCellView?
 
-    public var props: SimpleDict?
+    open var props: SimpleDict?
 
-    public var height: CGFloat?
+    open var height: CGFloat?
 
 //    var actions: [NKTableViewRowAction]?
 
@@ -57,7 +57,7 @@ public class NKTableItem {
         self.props = props
     }
 
-    public convenience init(create: CreateTableViewCallback) {
+    public convenience init(create: @escaping CreateTableViewCallback) {
         self.init()
 
         self.create = create

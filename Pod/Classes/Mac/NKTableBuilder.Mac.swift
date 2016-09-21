@@ -43,19 +43,19 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
 
     // Classic API
     public var numberOfSections: (() -> Int)?
-    public var numberOfRows: ((section: Int) -> Int)?
-    public var itemForRow: ((section: Int, row: Int) -> NKTableItem)?
+    public var numberOfRows: ((_ section: Int) -> Int)?
+    public var itemForRow: ((_ section: Int, row: Int) -> NKTableItem)?
 
     // Section headers
-    public var viewForHeader: ((section: Int) -> NKView)?
+    public var viewForHeader: ((_ section: Int) -> NKView)?
     public var headerHeight: CGFloat?
 
     // Height
-    public var calcRowHeight: ((row: Int) -> CGFloat)?
+    public var calcRowHeight: ((_ row: Int) -> CGFloat)?
     public var rowHeight: CGFloat?
 
     // Selecting
-    public var onSelectRow: ((index: Int) -> ())?
+    public var onSelectRow: ((_ index: Int) -> ())?
     public var onDeselectRow: (() -> ())?
     public var selectedView: NKTableCellView?
     dynamic var _selectionIndexes: NSIndexSet?
@@ -63,8 +63,8 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // Events
     public var onTap: (() -> ())?                      // iOS only - doesn't do anything here
     public var onTapOut: (() -> ())?                   // iOS only - doesn't do anything here
-    public var onDelete: ((row: Int) -> ())?           // TODO: Implement
-    public var onScroll: ((offset: CGPoint) -> ())?    // Not sure about this one
+    public var onDelete: ((_ row: Int) -> ())?           // TODO: Implement
+    public var onScroll: ((_ offset: CGPoint) -> ())?    // Not sure about this one
     public var onStartScrolling: NKSimpleCallback?
     public var onDoubleClick: (() -> ())? {
         get { return tableView.onDoubleClick }
@@ -77,8 +77,8 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
 
     
     // Reordering callbacks
-    public var canMoveItem: ((at: Int) -> Bool)?
-    public var targetRowForMove: ((from: Int, to: Int) -> Int)?    // Not used here, TODO: make it somehow work with iOS
+    public var canMoveItem: ((_ at: Int) -> Bool)?
+    public var targetRowForMove: ((_ from: Int, to: Int) -> Int)?    // Not used here, TODO: make it somehow work with iOS
     public var canDropItem: ((from: Int, to: Int) -> Bool)?
     public var moveItem: ((atIndex: Int, toIndex: Int) -> ())?
 

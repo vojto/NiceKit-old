@@ -8,5 +8,5 @@
 
 import Foundation
 
-public class NKTextArea: NKTextField {
+open class NKTextArea: NKTextField {
 }

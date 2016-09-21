@@ -10,24 +10,24 @@
 import Foundation
 import AppKit
 
-public class NKButton: NKView {
+open class NKButton: NKView {
 
     // MARK: - Properties
     // -----------------------------------------------------------------------
 
-    public var image: XImage?
+    open var image: XImage?
 
-    public var imageEdgeInsets: XEdgeInsets?
-    public var imageEdgeInsetsNormalized: XEdgeInsets {
+    open var imageEdgeInsets: XEdgeInsets?
+    open var imageEdgeInsetsNormalized: XEdgeInsets {
         let insets = imageEdgeInsets ?? XEdgeInsetsZero
         return XEdgeInsets(top: insets.top/2, left: insets.left/2, bottom: insets.bottom/2, right: insets.right/2)
     }
 
-    public var title: String! = ""
+    open var title: String! = ""
 
-    public var leftClickShowsMenu = false
+    open var leftClickShowsMenu = false
 
-    public var enabled = true {
+    open var enabled = true {
         didSet {
             if enabled {
                 removeClass("disabled")
@@ -39,13 +39,13 @@ public class NKButton: NKView {
         }
     }
 
-    public var imageSize: CGSize { return image?.size ?? CGSizeMake(0, 0) }
+    open var imageSize: CGSize { return image?.size ?? CGSize(width: 0, height: 0) }
 
-    public var imageOuterSize: CGSize {
+    open var imageOuterSize: CGSize {
         let insets = imageEdgeInsetsNormalized
 
-        return CGSizeMake(imageSize.width + insets.left + insets.right,
-            imageSize.height + insets.top + insets.bottom)
+        return CGSize(width: imageSize.width + insets.left + insets.right,
+            height: imageSize.height + insets.top + insets.bottom)
     }
 
     // MARK: - Lifecycle
@@ -69,7 +69,7 @@ public class NKButton: NKView {
     // MARK: - Applying style
     // -----------------------------------------------------------------------
 
-    public override func applyStyle() {
+    open override func applyStyle() {
         if let image = style.image {
             self.image = NSImage(named: image)
         }
@@ -80,8 +80,8 @@ public class NKButton: NKView {
     // MARK: - Drawing
     // -----------------------------------------------------------------------
 
-    override public func drawRect(dirtyRect: CGRect) {
-        super.drawRect(dirtyRect)
+    override open func draw(_ dirtyRect: CGRect) {
+        super.draw(dirtyRect)
 
         let size = intrinsicContentSize
 
@@ -94,27 +94,27 @@ public class NKButton: NKView {
         let x = (bounds.size.width - size.width)/2
         let y = (bounds.size.height - size.height)/2
 
-        let rect = CGRectMake(x, y, size.width, size.height)
+        let rect = CGRect(x: x, y: y, width: size.width, height: size.height)
 
-        let imageRect = CGRectMake(x, y + (size.height - imageOuterSize.height)/2, imageOuterSize.width, imageOuterSize.height)
-        let textRect = CGRectMake(x + imageOuterSize.width, y, size.width - imageOuterSize.width, size.height)
+        let imageRect = CGRect(x: x, y: y + (size.height - imageOuterSize.height)/2, width: imageOuterSize.width, height: imageOuterSize.height)
+        let textRect = CGRect(x: x + imageOuterSize.width, y: y, width: size.width - imageOuterSize.width, height: size.height)
 
 
 
-        XColor.blackColor().set()
+        XColor.black.set()
 
         //            CGContextFillRect(ctx, rect)
 
         self.drawTitle(textRect)
 
 
-        XColor.blueColor().set()
+        XColor.blue.set()
         //            CGContextFillRect(ctx, imageRect)
 
         self.drawImage(imageRect)
     }
 
-    func drawTitle(rect: CGRect) {
+    func drawTitle(_ rect: CGRect) {
 
         // Draw a background so we could see where are we drawing the title
 //        let ctx = XGraphicsGetCurrentContext()
@@ -128,16 +128,16 @@ public class NKButton: NKView {
         //            let top = (height - fontSize) / 2
 
 //        title.drawAtPoint(CGPointMake(rect.origin.x, rect.origin.y))
-        title.drawInRect(rect)
+        title.draw(in: rect)
     }
 
-    func drawImage(rect: CGRect) {
+    func drawImage(_ rect: CGRect) {
         let insets = imageEdgeInsetsNormalized
 
-        let drawRect = CGRectMake(rect.origin.x + insets.left,
-            rect.origin.y + insets.bottom,
-            imageSize.width,
-            imageSize.height)
+        let drawRect = CGRect(x: rect.origin.x + insets.left,
+            y: rect.origin.y + insets.bottom,
+            width: imageSize.width,
+            height: imageSize.height)
 
         if self.image == nil {
             return
@@ -151,7 +151,7 @@ public class NKButton: NKView {
         if let color = style.textColor {
             image.draw(color.color, drawRect: drawRect, flip: true)
         } else {
-            image.drawInRect(drawRect)
+            image.draw(in: drawRect)
         }
 
 
@@ -169,11 +169,11 @@ public class NKButton: NKView {
 
             //                return size
 
-            return CGSizeMake(size.width, fontHeight)
+            return CGSize(width: size.width, height: fontHeight)
 
             //                return size
         } else {
-            return CGSizeZero
+            return CGSize.zero
         }
     }
 
@@ -192,11 +192,11 @@ public class NKButton: NKView {
     }
 
 
-    override public var intrinsicContentSize: CGSize {
+    override open var intrinsicContentSize: CGSize {
         get { return getIntrinsicContentSize() }
     }
 
-    override public var baselineOffsetFromBottom: CGFloat {
+    override open var baselineOffsetFromBottom: CGFloat {
         let font = style.font!
         let boundingRect = style.font!.boundingRectForFont
         return floor(abs(font.descender) + abs(boundingRect.origin.y)/2)
@@ -205,17 +205,17 @@ public class NKButton: NKView {
     // MARK: - Event handling
     // -----------------------------------------------------------------------
 
-    override public func mouseDown(theEvent: NSEvent) {
+    override open func mouseDown(with theEvent: NSEvent) {
         addClass("active")
         setNeedsDisplay()
 
-        if let menu = menu where leftClickShowsMenu {
-            let item = menu.itemArray.first
-            menu.popUpMenuPositioningItem(item, atLocation: NSMakePoint(15, -5), inView: self)
+        if let menu = menu , leftClickShowsMenu {
+            let item = menu.items.first
+            menu.popUp(positioning: item, at: NSMakePoint(15, -5), in: self)
         }
     }
 
-    override public func mouseUp(theEvent: NSEvent) {
+    override open func mouseUp(with theEvent: NSEvent) {
         removeClass("active")
         setNeedsDisplay()
 
@@ -224,7 +224,7 @@ public class NKButton: NKView {
         }
     }
 
-    override public var mouseDownCanMoveWindow: Bool {
+    override open var mouseDownCanMoveWindow: Bool {
         return false
     }
 }

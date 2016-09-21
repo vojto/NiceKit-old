@@ -33,12 +33,12 @@ Pod::Spec.new do |s|
 
 
   s.osx.dependency 'Cartography'
-  s.osx.dependency 'SwiftColors'
+  # s.osx.dependency 'SwiftHEXColors' #, :git => 'https://github.com/thii/SwiftHEXColors.git' #, :branch => 'swift-3.0'
   s.osx.dependency 'ITSwitch'
-  s.osx.dependency 'Changeset'
+  # s.osx.dependency 'Changeset'
 
   s.ios.dependency 'Cartography'
-  s.ios.dependency 'SwiftColors'
+  # s.ios.dependency 'SwiftHEXColors', :git => 'https://github.com/thii/SwiftHEXColors.git', :branch => 'swift-3.0'
   s.ios.dependency 'EZAlertController'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'

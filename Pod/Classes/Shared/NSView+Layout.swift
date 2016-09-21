@@ -28,7 +28,7 @@ public extension NKViewable {
         }
     }
 
-    public func expandX(left: CGFloat, right: CGFloat) -> ConstraintGroup {
+    public func expandX(_ left: CGFloat, right: CGFloat) -> ConstraintGroup {
         return constrain(self as! XView) { v in
             v.left == v.superview!.left + left
             v.right == v.superview!.right - right
@@ -51,19 +51,19 @@ public extension NKViewable {
 extension XView {
     // MARK: Layout
     
-    public func setWidth(width: CGFloat) {
+    public func setWidth(_ width: CGFloat) {
         constrain(self) { view in
             view.width == width
         }
     }
     
-    public func setHeight(height: CGFloat) {
+    public func setHeight(_ height: CGFloat) {
         constrain(self) { view in
             view.height == height
         }
     }
     
-    public func setSize(width: CGFloat, height: CGFloat) {
+    public func setSize(_ width: CGFloat, height: CGFloat) {
         self.setWidth(width)
         self.setHeight(height)
     }
@@ -72,11 +72,11 @@ extension XView {
         return self.expand(NKPadding(top: 0, right: 0, bottom: 0, left: 0))
     }
     
-    public func expand(padding: NKPadding) -> ConstraintGroup {
+    public func expand(_ padding: NKPadding) -> ConstraintGroup {
         return expand(padding, priority: 1000)
     }
 
-    public func expand(padding: NKPadding, priority: Float) -> ConstraintGroup {
+    public func expand(_ padding: NKPadding, priority: Float) -> ConstraintGroup {
         return constrain(self) { v in
             v.bottom == v.superview!.bottom - padding.bottom ~ priority
             v.left == v.superview!.left + padding.left ~ priority
