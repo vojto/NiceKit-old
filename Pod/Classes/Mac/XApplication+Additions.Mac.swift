@@ -20,22 +20,22 @@ public extension XApplication {
     
     // Taken from: http://stackoverflow.com/a/26284141/304321
     
-    class func setDockIconVisible(_ state: Bool) -> Bool {
+    class func setDockIconVisible(state: Bool) -> Bool {
         var result: Bool
         if state {
-            result = NSApp.setActivationPolicy(NSApplicationActivationPolicy.regular)
+            result = NSApp.setActivationPolicy(NSApplicationActivationPolicy.Regular)
         } else {
-            result = NSApp.setActivationPolicy(NSApplicationActivationPolicy.accessory)
+            result = NSApp.setActivationPolicy(NSApplicationActivationPolicy.Accessory)
         }
         
-        NSApp.presentationOptions = NSApplicationPresentationOptions()
+        NSApp.presentationOptions = .Default
         
         NSMenu.setMenuBarVisible(false)
         NSMenu.setMenuBarVisible(true)
         
-        NSApplication.shared().activate(ignoringOtherApps: true)
+        NSApplication.sharedApplication().activateIgnoringOtherApps(true)
         
-        Timer.schedule(delay: 0.1) { _ in
+        NSTimer.schedule(delay: 0.1) { _ in
             self.show()
         }
         
@@ -56,22 +56,22 @@ public extension XApplication {
     public class func launchMainAppFromHelperApp() {
         print("Launching")
 
-        let bundlePath = (Bundle.main.bundlePath as NSString)
+        let bundlePath = (NSBundle.mainBundle().bundlePath as NSString)
 
         print("bundle path: \(bundlePath)")
         
-        let workspace = NSWorkspace.shared()
+        let workspace = NSWorkspace.sharedWorkspace()
         
         let identifier = "rinik.Escape"
         
-        if let url = workspace.urlForApplication(withBundleIdentifier: identifier) {
+        if let url = workspace.URLForApplicationWithBundleIdentifier(identifier) {
             var config = [String: AnyObject]()
             config[NSWorkspaceLaunchConfigurationArguments] = ["quiet", "test"] as NSArray
             config[NSWorkspaceLaunchConfigurationEnvironment] = ["quiet": "true"] as NSDictionary
             
 
             do {
-                try workspace.launchApplication(at: url, options: [.default], configuration: config)
+                try workspace.launchApplicationAtURL(url, options: [.Default], configuration: config)
             } catch _ {
                 Swift.print("Failed launching app with config: \(config)")
             }
@@ -82,7 +82,7 @@ public extension XApplication {
     }
 
     var applicationState: XApplicationState {
-        return .active
+        return .Active
     }
 
 }

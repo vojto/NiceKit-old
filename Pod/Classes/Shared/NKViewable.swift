@@ -15,29 +15,29 @@ public protocol NKViewable: class {
 
     func setup()
 //
-    func addClass(_ cls: String)
-    func removeClass(_ cls: String)
+    func addClass(cls: String)
+    func removeClass(cls: String)
 
     func applyStyle()
 
-    var onMouseDown: ((XEvent) -> Void)? { get set }
+    var onMouseDown: (XEvent -> Void)? { get set }
     
 }
 
 
 
 extension NKViewable {
-    public var onMouseDown: ((XEvent) -> Void)? {
+    public var onMouseDown: (XEvent -> Void)? {
         get { return nil }
         set { }
     }
 
-    public func addClass(_ cls: String) {
+    public func addClass(cls: String) {
         self.classes.insert(cls)
         self.updateStyle()
     }
 
-    public func addClasses(_ classes: [String]) {
+    public func addClasses(classes: [String]) {
         for cls in classes {
             self.classes.insert(cls)
         }
@@ -45,20 +45,20 @@ extension NKViewable {
         self.updateStyle()
     }
 
-    public func removeClass(_ cls: String) {
+    public func removeClass(cls: String) {
         self.classes.remove(cls)
         self.updateStyle()
     }
 
     func updateStyle() {
-        self.style = NKStylesheet.styleForView(type(of: self), classes: Array(self.classes))
+        self.style = NKStylesheet.styleForView(self.dynamicType, classes: Array(self.classes))
         self.applyStyle()
     }
 
     public func applyStyle() {
     }
 
-    public func addSubviews(_ views: [XView]) {
+    public func addSubviews(views: [XView]) {
         let parentView = self as! XView
         for view in views {
             parentView.addSubview(view)
@@ -75,7 +75,7 @@ extension NKViewable {
         let views = subviews.filter { $0 is NKViewable }.map { $0 as! NKViewable }
 
 
-        for i in 0 ..< views.count {
+        for var i = 0; i < views.count; i++ {
             let subview = views[i]
             let style = subview.style
 
@@ -160,7 +160,7 @@ extension NKViewable {
 
                 // If this is the last view, pin to bottom, but only if explicitly
                 // defined so using current.bottom
-                if let bottom = style.bottom , next == nil {
+                if let bottom = style.bottom where next == nil {
                     constrain(subview as! XView) { s in s.bottom == s.superview!.bottom - bottom }
                 }
 
@@ -194,15 +194,14 @@ extension NKViewable {
                     constrain(subview as! XView, next) { s, n in s.right == n.left - distance }
                 }
                 
-                if let right = style.right , next == nil {
+                if let right = style.right where next == nil {
                     constrain(subview as! XView) { s in s.right == s.superview!.right - right }
                 }
             }
         }
     }
 
-    func nextBlockPositionedView(_ views: [NKViewable], index: Int) -> NKViewable? {
-        var index = index
+    func nextBlockPositionedView(views: [NKViewable], var index: Int) -> NKViewable? {
         while let view = views.get(++index) {
             if view.style.position == nil {
                 return view
@@ -212,8 +211,7 @@ extension NKViewable {
         return nil
     }
 
-    func previousBlockPositionedView(_ views: [NKViewable], index: Int) -> NKViewable? {
-        var index = index
+    func previousBlockPositionedView(views: [NKViewable], var index: Int) -> NKViewable? {
         while let view = views.get(--index) {
             if view.style.position == nil {
                 return view

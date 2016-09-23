@@ -11,12 +11,12 @@ import Foundation
 
 import AppKit
 
-open class NKTableView: NSTableView {
+public class NKTableView: NSTableView {
 
-    open var onDoubleClick: (() -> ())?
+    public var onDoubleClick: (() -> ())?
     var onMenu: ((Int) -> (NSMenu?))?
 
-    open var editing = false
+    public var editing = false
     
     
     // Hack that allows us editing custom text fields in custom
@@ -24,13 +24,13 @@ open class NKTableView: NSTableView {
     // Taken from: http://stackoverflow.com/q/7101237
     //
     
-    override open func mouseDown(with theEvent: NSEvent) {
-        super.mouseDown(with: theEvent)
+    override public func mouseDown(theEvent: NSEvent) {
+        super.mouseDown(theEvent)
         
         // NSPoint selfPoint = [self convertPoint:theEvent.locationInWindow fromView:nil];
-        let point = self.convert(theEvent.locationInWindow, from: nil)
-        let col = self.column(at: point)
-        let row = self.row(at: point)
+        let point = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+        let col = self.columnAtPoint(point)
+        let row = self.rowAtPoint(point)
         
         if row == -1 {
             if theEvent.clickCount == 2 {
@@ -40,23 +40,23 @@ open class NKTableView: NSTableView {
             return
         }
         
-        if let view = self.view(atColumn: col, row: row, makeIfNecessary: false) as? NKTableCellView {
+        if let view = self.viewAtColumn(col, row: row, makeIfNecessary: false) as? NKTableCellView {
             view.editTextField(theEvent)
         }
     }
 
-    override open func drawGrid(inClipRect clipRect: NSRect) {
+    override public func drawGridInClipRect(clipRect: NSRect) {
 
     }
 
-    open override func menu(for event: NSEvent) -> NSMenu? {
+    public override func menuForEvent(event: NSEvent) -> NSMenu? {
         if let onMenu = onMenu {
-            let pt = convert(event.locationInWindow, from: nil)
-            let row = self.row(at: pt)
+            let pt = convertPoint(event.locationInWindow, fromView: nil)
+            let row = rowAtPoint(pt)
 
             return onMenu(row)
         } else {
-            return super.menu(for: event)
+            return super.menuForEvent(event)
         }
     }
 

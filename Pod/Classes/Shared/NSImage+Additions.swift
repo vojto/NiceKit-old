@@ -17,15 +17,15 @@ import CoreGraphics
 
 public extension XImage {
     #if os(OSX)
-    var CGImage: CGImage? {
-        let ctx = NSGraphicsContext.current()
-        var rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        return self.cgImage(forProposedRect: &rect, context: ctx, hints: nil)
+    var CGImage: CGImageRef? {
+        let ctx = NSGraphicsContext.currentContext()
+        var rect = CGRectMake(0, 0, size.width, size.height)
+        return self.CGImageForProposedRect(&rect, context: ctx, hints: nil)
     }
     #else
     #endif
 
-    func draw(_ color: XColor, drawRect: CGRect, flip: Bool = false) {
+    func draw(color: XColor, drawRect: CGRect, flip: Bool = false) {
         let rect: CGRect = drawRect
         let image = self
         let imageRef = image.CGImage
@@ -35,22 +35,22 @@ public extension XImage {
 //        let cgCtx = ctx?.CGContext
 //        let imageRef = image.CGImageForProposedRect(nil, context: ctx, hints: nil)
 
-        ctx.saveGState()
+        CGContextSaveGState(ctx)
         
         if flip {
-            ctx.translateBy(x: 0, y: rect.size.height + rect.origin.y*2)
-            ctx.scaleBy(x: 1, y: -1)
+            CGContextTranslateCTM(ctx, 0, rect.size.height + rect.origin.y*2)
+            CGContextScaleCTM(ctx, 1, -1)
         }
         
         
-        ctx.clip(to: rect, mask: imageRef)
+        CGContextClipToMask(ctx, rect, imageRef)
         
         color.set()
 
 //        NSRectFillUsingOperation(rect, .CompositeSourceOver)
-        ctx.fill(rect)
+        CGContextFillRect(ctx, rect)
 
-        ctx.restoreGState()
+        CGContextRestoreGState(ctx)
     }
 
     #if os (OSX)

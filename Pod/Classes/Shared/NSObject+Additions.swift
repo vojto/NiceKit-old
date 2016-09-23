@@ -12,42 +12,42 @@ struct EventObservingConstants {
     static var observersKey = NSString(string: "__eventObservers__")
 }
 
-open class NKEventObserver {
+public class NKEventObserver {
     let observer: NSObjectProtocol
     
     public init(observer: NSObjectProtocol) {
         self.observer = observer
     }
     
-    open func off() {
-        let center = NotificationCenter.default
+    public func off() {
+        let center = NSNotificationCenter.defaultCenter()
         center.removeObserver(self.observer)
     }
 }
 
 public extension NSObject {
-    public func trigger(_ name: String) {
+    public func trigger(name: String) {
         self.trigger(name, data: nil)
     }
     
-    public func trigger(_ name: String, data: AnyObject?) {
+    public func trigger(name: String, data: AnyObject?) {
         let identifier = self.eventIdentifier(name)
-        let center = NotificationCenter.default
+        let center = NSNotificationCenter.defaultCenter()
         var userInfo = [String: AnyObject]()
         if let data = data {
             userInfo["data"] = data
         }
-        let notification = Notification(name: Notification.Name(rawValue: identifier), object: self, userInfo: userInfo)
-        center.post(notification)
+        let notification = NSNotification(name: identifier, object: self, userInfo: userInfo)
+        center.postNotification(notification)
     }
     
-    public func on(_ name: String, handler: @escaping (_ data: AnyObject?) -> ()) -> NKEventObserver {
+    public func on(name: String, handler: (data: AnyObject?) -> ()) -> NKEventObserver {
         let identifier = self.eventIdentifier(name)
-        let center = NotificationCenter.default
-        let systemObserver = center.addObserver(forName: NSNotification.Name(rawValue: identifier), object: self, queue: nil) { notification in
-            if let userInfo = (notification as NSNotification).userInfo as? [String: AnyObject] {
+        let center = NSNotificationCenter.defaultCenter()
+        let systemObserver = center.addObserverForName(identifier, object: self, queue: nil) { notification in
+            if let userInfo = notification.userInfo as? [String: AnyObject] {
                 let data = userInfo["data"]
-                handler(data)
+                handler(data: data)
             }
         }
         
@@ -56,8 +56,8 @@ public extension NSObject {
         return observer
     }
     
-    fileprivate func eventIdentifier(_ name: String) -> String {
-        return "\(Unmanaged.passUnretained(self).toOpaque())_\(name)"
+    private func eventIdentifier(name: String) -> String {
+        return "\(unsafeAddressOf(self))_\(name)"
     }
     
     /*

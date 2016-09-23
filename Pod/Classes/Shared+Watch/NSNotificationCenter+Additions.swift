@@ -8,33 +8,33 @@
 
 import Foundation
 
-public extension NotificationCenter {
-    public func replace(_ notifName: String, obj: AnyObject?, newObj: AnyObject?, target: AnyObject, selector: Selector) {
+public extension NSNotificationCenter {
+    public func replace(notifName: String, obj: AnyObject?, newObj: AnyObject?, target: AnyObject, selector: Selector) {
         if obj != nil {
-            self.removeObserver(target, name: NSNotification.Name(rawValue: notifName), object: obj)
+            self.removeObserver(target, name: notifName, object: obj)
         }
         
         if newObj != nil {
-            self.addObserver(target, selector: selector, name: NSNotification.Name(rawValue: notifName), object: newObj)
+            self.addObserver(target, selector: selector, name: notifName, object: newObj)
         }
     }
 
-    public static func post(_ notifName: String) {
+    public static func post(notifName: String) {
         self.post(notifName, nil)
     }
     
-    public static func post(_ notifName: String, _ object: AnyObject?) {
-        let center = NotificationCenter.default
-        let notification = Notification(name: Notification.Name(rawValue: notifName), object: object)
-        center.post(notification)
+    public static func post(notifName: String, _ object: AnyObject?) {
+        let center = NSNotificationCenter.defaultCenter()
+        let notification = NSNotification(name: notifName, object: object)
+        center.postNotification(notification)
     }
     
-    public static func on(_ notifName: String, handler: @escaping (_ obj: AnyObject?) -> ()) {
-        let center = NotificationCenter.default
+    public static func on(notifName: String, handler: (obj: AnyObject?) -> ()) {
+        let center = NSNotificationCenter.defaultCenter()
         
-        center.addObserver(forName: NSNotification.Name(rawValue: notifName), object: nil, queue: nil) { notification in
+        center.addObserverForName(notifName, object: nil, queue: nil) { notification in
             let obj = notification.object
-            handler(obj as AnyObject?)
+            handler(obj: obj)
         }
     }
 }

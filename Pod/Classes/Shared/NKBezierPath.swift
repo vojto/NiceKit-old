@@ -9,23 +9,23 @@
 import Foundation
 import CoreGraphics
 
-open class NKBezierPath: XBezierPath {
-    open var size: CGSize?
+public class NKBezierPath: XBezierPath {
+    public var size: CGSize?
 
-    open func renderToImage(_ size: CGSize) -> XImage {
+    public func renderToImage(size: CGSize) -> XImage {
         let size = self.size ?? self.bounds.size
 
         let scaleX = size.width / size.width
         let scaleY = size.height / size.height
 
         let path = self.copy() as! NKBezierPath
-        path.applyTransform(CGAffineTransform(scaleX: scaleX, y: scaleY))
+        path.applyTransform(CGAffineTransformMakeScale(scaleX, scaleY))
 
-        let view = NKBezierPathView(bezierPath: path as XBezierPath, frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        let view = NKBezierPathView(bezierPath: path as! XBezierPath, frame: CGRectMake(0, 0, size.width, size.height))
         return view.renderToImage()
     }
 
-    open func renderToImage() -> XImage {
+    public func renderToImage() -> XImage {
         return renderToImage(self.size!)
     }
 }

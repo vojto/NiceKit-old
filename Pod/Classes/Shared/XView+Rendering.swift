@@ -19,7 +19,7 @@ public extension XView {
         let frame = self.bounds
         let size = frame.size
 
-        let backingSize = self.convertToBacking(size)
+        let backingSize = self.convertSizeToBacking(size)
         let scale = backingSize.width / size.width
 
 
@@ -41,7 +41,7 @@ public extension XView {
         let context = NSGraphicsContext(bitmapImageRep: rep)!
 
         NSGraphicsContext.setCurrentContext(context)
-        (context.CGContext).scaleBy(x: scale, y: scale)
+        CGContextScaleCTM(context.CGContext, scale, scale)
 
         self.displayRectIgnoringOpacity(frame, inContext: context)
 

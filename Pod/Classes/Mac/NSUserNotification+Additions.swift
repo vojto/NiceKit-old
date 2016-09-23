@@ -9,12 +9,12 @@
 import Foundation
 
 public extension NSUserNotification {
-    public static func deliver(_ title: String, text: String) {
-        let center = NSUserNotificationCenter.default
+    public static func deliver(title: String, text: String) {
+        let center = NSUserNotificationCenter.defaultUserNotificationCenter()
         let notification = NSUserNotification()
         
         notification.title = title
         notification.informativeText = text
-        center.deliver(notification)
+        center.deliverNotification(notification)
     }
 }

@@ -8,8 +8,9 @@
 
 import Foundation
 import CoreGraphics
+import SwiftColors
 
-open class NKColor: NSObject {
+public class NKColor: NSObject {
     var colors: [XColor]?
     
     override public init() {
@@ -33,43 +34,43 @@ open class NKColor: NSObject {
 
 
     
-    open var color: XColor {
+    public var color: XColor {
         return colors!.first!
     }
 
-    open var CGColor: CGColor {
-        return color.cgColor
+    public var CGColor: CGColorRef {
+        return color.CGColor
     }
     
-    open func set() {
+    public func set() {
         color.set()
     }
     
-    static open func yellow() -> NKColor {
+    static public func yellow() -> NKColor {
         return NKColor("fffd6e")
     }
     
-    open static func white() -> NKColor {
+    public static func white() -> NKColor {
         return NKColor("ffffff")
     }
     
-    open static func orange() -> NKColor {
+    public static func orange() -> NKColor {
         return NKColor("FFCDA1")
     }
     
-    open static func green() -> NKColor {
+    public static func green() -> NKColor {
         return NKColor("9EFFDB")
     }
     
-    open static func blue() -> NKColor {
+    public static func blue() -> NKColor {
         return NKColor("9ECAFF")
     }
     
-    open static func black() -> NKColor {
+    public static func black() -> NKColor {
         return NKColor("000000")
     }
 
-    open static func red() -> NKColor {
+    public static func red() -> NKColor {
         return NKColor("f00")
     }
 }

@@ -28,7 +28,7 @@ func ==(lhs: NKScene, rhs: NKScene) -> Bool {
 
 
 
-open class NKStoryboard: NSObject, NSWindowDelegate {
+public class NKStoryboard: NSObject, NSWindowDelegate {
     static var _instance: NKStoryboard?
     var window: NSWindow!
     var scenes = Set<NKScene>()
@@ -42,7 +42,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // MARK: - Lifecycles
     // -----------------------------------------------------------------------
 
-    open static var instance: NKStoryboard {
+    public static var instance: NKStoryboard {
         get {
             if _instance == nil { _instance = NKStoryboard() }
             return _instance!
@@ -53,7 +53,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // MARK - Querying state
     // -----------------------------------------------------------------------
 
-    open var currentSceneName: String? {
+    public var currentSceneName: String? {
         return mainWindow?.currentScene
     }
 
@@ -62,7 +62,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // -----------------------------------------------------------------------
 
 
-    open func registerWindow(_ name: String, window: NKWindow) {
+    public func registerWindow(name: String, window: NKWindow) {
         if windows[name] != nil {
             fatalError("Window with name \(name) is already registered!")
         }
@@ -75,7 +75,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
         windows[name] = window
     }
 
-    open func registerScene(_ name: String, viewClass: NKView.Type, window: String) {
+    public func registerScene(name: String, viewClass: NKView.Type, window: String) {
         let scene = NKScene(windowName: window, name: name, viewClass: viewClass)
 
         if scenes.contains(scene) {
@@ -85,7 +85,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
         scenes.insert(scene)
     }
 
-    open func registerTransition(_ fromScene: String?, toScene: String, window: String, transition: NKTransitionType) {
+    public func registerTransition(fromScene: String?, toScene: String, window: String, transition: NKTransitionType) {
         let transition = NKTransition(fromScene: fromScene, toScene: toScene, transition: transition, windowName: window)
         transitions.insert(transition)
     }
@@ -96,11 +96,11 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // MARK: - Making transitions
     // -----------------------------------------------------------------------
 
-    open func transitionTo(_ scene: String) {
+    public func transitionTo(scene: String) {
         transitionTo(scene, context: nil)
     }
 
-    open func transitionTo(_ sceneName: String, context: AnyObject?) {
+    public func transitionTo(sceneName: String, context: AnyObject?) {
         // Find window based on destination scene
 
         guard let scene = scenes.filter({ $0.name == sceneName }).first else {
@@ -111,12 +111,12 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
 
         window.transitionTo(scene, context: context)
 
-        if !window.isVisible {
+        if !window.visible {
             self.openWindow(window)
         }
     }
 
-    open func findTransition(_ window: String, fromScene: String?, toScene: String) -> NKTransition? {
+    public func findTransition(window: String, fromScene: String?, toScene: String) -> NKTransition? {
         let matching = transitions.filter { transition in
             return transition.windowName == window &&
                 transition.fromScene == fromScene &&
@@ -131,7 +131,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
 
     // MARK: Transitioning back
 
-    open func transitionBack(_ windowName: String) {
+    public func transitionBack(windowName: String) {
         guard let window = windows[windowName] else {
             fatalError("No window named \(windowName) found")
         }
@@ -149,7 +149,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // MARK: - Opening/closing windows
     // -----------------------------------------------------------------------
 
-    func openWindow(_ window: NKWindow) {
+    func openWindow(window: NKWindow) {
         if window == mainWindow {
             Swift.print("NKStoryboard not opening the main window, that should be managed by your application")
             return
@@ -163,7 +163,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
         }
     }
 
-    func closeWindow(_ window: NKWindow) {
+    func closeWindow(window: NKWindow) {
         switch(window.openingPolicy) {
         case .Default:
             window.close()
@@ -177,7 +177,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // MARK: - Sheet windows
     // -----------------------------------------------------------------------
 
-    func openWindowAsSheet(_ window: NKWindow) {
+    func openWindowAsSheet(window: NKWindow) {
         if window == mainWindow {
             fatalError("Cannot open main window as sheet")
         }
@@ -189,9 +189,8 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
         main.beginSheet(window, completionHandler: nil)
     }
 
-    public func window(_ window: NSWindow, willPositionSheet sheet: NSWindow, using rect: NSRect) -> NSRect {
-        var rect = rect
-        if let window = sheet as? NKWindow, let offset = window.sheetOffset {
+    public func window(window: NSWindow, willPositionSheet sheet: NSWindow, var usingRect rect: NSRect) -> NSRect {
+        if let window = sheet as? NKWindow, offset = window.sheetOffset {
             rect.origin.x += offset.width
             rect.origin.y += offset.height
         }
@@ -199,7 +198,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
         return rect
     }
 
-    func endSheet(_ window: NKWindow) {
+    func endSheet(window: NKWindow) {
         guard let main = mainWindow else {
             fatalError("Main window must be present in order to close windows as sheets")
         }
@@ -215,7 +214,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // MARK: - Accessig registered objects
     // -----------------------------------------------------------------------
 
-    func windowNamed(_ name: String) -> NKWindow {
+    func windowNamed(name: String) -> NKWindow {
         if let window = windows[name] {
             return window
         } else {
@@ -223,7 +222,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
         }
     }
 
-    func viewFor(_ scene: NKScene) -> NKView {
+    func viewFor(scene: NKScene) -> NKView {
         if let view = views[scene] {
             return view
         }
@@ -247,7 +246,7 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
         return window.contentView!
     }
 
-    open func updateStatusBar() {
+    public func updateStatusBar() {
     }
 
 
@@ -256,15 +255,15 @@ open class NKStoryboard: NSObject, NSWindowDelegate {
     // MARK: - Alerts
     // -----------------------------------------------------------------------
 
-    open func showAlert(_ text: String, description: String?) {
+    public func showAlert(text: String, description: String?) {
         showAlert(text, description: description, callback: nil)
     }
 
-    open func showAlert(_ text: String, description: String?, callback: NKSimpleCallback?) {
+    public func showAlert(text: String, description: String?, callback: NKSimpleCallback?) {
         let alert = NSAlert()
         alert.messageText = text
         alert.informativeText = description ?? ""
-        alert.addButton(withTitle: "OK")
+        alert.addButtonWithTitle("OK")
         alert.runModal()
 
         callback?()

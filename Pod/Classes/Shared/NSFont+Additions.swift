@@ -20,7 +20,7 @@ public extension XFont {
 #endif
 
     public func monospaced() -> XFont? {
-        let descriptor = getFontDescriptor().addingAttributes([XFontFeatureSettingsAttribute: [[
+        let descriptor = getFontDescriptor().fontDescriptorByAddingAttributes([XFontFeatureSettingsAttribute: [[
             XFontFeatureTypeIdentifierKey: 6,
             XFontFeatureSelectorIdentifierKey: 0
             ]]])

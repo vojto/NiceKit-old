@@ -9,12 +9,12 @@
 import Foundation
 
 public enum NKGradientOrientation {
-    case vertical
-    case horizontal
+    case Vertical
+    case Horizontal
 }
 
-open class NKGradient: NKColor {
-    open var orientation: NKGradientOrientation = .vertical
+public class NKGradient: NKColor {
+    public var orientation: NKGradientOrientation = .Vertical
 
     public init(colors: [XColor]) {
         super.init()

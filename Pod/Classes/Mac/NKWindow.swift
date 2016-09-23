@@ -13,10 +13,10 @@ public enum NKWindowOpeningPolicy: String {
     case Sheet
 }
 
-open class NKWindow: NSWindow {
+public class NKWindow: NSWindow {
 
-    open var openingPolicy: NKWindowOpeningPolicy = .Default
-    open var sheetOffset: NSSize?
+    public var openingPolicy: NKWindowOpeningPolicy = .Default
+    public var sheetOffset: NSSize?
 
     // Properties
     // -----------------------------------------------------------------------
@@ -28,11 +28,11 @@ open class NKWindow: NSWindow {
     var executedTransitions = Array<NKTransition>()
     
     var handleZoom: (() -> ())?
-    var closeButton: NSButton? { get { return self.standardWindowButton(.closeButton) } }
-    var miniaturizeButton: NSButton? { get { return self.standardWindowButton(.miniaturizeButton) } }
-    var zoomButton: NSButton? { get { return self.standardWindowButton(.zoomButton) } }
+    var closeButton: NSButton? { get { return self.standardWindowButton(.CloseButton) } }
+    var miniaturizeButton: NSButton? { get { return self.standardWindowButton(.MiniaturizeButton) } }
+    var zoomButton: NSButton? { get { return self.standardWindowButton(.ZoomButton) } }
 
-    open var currentScene: String? {
+    public var currentScene: String? {
         return executedTransitions.last?.toScene
     }
 
@@ -41,19 +41,19 @@ open class NKWindow: NSWindow {
     // -----------------------------------------------------------------------
 
 
-    public override init(contentRect: NSRect, styleMask aStyle: Int, backing bufferingType: NSBackingStoreType, defer flag: Bool) {
-        super.init(contentRect: contentRect, styleMask: NSWindowStyleMask(rawValue: UInt(aStyle)), backing: bufferingType, defer: flag)
+    public override init(contentRect: NSRect, styleMask aStyle: Int, backing bufferingType: NSBackingStoreType, `defer` flag: Bool) {
+        super.init(contentRect: contentRect, styleMask: aStyle, backing: bufferingType, `defer`: flag)
 
         self.showsResizeIndicator = true
 
-        NotificationCenter.default.addObserver(self, selector: #selector(NKWindow.willClose(_:)), name: NSNotification.Name.NSWindowWillClose, object: self)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "willClose:", name: NSWindowWillCloseNotification, object: self)
     }
 
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func willClose(_ notification: Notification) {
+    func willClose(notification: NSNotification) {
         let storyboard = NKStoryboard.instance
 
         if storyboard.mainWindow != self {
@@ -69,15 +69,15 @@ open class NKWindow: NSWindow {
     
     func hideButtons() {
         // Hide standard buttons
-        self.closeButton?.isHidden = true
-        self.miniaturizeButton?.isHidden = true
-        self.zoomButton?.isHidden = true
+        self.closeButton?.hidden = true
+        self.miniaturizeButton?.hidden = true
+        self.zoomButton?.hidden = true
     }
 
-    open func setupCustomHeader() {
+    public func setupCustomHeader() {
         self.titlebarAppearsTransparent = true
-        self.titleVisibility = .hidden
-        self.isMovableByWindowBackground = true
+        self.titleVisibility = .Hidden
+        self.movableByWindowBackground = true
     }
 
 
@@ -85,7 +85,7 @@ open class NKWindow: NSWindow {
     // Actions
     // -----------------------------------------------------------------------
     
-    override open func zoom(_ sender: Any?) {
+    override public func zoom(sender: AnyObject?) {
         if let fun = self.handleZoom {
             fun()
         } else {
@@ -99,9 +99,9 @@ open class NKWindow: NSWindow {
     // -----------------------------------------------------------------------
 
     var sheetWindow: NKSheetWindow?
-    func presentSheet(_ view: NKView, size: CGSize) {
+    func presentSheet(view: NKView, size: CGSize) {
         if sheetWindow == nil {
-            sheetWindow = NKSheetWindow(contentRect: CGRect(x: 0, y: 0, width: size.width, height: size.height), styleMask: NSTitledWindowMask, backing: .buffered, defer: false)
+            sheetWindow = NKSheetWindow(contentRect: CGRectMake(0, 0, size.width, size.height), styleMask: NSTitledWindowMask, backing: .Buffered, `defer`: false)
         }
 
         sheetWindow!.contentView = view
@@ -120,7 +120,7 @@ open class NKWindow: NSWindow {
     // Executing storyboard transitions
     // -----------------------------------------------------------------------
 
-    func transitionTo(_ scene: NKScene, context: AnyObject?) {
+    func transitionTo(scene: NKScene, context: AnyObject?) {
         if currentScene == scene.name {
             return
         }
@@ -180,7 +180,7 @@ open class NKWindow: NSWindow {
     // Managing the navigation stack
     // -----------------------------------------------------------------------
 
-    func push(_ view: NKView) {
+    func push(view: NKView) {
         let currentView = contentView!.subviews[0]
 
         view.frame = contentView!.frame

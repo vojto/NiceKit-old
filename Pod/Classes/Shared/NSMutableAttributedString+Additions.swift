@@ -12,20 +12,20 @@ import AppKit
 #endif
 
 public extension NSMutableAttributedString {
-    func addAttribute(_ name: String, value: AnyObject) {
+    func addAttribute(name: String, value: AnyObject) {
         self.addAttribute(name, value: value, range: NSMakeRange(0, self.length))
     }
     
-    func attributeValue(_ name: String) -> AnyObject? {
+    func attributeValue(name: String) -> AnyObject? {
         var range = NSMakeRange(0, self.length)
-        return self.attribute(name, at: 0, effectiveRange: &range) as AnyObject?
+        return self.attribute(name, atIndex: 0, effectiveRange: &range)
     }
     
-    func removeAttribute(_ name: String) {
+    func removeAttribute(name: String) {
         self.removeAttribute(name, range: NSMakeRange(0, self.length))
     }
     
-    func replaceAttribute(_ name: String, newValue: AnyObject?) {
+    func replaceAttribute(name: String, newValue: AnyObject?) {
         self.removeAttribute(name)
         if let value = newValue {
             self.addAttribute(name, value: value)
@@ -37,7 +37,7 @@ public extension NSMutableAttributedString {
 
         var attributes = [String: AnyObject]()
 
-        self.enumerateAttributes(in: range, options: NSAttributedString.EnumerationOptions()) { (dct, range, bazinga) -> Void in
+        self.enumerateAttributesInRange(range, options: NSAttributedStringEnumerationOptions()) { (dct, range, bazinga) -> Void in
             attributes += dct
         }
 
@@ -67,7 +67,7 @@ public extension NSMutableAttributedString {
             return self.attributeValue(XStrikethroughStyleAttributeName) as? Int
         }
         set {
-            self.replaceAttribute(XStrikethroughStyleAttributeName, newValue: newValue as AnyObject?)
+            self.replaceAttribute(XStrikethroughStyleAttributeName, newValue: newValue)
         }
     }
 
@@ -82,21 +82,21 @@ public extension NSMutableAttributedString {
 }
 
 public func +=(lhs: NSMutableAttributedString, rhs: NSAttributedString) {
-    lhs.append(rhs)
+    lhs.appendAttributedString(rhs)
 }
 
 public func +=(lhs: NSMutableAttributedString, rhs: String) {
-    lhs.append(NSAttributedString(string: rhs))
+    lhs.appendAttributedString(NSAttributedString(string: rhs))
 }
 
 public func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedString {
     let str1 = lhs.mutableCopy() as! NSMutableAttributedString
-    str1.append(rhs)
+    str1.appendAttributedString(rhs)
     return str1
 }
 
 public func +(lhs: String, rhs: NSAttributedString) -> NSMutableAttributedString {
     let str = NSMutableAttributedString(string: lhs)
-    str.append(rhs)
+    str.appendAttributedString(rhs)
     return str
 }

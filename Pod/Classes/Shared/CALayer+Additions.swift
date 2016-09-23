@@ -10,15 +10,15 @@ import Foundation
 import QuartzCore
 
 public extension CALayer {
-    public func animate(_ property: String, to: CGFloat, duration: Double) {
-        let currentValue = value(forKey: property)
+    public func animate(property: String, to: CGFloat, duration: Double) {
+        let currentValue = valueForKey(property)
 
         let animation = CABasicAnimation()
         animation.fromValue = currentValue
         animation.toValue = to
         animation.duration = duration
 
-        add(animation, forKey: property)
+        addAnimation(animation, forKey: property)
 
         setValue(to, forKey: property)
     }
@@ -37,10 +37,10 @@ public extension CALayer {
 
 
 public extension CAShapeLayer {
-    public static func circleLayer(_ frame: CGRect) -> CAShapeLayer {
+    public static func circleLayer(frame: CGRect) -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.frame = frame
-        let path = XBezierPath(ovalIn: frame)
+        let path = XBezierPath(ovalInRect: frame)
         layer.path = path.CGPath
 
         return layer

@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 
 
-open class NKTableCellView: NKView {
+public class NKTableCellView: NKView {
     let reuseIdentifier: String
     var selected = false
     var builder: NKTableBuilder!
@@ -35,21 +35,21 @@ open class NKTableCellView: NKView {
     // MARK: - Updating
     // -----------------------------------------------------------------------
 
-    open func update(_ item: NKTableItem) {}
+    public func update(item: NKTableItem) {}
 
-    open func setEditing(_ editing: Bool, animated: Bool) {
+    public func setEditing(editing: Bool, animated: Bool) {
         // Doesn't do anything on Mac
     }
 
-    open func setSelected(_ selected: Bool, animated: Bool) {
+    public func setSelected(selected: Bool, animated: Bool) {
         // Doesn't do anything on Mac
     }
 
     // MARK: - Hacky OSX stuff
     // -----------------------------------------------------------------------
 
-    func editTextField(_ event: NSEvent) {
-        let point = self.convert(event.locationInWindow, from: nil)
+    func editTextField(event: NSEvent) {
+        let point = self.convertPoint(event.locationInWindow, fromView: nil)
 
         for subview in self.subviews {
             if let textField = subview as? NKTextField {
