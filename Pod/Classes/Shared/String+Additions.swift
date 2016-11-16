@@ -30,7 +30,7 @@ extension NSAttributedString {
         let bounds = CGSizeMake(width, 10000)
 
         #if os(OSX)
-        let size = attributedString.boundingRectWithSize(bounds, options: .UsesLineFragmentOrigin)
+        let size = attributedString.boundingRectWithSize(bounds, options: [.UsesLineFragmentOrigin, .UsesFontLeading])
         #else
         let size = attributedString.boundingRectWithSize(bounds, options: [.UsesLineFragmentOrigin, .UsesFontLeading], context: nil)
         #endif

@@ -94,6 +94,8 @@ public class NKTextField: NSTextField, NKViewable {
         self.focusRingType = .None
 
         applyStyle()
+        
+        
     }
 
     public func setup() {
@@ -207,6 +209,8 @@ public class NKTextField: NSTextField, NKViewable {
 //
 //        stringValue = value
 //    }
+    
+    
 
     var lastValue: String = ""
 
@@ -219,8 +223,26 @@ public class NKTextField: NSTextField, NKViewable {
             super.stringValue = newValue
         }
     }
+    
+    public override class func cellClass() -> AnyClass? {
+        return NKTextFieldCell.self
+    }
+}
 
-
+class NKTextFieldCell: NSTextFieldCell {
+//    override func drawingRectForBounds(theRect: NSRect) -> NSRect {
+//        var rect = super.drawingRectForBounds(theRect)
+//        
+//        
+//        
+//        rect.origin.x -= 2
+//        rect.size.width += 4
+//        
+//        
+//        Swift.print("Returning drawing rect for bounds \(theRect) -- >\(rect)")
+//        
+//        return rect
+//    }
 }
 
 class NKTextFieldDelegate: NSObject, NSTextFieldDelegate {
