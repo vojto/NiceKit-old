@@ -11,16 +11,16 @@ import CoreGraphics
 import AppKit
 
 
-public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegate {
+open class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
     // MARK: - Properties
     // ------------------------------------------------------------------------
 
     // Core props
-    public let scrollView: NSScrollView
-    public let tableView: NKTableView
-    public let mainView: NKView
-    public var items = [NKTableItem]() {
+    open let scrollView: NSScrollView
+    open let tableView: NKTableView
+    open let mainView: NKView
+    open var items = [NKTableItem]() {
         didSet {
             reload()
         }
@@ -28,59 +28,59 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     let hiddenIndexes = NSMutableIndexSet()
 
     // UI
-    public var showsVerticalScrollIndicator: Bool = false // Doesn't do anything
-    public var padding: NKPadding? {
+    open var showsVerticalScrollIndicator: Bool = false // Doesn't do anything
+    open var padding: NKPadding? {
         didSet { setPadding(padding!) } // TODO: This should be done through styles
     }
-    public var enableReordering: Bool = false {
+    open var enableReordering: Bool = false {
         didSet { applyEnableReordering(enableReordering) }
     }
-    public var menu: NSMenu? {
+    open var menu: NSMenu? {
         get { return self.tableView.menu }
         set { self.tableView.menu = newValue }
     }
-    public var columnWidth: CGFloat { return tableView.tableColumns[0].width }
+    open var columnWidth: CGFloat { return tableView.tableColumns[0].width }
 
     // Classic API
-    public var numberOfSections: (() -> Int)?
-    public var numberOfRows: ((section: Int) -> Int)?
-    public var itemForRow: ((section: Int, row: Int) -> NKTableItem)?
+    open var numberOfSections: (() -> Int)?
+    open var numberOfRows: ((_ section: Int) -> Int)?
+    open var itemForRow: ((_ section: Int, _ row: Int) -> NKTableItem)?
 
     // Section headers
-    public var viewForHeader: ((section: Int) -> NKView)?
-    public var headerHeight: CGFloat?
+    open var viewForHeader: ((_ section: Int) -> NKView)?
+    open var headerHeight: CGFloat?
 
     // Height
-    public var calcRowHeight: ((row: Int) -> CGFloat)?
-    public var rowHeight: CGFloat?
+    open var calcRowHeight: ((_ row: Int) -> CGFloat)?
+    open var rowHeight: CGFloat?
 
     // Selecting
-    public var onSelectRow: ((index: Int) -> ())?
-    public var onDeselectRow: (() -> ())?
-    public var selectedView: NKTableCellView?
-    dynamic var _selectionIndexes: NSIndexSet?
+    open var onSelectRow: ((_ index: Int) -> ())?
+    open var onDeselectRow: (() -> ())?
+    open var selectedView: NKTableCellView?
+    dynamic var _selectionIndexes: IndexSet?
 
     // Events
-    public var onTap: (() -> ())?                      // iOS only - doesn't do anything here
-    public var onTapOut: (() -> ())?                   // iOS only - doesn't do anything here
-    public var onDelete: ((row: Int) -> ())?           // TODO: Implement
-    public var onScroll: ((offset: CGPoint) -> ())?    // Not sure about this one
-    public var onStartScrolling: NKSimpleCallback?
-    public var onDoubleClick: (() -> ())? {
+    open var onTap: (() -> ())?                      // iOS only - doesn't do anything here
+    open var onTapOut: (() -> ())?                   // iOS only - doesn't do anything here
+    open var onDelete: ((_ row: Int) -> ())?           // TODO: Implement
+    open var onScroll: ((_ offset: CGPoint) -> ())?    // Not sure about this one
+    open var onStartScrolling: NKSimpleCallback?
+    open var onDoubleClick: (() -> ())? {
         get { return tableView.onDoubleClick }
         set { tableView.onDoubleClick = newValue }
     }
-    public var onMenu: ((Int) -> (NSMenu?))? {
+    open var onMenu: ((Int) -> (NSMenu?))? {
         get { return tableView.onMenu }
         set { tableView.onMenu = newValue }
     }
 
     
     // Reordering callbacks
-    public var canMoveItem: ((at: Int) -> Bool)?
-    public var targetRowForMove: ((from: Int, to: Int) -> Int)?    // Not used here, TODO: make it somehow work with iOS
-    public var canDropItem: ((from: Int, to: Int) -> Bool)?
-    public var moveItem: ((atIndex: Int, toIndex: Int) -> ())?
+    open var canMoveItem: ((_ at: Int) -> Bool)?
+    open var targetRowForMove: ((_ from: Int, _ to: Int) -> Int)?    // Not used here, TODO: make it somehow work with iOS
+    open var canDropItem: ((_ from: Int, _ to: Int) -> Bool)?
+    open var moveItem: ((_ atIndex: Int, _ toIndex: Int) -> ())?
 
 
 
@@ -97,23 +97,24 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         super.init()
 
         let column = NSTableColumn(identifier: "column")
-        column.resizingMask = .AutoresizingMask
+        column.resizingMask = .autoresizingMask
         tableView.addTableColumn(column)
 
-        tableView.selectionHighlightStyle = .None
-        tableView.intercellSpacing = CGSizeMake(0, 0)
+        tableView.selectionHighlightStyle = .none
+        tableView.intercellSpacing = CGSize(width: 0, height: 0)
         
-        tableView.setDelegate(self)
-        tableView.setDataSource(self)
+        tableView.delegate = self
+        tableView.dataSource = self
+
         
         tableView.headerView = nil
         scrollView.documentView = tableView
 
-        tableView.bind("selectionIndexes", toObject: self, withKeyPath: "_selectionIndexes", options: nil)
-        self.addObserver(self, forKeyPath: "_selectionIndexes", options: .New, context: nil)
+        tableView.bind("selectionIndexes", to: self, withKeyPath: "_selectionIndexes", options: nil)
+        self.addObserver(self, forKeyPath: "_selectionIndexes", options: .new, context: nil)
     }
 
-    public func reload() {
+    open func reload() {
 //        NiceKit.log?("Reloading! 😈")
 
         hiddenIndexes.removeAllIndexes()
@@ -123,7 +124,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         tableView.reloadData()
         tableView.layoutSubtreeIfNeeded()
 
-        self.reselectIndexes(indexes)
+        self.reselectIndexes(indexes as IndexSet)
 
 //        NSTimer.schedule(delay: 0.1) { _ in
 //            // - Come on Vojto, this code is shit and you know it!
@@ -136,19 +137,19 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Public API
     // ------------------------------------------------------------------------
 
-    public func viewAt(index: Int) -> NSView? {
-        return tableView.viewAtColumn(0, row: index, makeIfNecessary: false)
+    open func viewAt(_ index: Int) -> NSView? {
+        return tableView.view(atColumn: 0, row: index, makeIfNecessary: false)
     }
 
-    public func indexForView(view: NKTableCellView) -> Int? {
-        return items.indexOf { $0.view == view }
+    open func indexForView(_ view: NKTableCellView) -> Int? {
+        return items.index { $0.view == view }
     }
     
 
     // MARK: - UI Helpers
     // ------------------------------------------------------------------------
 
-    func setPadding(padding: NKPadding) {
+    func setPadding(_ padding: NKPadding) {
         if let padding = self.padding {
             self.scrollView.automaticallyAdjustsContentInsets = false
             self.scrollView.contentInsets = padding.edgeInsets
@@ -157,9 +158,9 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
     }
 
-    func applyEnableReordering(enable: Bool) {
+    func applyEnableReordering(_ enable: Bool) {
         if enable {
-            tableView.registerForDraggedTypes(["public.data"])
+            tableView.register(forDraggedTypes: ["public.data"])
         } else {
             tableView.unregisterDraggedTypes()
         }
@@ -169,7 +170,9 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // ------------------------------------------------------------------------
 
     
-    public func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+    
+    
+    @nonobjc open func numberOfRowsInTableView(_ tableView: NSTableView) -> Int {
         if isCustomMode {
             return self.numberOfRowsInCustomMode()
         } else {
@@ -177,21 +180,21 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
     }
     
-    public func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+    open func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 
         // Return the header view if that's the case
         if isCustomMode {
             let (section, row) = self.indexPathAtOuterRow(row)
             if row == 0 {
-                return self.viewForHeader!(section: section)
+                return self.viewForHeader!(section)
             }
 
         }
 
         let item = self.itemAt(row)
 
-        let identifier = String(item.viewClass)
-        var view = tableView.makeViewWithIdentifier(identifier, owner: self) as! NKTableCellView?
+        let identifier = String(describing: item.viewClass)
+        var view = tableView.make(withIdentifier: identifier, owner: self) as! NKTableCellView?
 
         if view == nil {
 //            Log.t("Initializing viewg mit identifier: \(identifier)")
@@ -208,7 +211,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         return view
     }
     
-    public func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+    open func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         let height = heightForRowAt(row)
 
         if height == 0 {
@@ -218,8 +221,8 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
     }
 
-    func heightForRowAt(row: Int) -> CGFloat {
-        if hiddenIndexes.containsIndex(row) {
+    func heightForRowAt(_ row: Int) -> CGFloat {
+        if hiddenIndexes.contains(row) {
             return 1
         }
 
@@ -234,7 +237,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
 
         if self.calcRowHeight != nil {
-            return self.calcRowHeight!(row: row)
+            return self.calcRowHeight!(row)
         } else {
             return 22.0
         }
@@ -245,7 +248,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Accessing items
     // ------------------------------------------------------------------------
 
-    public func itemAt(row: Int) -> NKTableItem {
+    open func itemAt(_ row: Int) -> NKTableItem {
         if isCustomMode {
             return self.itemForCustomModeAt(row)
         } else {
@@ -270,8 +273,9 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     func buildSectionsCache() {
         cachedSections = [Int]()
 
-        for var i = 0; i < self.numberOfSections!(); i++ {
-            let count = self.numberOfRows!(section: i) + 1
+        
+        for i in 0 ..< self.numberOfSections!() {
+            let count = self.numberOfRows!(i) + 1
             cachedSections?.append(count)
         }
     }
@@ -286,7 +290,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         return cachedSections!.reduce(0) { $0 + $1 }
     }
 
-    func itemForCustomModeAt(outerRow: Int) -> NKTableItem {
+    func itemForCustomModeAt(_ outerRow: Int) -> NKTableItem {
         // Find section
 
         let (section, row) = indexPathAtOuterRow(outerRow)
@@ -294,14 +298,14 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         if section == 0 {
             return NKTableItem()
         } else {
-            return self.itemForRow!(section: section, row: row - 1)
+            return self.itemForRow!(section, row - 1)
         }
     }
 
-    func indexPathAtOuterRow(row: Int) -> (Int, Int) {
+    func indexPathAtOuterRow(_ row: Int) -> (Int, Int) {
         var totalRow = 0
 
-        for var i = 0; i < cachedSections!.count; i++ {
+        for i in 0 ..< cachedSections!.count {
             let sectionRows = cachedSections![i]
             totalRow += sectionRows
 
@@ -317,69 +321,69 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     // MARK: Selecting items
     // ------------------------------------------------------------------------
 
-    public var selectedRow: Int? {
+    open var selectedRow: Int? {
         return tableView.selectedRow
     }
-
-    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        handleSelectionChange(tableView.selectedRowIndexes)
+    
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        handleSelectionChange(tableView.selectedRowIndexes as IndexSet)
     }
 
-    public func selectRow(index: Int) {
-        selectIndexes(NSIndexSet(index: index))
+    open func selectRow(_ index: Int) {
+        selectIndexes(NSIndexSet(index: index) as IndexSet)
     }
 
-    public func selectIndexes(indexes: NSIndexSet) {
-        tableView.selectRowIndexes(indexes, byExtendingSelection: false)
+    open func selectIndexes(_ indexes: IndexSet) {
+        tableView.selectRowIndexes(indexes as IndexSet, byExtendingSelection: false)
 
         handleSelectionChange(indexes)
     }
 
-    public func reselectIndexes(proposedIndexes: NSIndexSet) {
+    open func reselectIndexes(_ proposedIndexes: IndexSet) {
         let indexes = indexesForReselection(proposedIndexes)
 
         selectIndexes(indexes)
     }
 
-    func indexesForReselection(indexes: NSIndexSet) -> NSIndexSet {
+    func indexesForReselection(_ indexes: IndexSet) -> IndexSet {
         if indexes.count > 0 {
-            var index = indexes.firstIndex
+            var index = indexes.first
 
             var item: NKTableItem!
 
             while true {
-                item = itemAt(index)
+                item = itemAt(index!)
 
                 if item.selectable {
-                    return NSIndexSet(index: index)
+                    return IndexSet(integer: index!)
                 } else {
-                    if index - 1 >= 0 {
-                        index = index - 1
+                    if index! - 1 >= 0 {
+                        index = index! - 1
                     } else {
-                        return NSIndexSet()
+                        return IndexSet()
                     }
                 }
             }
         }
 
-        return NSIndexSet()
+        return IndexSet()
     }
 
-    public func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+    open func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         let item = self.itemAt(row)
         return item.selectable
     }
 
-    func handleSelectionChange(indexes: NSIndexSet) {
+    func handleSelectionChange(_ indexes: IndexSet) {
         if indexes.count > 0 {
 //            Log.w("Selection just changed to: \(indexes.firstIndex)")
 
-            let item = self.itemAt(indexes.firstIndex)
+            let item = self.itemAt(indexes.first!)
             if let view = item.view {
                 self.makeViewSelected(view)
             }
 
-            onSelectRow?(index: indexes.firstIndex)
+            onSelectRow?(indexes.first!)
         } else {
 //            Log.w("Deselected")
 
@@ -389,11 +393,11 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
     }
 
-    public func deselect() {
+    open func deselect() {
         fatalError("Deselect not implemented yet")
     }
 
-    func makeViewSelected(view: NKTableCellView) {
+    func makeViewSelected(_ view: NKTableCellView) {
         if let currentView = self.selectedView {
             currentView.setSelected(false, animated: false)
         }
@@ -434,37 +438,37 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
     
     // MARK: Recalculating heights
     
-    public func recalculateHeightForView(view: NKTableCellView) {
+    open func recalculateHeightForView(_ view: NKTableCellView) {
         let indexes = NSMutableIndexSet()
         
-        self.tableView.enumerateAvailableRowViewsUsingBlock { rowView, index in
-            if view.isDescendantOf(rowView) {
-                indexes.addIndex(index)
+        self.tableView.enumerateAvailableRowViews { rowView, index in
+            if view.isDescendant(of: rowView) {
+                indexes.add(index)
             }
         }
         
+        recalculateHeights(indexes as IndexSet)
+    }
+    
+    open func recalculateAllHeights() {
+        let indexes = NSIndexSet(indexesIn: NSMakeRange(0, tableView.numberOfRows)) as IndexSet
         recalculateHeights(indexes)
     }
     
-    public func recalculateAllHeights() {
-        let indexes = NSIndexSet(indexesInRange: NSMakeRange(0, tableView.numberOfRows))
-        recalculateHeights(indexes)
-    }
-    
-    public func recalculateHeights(indexes: NSIndexSet) {
-        let context = NSAnimationContext.currentContext()
+    open func recalculateHeights(_ indexes: IndexSet) {
+        let context = NSAnimationContext.current()
         
         NSAnimationContext.beginGrouping()
         context.duration = 0
         
-        self.tableView.noteHeightOfRowsWithIndexesChanged(indexes)
+        self.tableView.noteHeightOfRows(withIndexesChanged: indexes as IndexSet)
         
         NSAnimationContext.endGrouping()
     }
     
     // MARK: Reordering
     
-    public func tableView(tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
+    open func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
         if !enableReordering {
             return nil
         }
@@ -472,7 +476,7 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         var canMove = true
         
         if let fun = self.canMoveItem {
-            canMove = fun(at: row)
+            canMove = fun(row)
         }
         
         if canMove {
@@ -485,31 +489,31 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         
     }
     
-    public func tableView(tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation {
+    open func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation {
         var canMove = true
 
-        if let contents = info.draggingPasteboard().stringForType("public.data") {
+        if let contents = info.draggingPasteboard().string(forType: "public.data") {
             let index = Int(contents)
         
             if let fun = self.canDropItem {
-                canMove = fun(from: index!, to: row)
+                canMove = fun(index!, row)
             }
             
-            if canMove && dropOperation == .Above {
-                return .Move
+            if canMove && dropOperation == .above {
+                return .move
             } else {
-                return .None
+                return []
             }
 
         }
 
-        return .None
+        return []
     }
     
-    public func tableView(tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool {
+    open func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool {
         var oldIndexes = [Int]()
-        info.enumerateDraggingItemsWithOptions(.Concurrent, forView: tableView, classes: [NSPasteboardItem.self], searchOptions: [:]) {
-            if let index = Int(($0.0.item as! NSPasteboardItem).stringForType("public.data")!) {
+        info.enumerateDraggingItems(options: .concurrent, for: tableView, classes: [NSPasteboardItem.self], searchOptions: [:]) {
+            if let index = Int(($0.0.item as! NSPasteboardItem).string(forType: "public.data")!) {
                 oldIndexes.append(index)
             }
         }
@@ -524,12 +528,12 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         for oldIndex in oldIndexes {
             if oldIndex < row {
 //                tableView.moveRowAtIndex(oldIndex + oldIndexOffset, toIndex: row - 1)
-                moveItem(oldIndex + oldIndexOffset, toIndex: row - 1)
-                --oldIndexOffset
+                self.moveItem(oldIndex + oldIndexOffset, toIndex: row - 1)
+                oldIndexOffset -= 1
             } else {
 //                tableView.moveRowAtIndex(oldIndex, toIndex: row + newIndexOffset)
-                moveItem(oldIndex, toIndex: row + newIndexOffset)
-                ++newIndexOffset
+                self.moveItem(oldIndex, toIndex: row + newIndexOffset)
+                newIndexOffset += 1
             }
         }
         
@@ -538,54 +542,54 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
         return true
     }
     
-    func moveItem(atIndex: Int, toIndex: Int) {
+    func moveItem(_ atIndex: Int, toIndex: Int) {
         if let fun = self.moveItem {
-            fun(atIndex: atIndex, toIndex: toIndex)
+            fun(atIndex, toIndex)
         }
     }
 
-    public func toggleReordering() { // Doesn't do anything on Mac
+    open func toggleReordering() { // Doesn't do anything on Mac
     }
 
     // MARK: Hiding/showing rows
     // -----------------------------------------------------------------------
 
-    public func hideRowAt(index: Int) {
-        if hiddenIndexes.containsIndex(index) {
+    open func hideRowAt(_ index: Int) {
+        if hiddenIndexes.contains(index) {
             return
         }
 
-        hiddenIndexes.addIndex(index)
+        hiddenIndexes.add(index)
 
         if let view = itemAt(index).view {
-            view.hide()
+            view.isHidden = true
         }
 
         recalculateAllHeights()
     }
 
-    public func unhideRowAt(index: Int) {
-        if !hiddenIndexes.containsIndex(index) {
+    open func unhideRowAt(_ index: Int) {
+        if !hiddenIndexes.contains(index) {
             return
         }
 
-        hiddenIndexes.removeIndex(index)
+        hiddenIndexes.remove(index)
 
         if let view = itemAt(index).view {
-            view.show()
+            view.isHidden = false
         }
         
         recalculateAllHeights()
     }
 
-    public func isRowHidden(index: Int) -> Bool {
-        return hiddenIndexes.containsIndex(index)
+    open func isRowHidden(_ index: Int) -> Bool {
+        return hiddenIndexes.contains(index)
     }
 
     // MARK: Scrolling
     // -----------------------------------------------------------------------
 
-    public func scrollToBottom() {
+    open func scrollToBottom() {
         let rows = tableView.numberOfRows
         tableView.scrollRowToVisible(rows - 1)
     }
@@ -594,15 +598,15 @@ public class NKTableBuilder: NSObject, NSTableViewDataSource, NSTableViewDelegat
 
 class NKTableRowView: NSTableRowView {
     var isLast = false
-    var drawSelection: ((rect: NSRect) -> ())?
+    var drawSelection: ((_ rect: NSRect) -> ())?
     
-    override func drawSelectionInRect(dirtyRect: NSRect) {
-        self.drawSelection?(rect: self.bounds)
+    override func drawSelection(in dirtyRect: NSRect) {
+        self.drawSelection?(self.bounds)
     }
 
-    override func drawSeparatorInRect(dirtyRect: NSRect) {
+    override func drawSeparator(in dirtyRect: NSRect) {
         if !isLast {
-            super.drawSeparatorInRect(dirtyRect)
+            super.drawSeparator(in: dirtyRect)
         }
     }
 }

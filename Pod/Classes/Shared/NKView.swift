@@ -8,24 +8,24 @@
 
 import Cartography
 
-public typealias SetupCallback = ((view: NKViewable) -> ([NKViewable]))
+public typealias SetupCallback = ((_ view: NKViewable) -> ([NKViewable]))
 
 
-public class NKView: XView, NKViewable {
+open class NKView: XView, NKViewable {
 
     // MARK: - Properties
     // -----------------------------------------------------------------------
 
-    public var style: NKStyle
-    public var classes = Set<String>()
+    open var style: NKStyle
+    open var classes = Set<String>()
 
     // MARK: - Lifecycle
     // -----------------------------------------------------------------------
 
     required public init() {
-        style = NKStylesheet.styleForView(self.dynamicType)
+        style = NKStylesheet.styleForView(type(of: self))
 
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
 //        self.opaque = false
 
@@ -36,13 +36,13 @@ public class NKView: XView, NKViewable {
     }
 
     public init(setup: SetupCallback) {
-        self.style = NKStylesheet.styleForView(self.dynamicType)
+        self.style = NKStylesheet.styleForView(type(of: self))
 
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         self.setup()
 
-        let subviews = setup(view: self).map { $0 as! XView }
+        let subviews = setup(self).map { $0 as! XView }
         addSubviews(subviews)
 
         applyLayoutFromChildrenStyles()
@@ -50,26 +50,26 @@ public class NKView: XView, NKViewable {
     }
 
     required public init?(coder: NSCoder) {
-        self.style = NKStylesheet.styleForView(self.dynamicType)
+        self.style = NKStylesheet.styleForView(type(of: self))
 
         super.init(coder: coder)
     }
 
-    public func setup() {}
+    open func setup() {}
 
     func postSetup() {}
     
     func unsetup() {}
 
-    public func setContext(context: AnyObject?) {}
+    open func setContext(_ context: AnyObject?) {}
 
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         
         applyStyle()
     }
 
-    public func applyStyle() {
+    open func applyStyle() {
         #if os(iOS)
         if let opaque = style.opaque {
             self.opaque = opaque
@@ -89,7 +89,7 @@ public class NKView: XView, NKViewable {
     // Drawing
     // -----------------------------------------------------------------------
 
-    override public func drawRect(dirtyRect: CGRect) {
+    override open func draw(_ dirtyRect: CGRect) {
         style.draw(bounds)
     }
 
@@ -97,71 +97,71 @@ public class NKView: XView, NKViewable {
     // -----------------------------------------------------------------------
 
 #if os(OSX)
-    public var onTap: NKSimpleCallback?
-    public var onTouchDown: NKSimpleCallback?
-    public var onClick: NKSimpleCallback?
-    public var action: NKSimpleCallback? {
+    open var onTap: NKSimpleCallback?
+    open var onTouchDown: NKSimpleCallback?
+    open var onClick: NKSimpleCallback?
+    open var action: NKSimpleCallback? {
         get { return onClick }
         set { onClick = newValue }
     }
-    public var onMouseOver: NKSimpleCallback?
-    public var onMouseOut: NKSimpleCallback?
+    open var onMouseOver: NKSimpleCallback?
+    open var onMouseOut: NKSimpleCallback?
 
-    public var mouseTrackingArea: NSTrackingArea?
-    public var clipsToBounds = false
+    open var mouseTrackingArea: NSTrackingArea?
+    open var clipsToBounds = false
 
-    public func preferredStatusBarStyle() -> XStatusBarStyle {
-        return .Default
+    open func preferredStatusBarStyle() -> XStatusBarStyle {
+        return .default
     }
 
-    public var userInteractionEnabled = true
+    open var userInteractionEnabled = true
 
-    public var transform: CGAffineTransform? // TODO: Implement
+    open var transform: CGAffineTransform? // TODO: Implement
 
-    public func setNeedsDisplay() {
-        self.setNeedsDisplayInRect(self.bounds)
+    open func setNeedsDisplay() {
+        self.setNeedsDisplay(self.bounds)
     }
 
-    public var shouldTrackMouseEnterExit = false
+    open var shouldTrackMouseEnterExit = false
 
-    override public var flipped: Bool { return true }
+    override open var isFlipped: Bool { return true }
 
-    override public func updateTrackingAreas() {
+    override open func updateTrackingAreas() {
         if let area = self.mouseTrackingArea {
             self.removeTrackingArea(area)
         }
         if self.shouldTrackMouseEnterExit {
-            self.mouseTrackingArea = NSTrackingArea(rect: self.bounds, options: [.ActiveAlways, .MouseEnteredAndExited], owner: self, userInfo: nil)
+            self.mouseTrackingArea = NSTrackingArea(rect: self.bounds, options: [.activeAlways, .mouseEnteredAndExited], owner: self, userInfo: nil)
 
             self.addTrackingArea(self.mouseTrackingArea!)
         }
     }
 
-    override public func mouseEntered(theEvent: XEvent) {
+    override open func mouseEntered(with theEvent: XEvent) {
         onMouseOver?()
         addClass("hover")
     }
 
-    override public func mouseExited(theEvent: XEvent) {
+    override open func mouseExited(with theEvent: XEvent) {
         onMouseOut?()
         removeClass("hover")
     }
 
-    override public func mouseDown(theEvent: NSEvent) {
+    override open func mouseDown(with theEvent: NSEvent) {
         if onClick == nil {
-            super.mouseDown(theEvent)
+            super.mouseDown(with: theEvent)
         }
     }
 
-    override public func mouseUp(theEvent: NSEvent) {
+    override open func mouseUp(with theEvent: NSEvent) {
         if onClick == nil {
-            super.mouseUp(theEvent)
+            super.mouseUp(with: theEvent)
         } else {
             onClick?()
         }
     }
 
-    func setOpaque(opauqe: Bool) {
+    func setOpaque(_ opauqe: Bool) {
         // Doesn't do anything on Mac
     }
 
@@ -200,8 +200,8 @@ public class NKView: XView, NKViewable {
 }
 
 
-func alignVertically(items: [LayoutProxy], margin: CGFloat) {
-    for var i = 1; i < items.count; i++ {
+func alignVertically(_ items: [LayoutProxy], margin: CGFloat) {
+    for i in 1 ..< items.count {
         items[i].top == items[i-1].bottom + margin
     }
 }

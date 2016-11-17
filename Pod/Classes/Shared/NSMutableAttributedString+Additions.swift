@@ -12,41 +12,42 @@ import AppKit
 #endif
 
 public extension NSMutableAttributedString {
-    func addAttribute(name: String, value: AnyObject) {
+    func addAttribute(_ name: String, value: Any) {
         self.addAttribute(name, value: value, range: NSMakeRange(0, self.length))
     }
     
-    func attributeValue(name: String) -> AnyObject? {
+    func attributeValue(_ name: String) -> Any? {
         var range = NSMakeRange(0, self.length)
-        return self.attribute(name, atIndex: 0, effectiveRange: &range)
+        return self.attribute(name, at: 0, effectiveRange: &range) as Any?
     }
     
-    func removeAttribute(name: String) {
+    func removeAttribute(_ name: String) {
         self.removeAttribute(name, range: NSMakeRange(0, self.length))
     }
     
-    func replaceAttribute(name: String, newValue: AnyObject?) {
+    func replaceAttribute(_ name: String, newValue: Any?) {
         self.removeAttribute(name)
         if let value = newValue {
             self.addAttribute(name, value: value)
         }
     }
 
-    var attributes: [String: AnyObject] {
+    var attributes: [String: Any] {
         let range = NSMakeRange(0, self.length)
-
-        var attributes = [String: AnyObject]()
-
-        self.enumerateAttributesInRange(range, options: NSAttributedStringEnumerationOptions()) { (dct, range, bazinga) -> Void in
-            attributes += dct
+        var attrs = [String: Any]()
+        
+        self.enumerateAttributes(in: range, options: NSAttributedString.EnumerationOptions()) { (dct, range, wtf) in
+            for (key, value) in dct {
+                attrs[key] = value
+            }
         }
-
-        return attributes
+        
+        return attrs
     }
     
     public var textColor: XColor? {
         get {
-            return self.attributeValue(XForegroundColorAttributeName) as? XColor
+            return self.attributeValue(XForegroundColorAttributeName) as? NSColor
         }
         set {
             self.replaceAttribute(XForegroundColorAttributeName, newValue: newValue)
@@ -67,7 +68,7 @@ public extension NSMutableAttributedString {
             return self.attributeValue(XStrikethroughStyleAttributeName) as? Int
         }
         set {
-            self.replaceAttribute(XStrikethroughStyleAttributeName, newValue: newValue)
+            self.replaceAttribute(XStrikethroughStyleAttributeName, newValue: newValue as Any?)
         }
     }
 
@@ -82,21 +83,21 @@ public extension NSMutableAttributedString {
 }
 
 public func +=(lhs: NSMutableAttributedString, rhs: NSAttributedString) {
-    lhs.appendAttributedString(rhs)
+    lhs.append(rhs)
 }
 
 public func +=(lhs: NSMutableAttributedString, rhs: String) {
-    lhs.appendAttributedString(NSAttributedString(string: rhs))
+    lhs.append(NSAttributedString(string: rhs))
 }
 
 public func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedString {
     let str1 = lhs.mutableCopy() as! NSMutableAttributedString
-    str1.appendAttributedString(rhs)
+    str1.append(rhs)
     return str1
 }
 
 public func +(lhs: String, rhs: NSAttributedString) -> NSMutableAttributedString {
     let str = NSMutableAttributedString(string: lhs)
-    str.appendAttributedString(rhs)
+    str.append(rhs)
     return str
 }

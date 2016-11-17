@@ -18,7 +18,7 @@ extension XScreen {
 
     public static var mainScale: CGFloat {
         #if os(OSX)
-        return mainScreen()!.scale
+        return main()!.scale
         #else
         return mainScreen().scale
         #endif

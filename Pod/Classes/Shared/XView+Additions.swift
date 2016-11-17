@@ -24,15 +24,6 @@ public extension XView {
         #endif
     }
 
-
-    public func hide() {
-        hidden = true
-    }
-
-    public func show() {
-        hidden = false
-    }
-
     // MARK: - OSX Additions
     // ------------------------------------------------------------------------
 
@@ -42,7 +33,7 @@ public extension XView {
         set { self.getLayer().opacity = Float(newValue) }
     }
 
-    public static func animateWithDuration(duration: NSTimeInterval, animations: () -> Void, completion: ((Bool) -> Void)?) {
+    public static func animateWithDuration(_ duration: TimeInterval, animations: () -> Void, completion: ((Bool) -> Void)?) {
         animations()
         completion?(true)
     }
@@ -53,16 +44,3 @@ public extension XView {
 
 
 
-extension Array where Element:XView {
-    func hide() {
-        for view in self {
-            view.hide()
-        }
-    }
-
-    func show() {
-        for view in self {
-            view.show()
-        }
-    }
-}

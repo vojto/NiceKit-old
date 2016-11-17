@@ -9,6 +9,6 @@
 import Foundation
 
 public enum NKFieldType {
-    case Email
-    case Password
+    case email
+    case password
 }

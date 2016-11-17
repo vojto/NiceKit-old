@@ -17,15 +17,15 @@ import CoreGraphics
 
 public extension XImage {
     #if os(OSX)
-    var CGImage: CGImageRef? {
-        let ctx = NSGraphicsContext.currentContext()
-        var rect = CGRectMake(0, 0, size.width, size.height)
-        return self.CGImageForProposedRect(&rect, context: ctx, hints: nil)
+    var CGImage: CGImage? {
+        let ctx = NSGraphicsContext.current()
+        var rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        return self.cgImage(forProposedRect: &rect, context: ctx, hints: nil)
     }
     #else
     #endif
 
-    func draw(color: XColor, drawRect: CGRect, flip: Bool = false) {
+    func draw(_ color: XColor, drawRect: CGRect, flip: Bool = false) {
         let rect: CGRect = drawRect
         let image = self
         let imageRef = image.CGImage
@@ -35,27 +35,27 @@ public extension XImage {
 //        let cgCtx = ctx?.CGContext
 //        let imageRef = image.CGImageForProposedRect(nil, context: ctx, hints: nil)
 
-        CGContextSaveGState(ctx)
+        ctx.saveGState()
         
         if flip {
-            CGContextTranslateCTM(ctx, 0, rect.size.height + rect.origin.y*2)
-            CGContextScaleCTM(ctx, 1, -1)
+            ctx.translateBy(x: 0, y: rect.size.height + rect.origin.y*2)
+            ctx.scaleBy(x: 1, y: -1)
         }
         
         
-        CGContextClipToMask(ctx, rect, imageRef)
+        ctx.clip(to: rect, mask: imageRef!)
         
         color.set()
 
 //        NSRectFillUsingOperation(rect, .CompositeSourceOver)
-        CGContextFillRect(ctx, rect)
+        ctx.fill(rect)
 
-        CGContextRestoreGState(ctx)
+        ctx.restoreGState()
     }
 
     #if os (OSX)
     #else
-    func colorize(color: XColor) -> XImage {
+    public func colorize(color: XColor) -> XImage {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         let ctx = UIGraphicsGetCurrentContext()
 
@@ -71,4 +71,19 @@ public extension XImage {
         return newImage
     }
     #endif
+    
+
+    public func tintedImageWithColor(_ color: NSColor) -> NSImage {
+        let size        = self.size
+        let imageBounds = NSMakeRect(0, 0, size.width, size.height)
+        let copiedImage = self.copy() as! NSImage
+        
+        copiedImage.lockFocus()
+        color.set()
+        NSRectFillUsingOperation(imageBounds, .sourceAtop)
+        copiedImage.unlockFocus()
+        
+        return copiedImage
+    }
+    
 }

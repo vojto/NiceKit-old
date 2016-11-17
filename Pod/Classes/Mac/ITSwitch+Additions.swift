@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ITSwitch
 
 public extension ITSwitch {
     var on: Bool {

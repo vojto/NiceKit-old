@@ -8,8 +8,9 @@
 
 import Foundation
 import AVFoundation
+import AppKit
 
-public class NKSound: Equatable {
+open class NKSound: Equatable {
     let fileName: String
 #if os(OSX)
     let sound: NSSound?
@@ -38,7 +39,7 @@ public class NKSound: Equatable {
     }
 
 
-    public var volume: Float = 1 {
+    open var volume: Float = 1 {
         didSet {
             #if os(OSX)
                 sound?.volume = volume
@@ -48,7 +49,7 @@ public class NKSound: Equatable {
         }
     }
 
-    public var loops: Bool = false {
+    open var loops: Bool = false {
         didSet {
             #if os(OSX)
                 sound?.loops = loops
@@ -58,7 +59,7 @@ public class NKSound: Equatable {
         }
     }
 
-    public func play() {
+    open func play() {
         #if os(OSX)
             sound?.play()
         #else
@@ -66,7 +67,7 @@ public class NKSound: Equatable {
         #endif
     }
 
-    public func stop() {
+    open func stop() {
         #if os(OSX)
             sound?.stop()
         #else

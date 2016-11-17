@@ -19,7 +19,7 @@ public extension XView {
         let frame = self.bounds
         let size = frame.size
 
-        let backingSize = self.convertSizeToBacking(size)
+        let backingSize = self.convertToBacking(size)
         let scale = backingSize.width / size.width
 
 
@@ -32,7 +32,7 @@ public extension XView {
             hasAlpha: true,
             isPlanar: false,
             colorSpaceName: NSCalibratedRGBColorSpace,
-            bitmapFormat: .NSAlphaFirstBitmapFormat,
+            bitmapFormat: .alphaFirst,
             bytesPerRow: 4 * Int(backingSize.width),
             bitsPerPixel: 32)!
 
@@ -40,10 +40,10 @@ public extension XView {
 
         let context = NSGraphicsContext(bitmapImageRep: rep)!
 
-        NSGraphicsContext.setCurrentContext(context)
-        CGContextScaleCTM(context.CGContext, scale, scale)
+        NSGraphicsContext.setCurrent(context)
+        (context.cgContext).scaleBy(x: scale, y: scale)
 
-        self.displayRectIgnoringOpacity(frame, inContext: context)
+        self.displayIgnoringOpacity(frame, in: context)
 
         NSGraphicsContext.restoreGraphicsState()
 

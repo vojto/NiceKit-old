@@ -12,9 +12,9 @@ import CoreGraphics
 public extension XBezierPath {
     public convenience init(pieSliceInRect rect: CGRect, size: CGFloat) {
         self.init()
-        let mid = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect))
+        let mid = CGPoint(x: rect.midX, y: rect.midY)
         let radius = rect.size.width / 2
-        self.moveToPoint(mid)
+        self.move(to: mid)
         
 //        addArcWithCenter(mid, radius: radius, startAngle: 90-360*size, endAngle: 90, clockwise: true)
 
@@ -30,21 +30,22 @@ public extension XBezierPath {
         self.init(roundedRect: roundedRect, xRadius: cornerRadius, yRadius: cornerRadius)
     }
 
-    public func addCurveToPoint(point: CGPoint, controlPoint1: CGPoint, controlPoint2: CGPoint) {
-        curveToPoint(point, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
+    public func addCurveToPoint(_ point: CGPoint, controlPoint1: CGPoint, controlPoint2: CGPoint) {
+        curve(to: point, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
     }
 
-    public func addLineToPoint(point: CGPoint) {
-        lineToPoint(point)
+    public func addLineToPoint(_ point: CGPoint) {
+        line(to: point)
     }
 
-    public func addArcWithCenter(center: CGPoint, radius: CGFloat, var startAngle: CGFloat, var endAngle: CGFloat, clockwise: Bool) {
+    public func addArcWithCenter(_ center: CGPoint, radius: CGFloat, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool) {
+        var startAngle = startAngle, endAngle = endAngle
 
         startAngle = toDegrees(Double(startAngle))
         endAngle = toDegrees(Double(endAngle))
 
 
-        appendBezierPathWithArcWithCenter(center, radius: radius, startAngle: startAngle, endAngle: endAngle)
+        appendArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle)
     }
     #endif
 }
@@ -55,7 +56,7 @@ public extension XBezierPath {
 
     #if os(OSX)
 
-    public var CGPath: CGPathRef {
+    public var CGPath: CGPath {
 
         get {
             return self.transformToCGPath()
@@ -65,11 +66,11 @@ public extension XBezierPath {
     /// Transforms the NSBezierPath into a CGPathRef
     ///
     /// :returns: The transformed NSBezierPath
-    private func transformToCGPath() -> CGPathRef {
+    fileprivate func transformToCGPath() -> CGPath {
 
         // Create path
-        let path = CGPathCreateMutable()
-        let points = UnsafeMutablePointer<NSPoint>.alloc(3)
+        let path = CGMutablePath()
+        let points = UnsafeMutablePointer<NSPoint>.allocate(capacity: 3)
         let numElements = self.elementCount
 
         if numElements > 0 {
@@ -78,39 +79,39 @@ public extension XBezierPath {
 
             for index in 0..<numElements {
 
-                let pathType = self.elementAtIndex(index, associatedPoints: points)
+                let pathType = self.element(at: index, associatedPoints: points)
 
                 switch pathType {
 
-                case .MoveToBezierPathElement:
-                    CGPathMoveToPoint(path, nil, points[0].x, points[0].y)
-                case .LineToBezierPathElement:
-                    CGPathAddLineToPoint(path, nil, points[0].x, points[0].y)
+                case .moveToBezierPathElement:
+                    path.move(to: CGPoint(x: points[0].x, y: points[0].y))
+                case .lineToBezierPathElement:
+                    path.addLine(to: CGPoint(x: points[0].x, y: points[0].y))
                     didClosePath = false
-                case .CurveToBezierPathElement:
-                    CGPathAddCurveToPoint(path, nil, points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y)
+                case .curveToBezierPathElement:
+                    path.addCurve(to: CGPoint(x: points[0].x, y: points[0].y), control1: CGPoint(x: points[1].x, y: points[1].y), control2: CGPoint(x: points[2].x, y: points[2].y))
                     didClosePath = false
-                case .ClosePathBezierPathElement:
-                    CGPathCloseSubpath(path)
+                case .closePathBezierPathElement:
+                    path.closeSubpath()
                     didClosePath = true
                 }
             }
             
-            if !didClosePath { CGPathCloseSubpath(path) }
+            if !didClosePath { path.closeSubpath() }
         }
         
-        points.dealloc(3)
+        points.deallocate(capacity: 3)
         return path
     }
 
-    public func applyTransform(transform: CGAffineTransform) {
+    public func applyTransform(_ transform: CGAffineTransform) {
 //        let t =
 
-        let t = NSAffineTransform()
-        t.transformStruct = NSAffineTransformStruct(m11: transform.a, m12: transform.b, m21: transform.c, m22: transform.d, tX: transform.tx, tY: transform.ty)
+        let t = AffineTransform.identity
+        (t as NSAffineTransform).transformStruct = NSAffineTransformStruct(m11: transform.a, m12: transform.b, m21: transform.c, m22: transform.d, tX: transform.tx, tY: transform.ty)
 
 
-        transformUsingAffineTransform(t)
+        self.transform(using: t)
 
     }
 

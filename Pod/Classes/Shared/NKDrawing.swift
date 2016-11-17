@@ -9,25 +9,27 @@
 import Foundation
 import CoreGraphics
 
-public func NKCreateBorderRadiusPath(rect: CGRect, radius: CGFloat) -> CGPathRef {
-    let path = CGPathCreateMutable()
-    CGPathMoveToPoint(path, nil, CGRectGetMinX(rect) + radius, CGRectGetMinY(rect))
-    CGPathAddArc(path, nil, CGRectGetMaxX(rect) - radius, CGRectGetMinY(rect) + radius, radius, CGFloat(3 * M_PI / 2.0), 0, false)
-    CGPathAddArc(path, nil, CGRectGetMaxX(rect) - radius, CGRectGetMaxY(rect) - radius, radius, 0, CGFloat(M_PI / 2.0), false)
-    CGPathAddArc(path, nil, CGRectGetMinX(rect) + radius, CGRectGetMaxY(rect) - radius, radius, CGFloat(M_PI / 2.0), CGFloat(M_PI), false)
-    CGPathAddArc(path, nil, CGRectGetMinX(rect) + radius, CGRectGetMinY(rect) + radius, radius, CGFloat(M_PI), CGFloat(3 * M_PI / 2.0), false)
-    CGPathCloseSubpath(path)
+public func NKCreateBorderRadiusPath(_ rect: CGRect, radius: CGFloat) -> CGPath {
+    let path = CGMutablePath()
+    path.move(to: CGPoint(x: rect.minX + radius, y: rect.minY))
+    path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.minY + radius), radius: radius, startAngle: CGFloat(3 * M_PI / 2.0), endAngle: 0, clockwise: false)
+    path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.maxY - radius), radius: radius, startAngle: 0, endAngle: CGFloat(M_PI / 2.0), clockwise: false)
+    path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.maxY - radius), radius: radius, startAngle: CGFloat(M_PI / 2.0), endAngle: CGFloat(M_PI), clockwise: false)
+    path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.minY + radius), radius: radius, startAngle:  CGFloat(M_PI), endAngle: CGFloat(3 * M_PI / 2.0), clockwise: false)
+    
+    path.closeSubpath()
     return path
 }
 
 
-public func NKCreateBorderRadiusPath(rect: CGRect, topLeft: CGFloat, topRight: CGFloat, bottomRight: CGFloat, bottomLeft: CGFloat) -> CGPathRef {
-    let path = CGPathCreateMutable()
-    CGPathMoveToPoint(path, nil, CGRectGetMinX(rect) + bottomLeft, CGRectGetMinY(rect))
-    CGPathAddArc(path, nil, CGRectGetMaxX(rect) - bottomRight, CGRectGetMinY(rect) + bottomRight, bottomRight, CGFloat(3 * M_PI / 2.0), 0, false)
-    CGPathAddArc(path, nil, CGRectGetMaxX(rect) - topRight, CGRectGetMaxY(rect) - topRight, topRight, 0, CGFloat(M_PI / 2.0), false)
-    CGPathAddArc(path, nil, CGRectGetMinX(rect) + topLeft, CGRectGetMaxY(rect) - topLeft, topLeft, CGFloat(M_PI / 2.0), CGFloat(M_PI), false)
-    CGPathAddArc(path, nil, CGRectGetMinX(rect) + bottomLeft, CGRectGetMinY(rect) + bottomLeft, bottomLeft, CGFloat(M_PI), CGFloat(3 * M_PI / 2.0), false)
-    CGPathCloseSubpath(path)
+public func NKCreateBorderRadiusPath(_ rect: CGRect, topLeft: CGFloat, topRight: CGFloat, bottomRight: CGFloat, bottomLeft: CGFloat) -> CGPath {
+    let path = CGMutablePath()
+    
+    path.move(to: CGPoint(x: rect.minX + bottomLeft, y: rect.minY))
+    path.addArc(center: CGPoint(x: rect.maxX - bottomRight, y: rect.minY + bottomRight), radius: bottomRight, startAngle: CGFloat(3 * M_PI / 2.0), endAngle: 0, clockwise: false)
+    path.addArc(center: CGPoint(x: rect.maxX - topRight, y: rect.maxY - topRight), radius: topRight, startAngle: 0, endAngle: CGFloat(M_PI / 2.0), clockwise: false)
+    path.addArc(center: CGPoint(x: rect.minX + topLeft, y: rect.maxY - topLeft), radius: topLeft, startAngle: CGFloat(M_PI / 2.0), endAngle: CGFloat(M_PI), clockwise: false)
+    path.addArc(center: CGPoint(x: rect.minX + bottomLeft, y: rect.minY + bottomLeft), radius: bottomLeft, startAngle:  CGFloat(M_PI), endAngle: CGFloat(3 * M_PI / 2.0), clockwise: false)
+    path.closeSubpath()
     return path
 }

@@ -8,17 +8,18 @@
 
 import Foundation
 
-public class NKLabel: NKTextField {
-    public var userInteractionEnabled = true
+open class NKLabel: NKTextField {
+    open var userInteractionEnabled = true
 
     public override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
-        self.editable = false
-        self.selectable = false
-        self.bezeled = false
-        self.lineBreakMode = .ByWordWrapping
-        self.setContentCompressionResistancePriority(250, forOrientation: .Horizontal)
+        self.drawsBackground = false
+        self.isEditable = false
+        self.isSelectable = false
+        self.isBezeled = false
+        self.lineBreakMode = .byWordWrapping
+        self.setContentCompressionResistancePriority(250, for: .horizontal)
     }
 
     required public init?(coder: NSCoder) {
@@ -26,7 +27,7 @@ public class NKLabel: NKTextField {
     }
 
     public convenience init(text: String) {
-        self.init(frame: CGRectZero)
+        self.init(frame: CGRect.zero)
 
         self.text = text
     }

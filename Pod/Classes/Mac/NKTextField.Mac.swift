@@ -13,48 +13,48 @@ import Changeset
 
 
 public enum NKAutocorrectionType {
-    case No
+    case no
 }
 
 public enum NKAutocapitalizationType {
-    case None
+    case none
 }
 
 public enum NKKeyboardType {
-    case NumberPad
+    case numberPad
 }
 
 
-public class NKTextField: NSTextField, NKViewable {
+open class NKTextField: NSTextField, NKViewable {
     var transientDelegate: NKTextFieldDelegate
 
-    public var style: NKStyle
-    public var placeholderStyle: NKStyle
-    public var classes = Set<String>()
+    open var style: NKStyle
+    open var placeholderStyle: NKStyle
+    open var classes = Set<String>()
 
-    public var onChange: NKSimpleCallback?
-    public var onCancel: NKSimpleCallback?
-    public var onBlur: NKSimpleCallback?
-    public var onFocus: NKSimpleCallback?
-    public var onSubmit: NKSimpleCallback?
+    open var onChange: NKSimpleCallback?
+    open var onCancel: NKSimpleCallback?
+    open var onBlur: NKSimpleCallback?
+    open var onFocus: NKSimpleCallback?
+    open var onSubmit: NKSimpleCallback?
 
-    public var onAction: NKSimpleCallback? {
+    open var onAction: NKSimpleCallback? {
         get { return onClick }
         set { onClick = newValue }
     }
 
-    public var onClick: NKSimpleCallback?
-    public var onMouseDown: (NSEvent -> Void)?
-    public var onMouseUp: (NSEvent -> Void)?
+    open var onClick: NKSimpleCallback?
+    open var onMouseDown: ((NSEvent) -> Void)?
+    open var onMouseUp: ((NSEvent) -> Void)?
 
-    public var autocorrectionType: NKAutocorrectionType?
-    public var autocapitalizationType: NKAutocapitalizationType?
-    public var keyboardType: NKKeyboardType?
+    open var autocorrectionType: NKAutocorrectionType?
+    open var autocapitalizationType: NKAutocapitalizationType?
+    open var keyboardType: NKKeyboardType?
 
-    public var fieldType: NKFieldType?
-    public var secureValue: String = ""
+    open var fieldType: NKFieldType?
+    open var secureValue: String = ""
 
-    public override var placeholder: String? {
+    open override var placeholder: String? {
         get { return super.placeholder }
         set {
             let str = NSMutableAttributedString(string: newValue!)
@@ -76,8 +76,8 @@ public class NKTextField: NSTextField, NKViewable {
     // ----------------------------------------------------------------------
 
     public override init(frame frameRect: NSRect) {
-        self.style = NKStylesheet.styleForView(self.dynamicType)
-        self.placeholderStyle = NKStylesheet.styleForView(self.dynamicType, classes: ["placeholder"])
+        self.style = NKStylesheet.styleForView(type(of: self))
+        self.placeholderStyle = NKStylesheet.styleForView(type(of: self), classes: ["placeholder"])
 
         self.transientDelegate = NKTextFieldDelegate()
         
@@ -87,39 +87,43 @@ public class NKTextField: NSTextField, NKViewable {
         
         self.transientDelegate.textField = self
 
-        self.drawsBackground = false
-        self.backgroundColor = XColor.clearColor()
-        self.bordered = false
+//        self.drawsBackground = false
+//        self.backgroundColor = XColor.clear
+//        self.isBordered = false
+//        self.focusRingType = .none
 
-        self.focusRingType = .None
-
-        applyStyle()
-        
-        
+        // applyStyle()
     }
 
-    public func setup() {
+    open func setup() {
     }
 
     public convenience init(placeholder: String) {
-        self.init(frame: CGRectZero)
+        self.init(frame: CGRect.zero)
 
         self.placeholder = placeholder
     }
 
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.transientDelegate = NKTextFieldDelegate()
+        self.style = NKStylesheet.styleForView(type(of: self))
+        self.placeholderStyle = NKStylesheet.styleForView(type(of: self), classes: ["placeholder"])
+        
+        super.init(coder: coder)
+        
+        self.delegate = self.transientDelegate
+        self.transientDelegate.textField = self
     }
 
-    override public func layoutSubtreeIfNeeded() {
+    override open func layoutSubtreeIfNeeded() {
         super.layoutSubtreeIfNeeded()
-        applyStyle()
+        // applyStyle()
     }
 
     // MARK: - Style support
     // ----------------------------------------------------------------------
 
-    public func applyStyle() {
+    open func applyStyle() {
         font = style.font
 
         if let color = style.textColor {
@@ -134,9 +138,9 @@ public class NKTextField: NSTextField, NKViewable {
 
         if let align = style.textAlign {
             switch(align) {
-            case .Left: textAlignment = .Left
-            case .Center: textAlignment = .Center
-            case .Right: textAlignment = .Right
+            case .Left: textAlignment = .left
+            case .Center: textAlignment = .center
+            case .Right: textAlignment = .right
             }
         }
 
@@ -153,27 +157,27 @@ public class NKTextField: NSTextField, NKViewable {
     // MARK: - Events
     // ----------------------------------------------------------------------
     
-    public func handleClickFromTable(event: NSEvent) {
-        if self.editable {
+    open func handleClickFromTable(_ event: NSEvent) {
+        if self.isEditable {
             self.window?.makeFirstResponder(self)
         }
     }
 
-    override public func textDidEndEditing(notification: NSNotification) {
+    override open func textDidEndEditing(_ notification: Notification) {
         super.textDidEndEditing(notification)
         onBlur?()
     }
 
-    override public func textDidBeginEditing(notification: NSNotification) {
+    override open func textDidBeginEditing(_ notification: Notification) {
         super.textDidBeginEditing(notification)
         onFocus?()
     }
 
-    public func blur() {
+    open func blur() {
         window?.makeFirstResponder(nil)
     }
 
-    public func focus() {
+    open func focus() {
         window?.makeFirstResponder(self)
     }
 
@@ -181,13 +185,13 @@ public class NKTextField: NSTextField, NKViewable {
         return onMouseDown != nil || onMouseUp != nil || onClick != nil
     }
 
-    public override func mouseDown(theEvent: NSEvent) {
-        super.mouseDown(theEvent)
+    open override func mouseDown(with theEvent: NSEvent) {
+        super.mouseDown(with: theEvent)
         onMouseDown?(theEvent)
     }
 
-    public override func mouseUp(theEvent: NSEvent) {
-        super.mouseUp(theEvent)
+    open override func mouseUp(with theEvent: NSEvent) {
+        super.mouseUp(with: theEvent)
         onMouseUp?(theEvent)
         onClick?()
     }
@@ -209,12 +213,10 @@ public class NKTextField: NSTextField, NKViewable {
 //
 //        stringValue = value
 //    }
-    
-    
 
     var lastValue: String = ""
 
-    public override var stringValue: String {
+    open override var stringValue: String {
         get {
             return super.stringValue
         }
@@ -223,47 +225,29 @@ public class NKTextField: NSTextField, NKViewable {
             super.stringValue = newValue
         }
     }
-    
-    public override class func cellClass() -> AnyClass? {
-        return NKTextFieldCell.self
-    }
-}
 
-class NKTextFieldCell: NSTextFieldCell {
-//    override func drawingRectForBounds(theRect: NSRect) -> NSRect {
-//        var rect = super.drawingRectForBounds(theRect)
-//        
-//        
-//        
-//        rect.origin.x -= 2
-//        rect.size.width += 4
-//        
-//        
-//        Swift.print("Returning drawing rect for bounds \(theRect) -- >\(rect)")
-//        
-//        return rect
-//    }
+
 }
 
 class NKTextFieldDelegate: NSObject, NSTextFieldDelegate {
     var textField: NKTextField!
 
-    override func controlTextDidChange(notification: NSNotification) {
-        if textField.fieldType == .Password {
+    override func controlTextDidChange(_ notification: Notification) {
+        if textField.fieldType == .password {
             let lastValue = textField.lastValue
             let currentValue = textField.text ?? ""
 
             self.applyChangeToSecureValue(lastValue, target: currentValue)
 
             let char = "●".characters.first!
-        textField.stringValue = String(Array(count: currentValue.characters.count as Int, repeatedValue: char))
+        textField.stringValue = String(Array(repeating: char, count: currentValue.characters.count as Int))
         }
 
 
         textField.onChange?()
     }
 
-    func applyChangeToSecureValue(source: String, target: String) {
+    func applyChangeToSecureValue(_ source: String, target: String) {
         let changeset = Changeset(source: source.characters, target: target.characters)
 
         let secureValue = textField.secureValue
@@ -274,33 +258,33 @@ class NKTextFieldDelegate: NSObject, NSTextFieldDelegate {
 
         for edit in changeset.edits {
             switch (edit.operation) {
-            case .Insertion:
-                chars.insert(edit.value, atIndex: edit.destination)
-            case .Substitution:
+            case .insertion:
+                chars.insert(edit.value, at: edit.destination)
+            case .substitution:
                 chars[edit.destination] = edit.value
-            case .Deletion:
+            case .deletion:
                 //                chars.removeAtIndex(edit.destination)
                 toDelete.append(edit.destination)
-            case .Move(let  origin):
-                chars.removeAtIndex(origin)
-                chars.insert(edit.value, atIndex: edit.destination)
+            case .move(let  origin):
+                chars.remove(at: origin)
+                chars.insert(edit.value, at: edit.destination)
 
             }
         }
 
-        for index in toDelete.reverse() {
-            chars.removeAtIndex(index)
+        for index in toDelete.reversed() {
+            chars.remove(at: index)
         }
 
         textField.secureValue = String(chars)
     }
 
 
-    func control(control: NSControl, textView: NSTextView, doCommandBySelector commandSelector: Selector) -> Bool {
-        if String(commandSelector) == "cancelOperation:" {
+    func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        if String(describing: commandSelector) == "cancelOperation:" {
             textField.onCancel?()
             return true
-        } else if String(commandSelector) == "insertNewline:" {
+        } else if String(describing: commandSelector) == "insertNewline:" {
             textField.onSubmit?()
             return true
         }

@@ -12,14 +12,14 @@ import QuartzCore
 public extension CAAnimationGroup {
     public var stays: Bool {
         get {
-            return !removedOnCompletion && fillMode == kCAFillModeForwards
+            return !isRemovedOnCompletion && fillMode == kCAFillModeForwards
         }
         set {
             if newValue {
-                removedOnCompletion = false
+                isRemovedOnCompletion = false
                 fillMode = kCAFillModeForwards
             } else {
-                removedOnCompletion = true
+                isRemovedOnCompletion = true
                 fillMode = kCAFillModeRemoved
             }
         }

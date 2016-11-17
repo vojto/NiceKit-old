@@ -24,10 +24,10 @@ public class NKTextField: XTextField, NKViewable, UITextFieldDelegate {
 
     public var fieldType: NKFieldType? {
         didSet {
-            if fieldType == .Email {
+            if fieldType == .email {
                 autocorrectionType = .No
                 autocapitalizationType = .None
-                keyboardType = .EmailAddress
+                keyboardType = .emailAddress
             } else if fieldType == .Password {
                 autocorrectionType = .No
                 autocapitalizationType = .None
