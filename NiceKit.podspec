@@ -32,10 +32,10 @@ Pod::Spec.new do |s|
   # }
 
 
-  s.osx.dependency 'Cartography'
+  s.osx.dependency 'Cartography', '0.6.0'
   s.osx.dependency 'SwiftColors'
   s.osx.dependency 'ITSwitch'
-  s.osx.dependency 'Changeset'
+  s.osx.dependency 'Changeset', '1.0.3'
 
   s.ios.dependency 'Cartography'
   s.ios.dependency 'SwiftColors'
