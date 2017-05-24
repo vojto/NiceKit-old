@@ -53,7 +53,7 @@ public extension XApplication {
     }
     
     // Taken from: https://github.com/keith/LoginItemTest
-    public class func launchMainAppFromHelperApp() {
+    public class func launchMainAppFromHelperApp(mainIdentifier: String) {
         print("Launching")
 
         let bundlePath = (NSBundle.mainBundle().bundlePath as NSString)
@@ -62,7 +62,7 @@ public extension XApplication {
         
         let workspace = NSWorkspace.sharedWorkspace()
         
-        let identifier = "rinik.Escape"
+        let identifier = mainIdentifier
         
         if let url = workspace.URLForApplicationWithBundleIdentifier(identifier) {
             var config = [String: AnyObject]()
